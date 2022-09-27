@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Special+Elite&display=swap');
 
 .navbar {
     background-color: var(--dark-light);
@@ -17,6 +18,7 @@
 }
 
 .navbar header {
+    font-family: 'Special Elite', cursive;
     margin-right: auto;
 }
 
