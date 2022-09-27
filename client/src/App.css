@@ -1,33 +1,23 @@
-*, *::before, *::after {
+* {
     box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
 
-#profile-page {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    padding: 0 20vw;
+:root {
+    font-size: 30px;
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    --blue: #007bff;
+    --shadow: black;
+    --dark: #121212;
+    --dark-light: #1F1F1F;
+    --text: white;
+    --primary: #3700B3;
+    --secondary: #018786;
 }
 
-#profile-items {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 2rem;
+ul {
+    list-style: none;
 }
 
-#profile-picture {
-    width: 200px;
-    height: 200px;
-    border-radius: 50%;
-    background-color: white;
-    margin: 10px;
-    box-shadow: 0 0 10px 1px black;
-    overflow: hidden;
-}
 
-#profile-picture img {
-    object-fit: contain;
-    height: 100%;
-    width: 100%;
-}

@@ -1,0 +1,29 @@
+#profile-page {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0 20vw;
+}
+
+#profile-items {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+}
+
+#profile-picture {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    background-color: white;
+    margin: 10px;
+    box-shadow: 0 0 10px 1px black;
+    overflow: hidden;
+}
+
+#profile-picture img {
+    object-fit: contain;
+    height: 100%;
+    width: 100%;
+}

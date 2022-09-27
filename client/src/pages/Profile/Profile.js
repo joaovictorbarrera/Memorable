@@ -1,6 +1,7 @@
 import React from 'react'
 import { useParams } from 'react-router-dom'
-import useUser from '../hooks/useUser'
+import "./Profile.css"
+import useUser from '../../hooks/useUser'
 
 function Profile() {
   const { username } = useParams()

@@ -1,0 +1,44 @@
+#register-form {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+    width: 100%;
+    margin: 1rem 0 .5rem 0
+}
+
+.register-input {
+    color: var(--text);
+    padding: .2rem;
+    font-size: .8rem;
+    background-color: var(--dark);
+    filter: brightness(250%);
+    border: 1px solid var(--shadow);
+    border-radius: .15rem;
+    transition: filter 100ms;
+}
+
+.register-input:focus {
+    outline: none;
+    filter: brightness(300%);
+}
+
+#register-btn {
+    background: none;
+    border: none;
+    color: white;
+    background-color: var(--secondary);
+    padding: .25rem;
+    font-size: .8rem;
+    cursor: pointer;
+    border-radius: .15rem;
+}
+
+#already-have-an-account {
+    font-size: .7rem;
+}
+
+#already-have-an-account a {
+    text-decoration: none;
+    color: var(--secondary);
+}

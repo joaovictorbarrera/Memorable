@@ -1,9 +1,9 @@
 import React from 'react'
 import { Outlet } from 'react-router-dom'
-import NavBar from '../components/NavBar'
-import "./PageLayout.css"
+import NavBar from './NavBar'
+import "./DefaultLayout.css"
 
-function PageLayout() {
+function DefaultLayout() {
   return (
     <main>
         <NavBar />
@@ -15,4 +15,4 @@ function PageLayout() {
   )
 }
 
-export default PageLayout
+export default DefaultLayout
