@@ -1,4 +1,5 @@
 const express = require("express")
+const { users, createNewUser } = require("./services/createNewUser")
 const app = express()
 const port = process.env.PORT || 4000
 app.use(
@@ -11,7 +12,6 @@ app.use(express.json())
 app.use(express.urlencoded({extended:false}))
 
 
-const users = [{username: "drag", password:"123"}, {username: "emily03", password:"123"}]
 app.post("/login", (req, res) => {
     const username = req?.body?.username + ""
     const password = req?.body?.password + ""
@@ -24,14 +24,15 @@ app.post("/login", (req, res) => {
 })
 
 app.post("/register", (req, res) => {
-    const email = req?.body?.email + ""
-    const username = req?.body?.username + ""
-    const password = req?.body?.password + ""
-    const firstName = req?.body?.firstName + ""
-    const lastName = req?.body?.lastName + ""
+    const user = {
+        email: req?.body.email + "",
+        username: req?.body.username + "",
+        password: req?.body.password + "",
+        "first-name": req?.body["first-name"] + "",
+        "last-name": req?.body["last-name"] + ""
+    }
 
-    // TODO:
-    const result = createNewUser({email, username, password, firstName, lastName})
+    const result = createNewUser(user)
     if (result.success) {
         res.json({success: true})
     } else {
