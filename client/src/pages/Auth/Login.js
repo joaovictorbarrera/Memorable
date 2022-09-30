@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useLayoutEffect, useState } from 'react'
 import "./Login.css"
 import {Link, useNavigate} from "react-router-dom"
 import LoginRegisterHeader from './components/LoginRegisterHeader'
@@ -9,6 +9,13 @@ function Login() {
   const [error, setError] = useState(false)
   const errorMessage = error ? "Incorrect Username/Password" : null
   const navigate = useNavigate()
+
+  useLayoutEffect(() => {
+    fetch("http://localhost:4000/auth", {credentials: "include"})
+    .then(res => res.json())
+    .then(data => data.auth ? navigate("/") : null)
+    .catch((e) => console.log(e))
+  }, [])
 
   const handleLogin = useCallback((e) => {
     e.preventDefault()
@@ -23,7 +30,8 @@ function Login() {
 
     fetch(loginURL, {
       method:"POST",
-      body: payload
+      credentials: "include",
+      body: payload,
     })
     .then(res => res.json())
     .then(data => {

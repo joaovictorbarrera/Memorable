@@ -1,4 +1,7 @@
-function validateNewUser(user) {
+const loginSch = require("../../schemas/loginSch")
+const { encryptPassword } = require("./passwordUtil")
+
+async function validateNewUser(user) {
     const email = user.email
     const username = user.username
     const password = user.password
@@ -66,22 +69,71 @@ function validateNewUser(user) {
     return {success: Object.keys(errors).length === 0, errors: errors}
 }
 
-function registerNewUser(user) {}
-
-// FIXME: when todo below is gone
-const users = [{username: "drag", password:"123"}, {username: "emily03", password:"123"}]
-const createNewUser = (user) => {
-    const validationResult = validateNewUser(user)
-    console.log(validationResult)
-    if (!validationResult.success) return validationResult
-
-    console.log(user)
-    users.push(user)
-    // TODO: implement db
-    // const dbResult = registerNewUser(user)
-    // if (!dbResult.success) return dbResult
-
+async function registerNewUser(user) {
+  try {
+    await loginSch.create(user)
     return {success: true}
+  } catch (e) {
+    console.log(e)
+    return {success: false}
+  }
 }
 
-module.exports = {users, createNewUser}
+async function checkUserAlreadyExists(user) {
+  const errors = {}
+
+  // check username already exists
+  const usernameDoc = await loginSch.find({username: user.username})
+  const validUsername = usernameDoc.length < 1
+  if (!validUsername) {
+    errors["username"] = {
+      errorMessage: "Username already exists."
+    }
+  }
+
+  // check email already exists
+  const emailDoc = await loginSch.find({email: user.email})
+  const validEmail = emailDoc.length < 1
+  if (!validEmail) {
+    errors["email"] = {
+      errorMessage: "Email already exists."
+    }
+  }
+
+  return {success: validUsername && validEmail, errors}
+}
+
+const createNewUser = async (user) => {
+  console.log("Checking if new user already exists...")
+  // check already exists
+  const alreadyExistsResult = await checkUserAlreadyExists(user)
+  if (!alreadyExistsResult.success) {
+    console.log("User already exists.")
+    return alreadyExistsResult
+  }
+
+  // validation
+  console.log("Validating new user...")
+  const validationResult = await validateNewUser(user)
+  if (!validationResult.success) {
+    console.log("New user is invalid.")
+    return validationResult
+  }
+
+  // encrypt password
+  console.log({"password": user.password})
+  user.password = await encryptPassword(user.password)
+
+  // register on db
+  console.log("Registering new user...")
+  const dbResult = await registerNewUser(user)
+  if (!dbResult.success) {
+    console.log("Failed to register new user.")
+    return dbResult
+  }
+
+  console.log("Successfully created new user.")
+  return {success: true}
+}
+
+module.exports = {createNewUser}

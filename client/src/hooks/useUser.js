@@ -1,14 +1,25 @@
-import { useLayoutEffect, useState } from 'react'
-import queryUser from "../services/queryUser"
+import { useCallback, useLayoutEffect, useState } from 'react'
 
-function useUser(username) {
-    const [user, setUser] = useState()
+function useUser() {
+    const [user, setUser] = useState(null)
+    const [updator, setUpdator] = useState({})
+
+    async function auth() {
+        try {
+            return await (await fetch("http://localhost:4000/user", {credentials: "include"})).json()
+        } catch (e) {
+            return null
+        }
+    }
     
     useLayoutEffect(() => {
-        setUser(queryUser(username))
-    }, [username])
+        setUser(undefined)
+        auth().then(setUser)
+    }, [updator])
 
-    return user
+    const refreshUser = useCallback(() => setUpdator({}), [])
+
+    return {user, refreshUser}
 }
 
 export default useUser

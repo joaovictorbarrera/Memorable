@@ -1,43 +1,51 @@
 const express = require("express")
-const { users, createNewUser } = require("./services/createNewUser")
+const session = require("express-session")
+
+async function runServer() {
+
+// DB
+console.log("waiting for database to connect...")
+const mongoURL = process.env.MONGO_URL || "mongodb://127.0.0.1/memorable"
+await require("./services/db/connectDB")(mongoURL)
+
+const MongoStore = require("connect-mongo")
+const sessionStore = new MongoStore({
+    mongoUrl: mongoURL,
+    collectionName: 'sessions'
+})
+
 const app = express()
 const port = process.env.PORT || 4000
-app.use(
-    require("cors")({
-        origin:"*"
-    })
-)
 
+app.use(require("cors")({
+    origin:"http://localhost:3000", 
+    credentials:true,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+}))
+app.use(express.static("../client/build"))
+app.use(require("./logger"))
+
+// use forms
 app.use(express.json())
 app.use(express.urlencoded({extended:false}))
 
-
-app.post("/login", (req, res) => {
-    const username = req?.body?.username + ""
-    const password = req?.body?.password + ""
-
-    const user = users.find(user => user.username === username)
-    const auth = user?.password === password 
-
-    if (auth) res.json({auth: true})
-    else res.json({auth: false})
-})
-
-app.post("/register", (req, res) => {
-    const user = {
-        email: req?.body.email + "",
-        username: req?.body.username + "",
-        password: req?.body.password + "",
-        "first-name": req?.body["first-name"] + "",
-        "last-name": req?.body["last-name"] + ""
+// use session
+if (!process.env.SECRET) console.log("\x1b[41m\x1b[37mWARNING! No secret found in environment variables! Your app may be at danger.\x1b[0m")
+app.use(session({
+    secret: process.env.SECRET || "secret",
+    resave: false,
+    saveUninitialized: false,
+    store: sessionStore,
+    cookie: {
+        maxAge: 1000 * 60 * 60 * 24 * 7, // expires in 7 days
+        httpOnly: true
     }
+}))
 
-    const result = createNewUser(user)
-    if (result.success) {
-        res.json({success: true})
-    } else {
-        res.json({success: false, errors: result.errors})
-    }
-})
+// import routes
+app.use("/", require("./routes/routes.js"))
 
 app.listen(port, () => console.log("Server started"))
+}
+
+runServer()

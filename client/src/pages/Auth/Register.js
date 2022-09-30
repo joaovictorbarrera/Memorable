@@ -2,7 +2,7 @@ import React, { useCallback, useReducer, useRef } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import FormInput from './components/FormInput'
 import LoginRegisterHeader from './components/LoginRegisterHeader'
-import { errorsReducer, ERRORS_INITIAL_STATE } from './errorsReducer'
+import { errorsReducer, ERRORS_INITIAL_STATE } from './hooks/errorsReducer'
 import "./Register.css"
 
 function Register() {
