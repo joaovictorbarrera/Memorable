@@ -1,5 +1,5 @@
 export default async function signUserOut() {
-    await fetch("http://localhost:4000/signout", {
+    await fetch(process.env.REACT_APP_SIGNOUT, {
         method: "DELETE",
         credentials: "include"
     })

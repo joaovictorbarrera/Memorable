@@ -9,9 +9,6 @@ import DefaultLayout from './layouts/DefaultLayout/DefaultLayout';
 import AuthLayout from './layouts/AuthLayout/AuthLayout';
 import AuthUserProvider from './contexts/AuthUserProvider';
 
-window.loginURL = "http://localhost:4000/login"
-window.registerURL = "http://localhost:4000/register"
-
 function App() {
   return (
     <AuthUserProvider>

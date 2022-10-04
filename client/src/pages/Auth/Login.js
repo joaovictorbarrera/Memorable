@@ -22,14 +22,13 @@ function Login() {
     e.preventDefault()
 
     const form = e.target
-    const loginURL = window.loginURL
 
     // Create new FormData object:
     const formData = new FormData(form);
     // Convert formData object to URL-encoded string:
     const payload = new URLSearchParams(formData);
 
-    fetch(loginURL, {
+    fetch(process.env.REACT_APP_LOGIN_POST, {
       method:"POST",
       credentials: "include",
       body: payload,

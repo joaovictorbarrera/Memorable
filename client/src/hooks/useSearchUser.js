@@ -6,7 +6,7 @@ export default function useSearchUser(username) {
     const [auth, setAuth] = useState()
 
     function search() {
-        return fetch(`http://localhost:4000/${username}`, {credentials: "include"})
+        return fetch(`${process.env.REACT_APP_BASE_URL}/${username}`, {credentials: "include"})
         .then(res => res.json())
         .then(data => {
             if(!data.userExists) return null

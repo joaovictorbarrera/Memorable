@@ -76,7 +76,7 @@ function MyProfileModal({setOpen}) {
         // Convert formData object to URL-encoded string:
         const payload = new URLSearchParams(formData);
 
-        fetch("http://localhost:4000/pfp", {
+        fetch(process.env.REACT_APP_CHANGE_PROFILE_PICTURE, {
             credentials:"include",
             method:"PUT",
             body: payload

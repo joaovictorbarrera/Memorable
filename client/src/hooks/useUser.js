@@ -5,7 +5,7 @@ function useUser() {
     const [updator, setUpdator] = useState({})
 
     function auth() {
-        return fetch("http://localhost:4000/loggedUser", {credentials: "include"})
+        return fetch(process.env.REACT_APP_LOGGED_USER, {credentials: "include"})
         .then(res => res.json())
         .then((data) => {
             if (!data.auth) return null

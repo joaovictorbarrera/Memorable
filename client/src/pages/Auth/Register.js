@@ -107,7 +107,6 @@ function Register() {
 
     dispatchErrors({type: "CLEAR"})
     const form = e.target
-    const registerURL = window.registerURL
 
     // Create new FormData object:
     const formData = new FormData(form);
@@ -115,7 +114,7 @@ function Register() {
     const payload = new URLSearchParams(formData);
 
     // {success: true/false, errors: {empty | input-name: {errorMessage: ""}}}
-    fetch(registerURL, {
+    fetch(process.env.REACT_APP_REGISTER_POST, {
       method:"POST",
       body: payload
     })
