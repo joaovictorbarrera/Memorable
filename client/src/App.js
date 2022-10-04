@@ -7,23 +7,26 @@ import Login from './pages/Auth/Login';
 import Register from './pages/Auth/Register';
 import DefaultLayout from './layouts/DefaultLayout/DefaultLayout';
 import AuthLayout from './layouts/AuthLayout/AuthLayout';
+import AuthUserProvider from './contexts/AuthUserProvider';
 
 window.loginURL = "http://localhost:4000/login"
 window.registerURL = "http://localhost:4000/register"
 
 function App() {
   return (
-    <Routes>
-      <Route exact path="/" element={<DefaultLayout />}>
-        <Route index element={<Home />} />
-        <Route exact path=":username" element={<Profile />} />
-      </Route>
+    <AuthUserProvider>
+      <Routes>
+        <Route exact path="/" element={<DefaultLayout />}>
+          <Route index element={<Home />} />
+          <Route exact path=":username" element={<Profile />} />
+        </Route>
 
-      <Route exact path="/" element={<AuthLayout />}>
-        <Route exact path="login" element={<Login />} />
-        <Route exact path="register" element={<Register />} />
-      </Route>
-    </Routes>
+        <Route exact path="/" element={<AuthLayout />}>
+          <Route exact path="login" element={<Login />} />
+          <Route exact path="register" element={<Register />} />
+        </Route>
+      </Routes>
+    </AuthUserProvider>
   )
 }
 

@@ -1,4 +1,5 @@
 import React from 'react'
+import "./GlobalComponents.css"
 
 function FormInput({placeholder, type, name, id, errorMessage, children}, ref) {
   return (

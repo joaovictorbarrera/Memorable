@@ -14,11 +14,11 @@ const loginSchema = new mongoose.Schema({
         required: true,
         lowercase: true
     },
-    "first-name": {
+    "firstName": {
         type: String,
         required: true
     },
-    "last-name": {
+    "lastName": {
         type: String,
         required: true
     },

@@ -3,8 +3,8 @@ export const ERRORS_INITIAL_STATE = {
     "username": {errorMessage: null}, 
     "password": {errorMessage: null}, 
     "confirm-password": {errorMessage: null}, 
-    "first-name": {errorMessage: null}, 
-    "last-name": {errorMessage: null}
+    "firstName": {errorMessage: null}, 
+    "lastName": {errorMessage: null}
 }
 
 export function errorsReducer(state, action) {

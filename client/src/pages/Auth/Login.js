@@ -2,20 +2,21 @@ import React, { useCallback, useLayoutEffect, useState } from 'react'
 import "./Login.css"
 import {Link, useNavigate} from "react-router-dom"
 import LoginRegisterHeader from './components/LoginRegisterHeader'
-import FormInput from './components/FormInput'
+import FormInput from '../../components/FormInput'
+import { useLoggedUser, useRefreshLoggedUserStatus } from '../../contexts/AuthUserProvider'
 
 function Login() {
-
   const [error, setError] = useState(false)
   const errorMessage = error ? "Incorrect Username/Password" : null
+
   const navigate = useNavigate()
+  const refreshLoggedUserStatus = useRefreshLoggedUserStatus()
+  const loggedUser = useLoggedUser()
+  console.log(loggedUser)
 
   useLayoutEffect(() => {
-    fetch("http://localhost:4000/auth", {credentials: "include"})
-    .then(res => res.json())
-    .then(data => data.auth ? navigate("/") : null)
-    .catch((e) => console.log(e))
-  }, [])
+    if (loggedUser != null) navigate("/")
+  }, [loggedUser])
 
   const handleLogin = useCallback((e) => {
     e.preventDefault()
@@ -36,6 +37,7 @@ function Login() {
     .then(res => res.json())
     .then(data => {
       if (data.auth) {
+        refreshLoggedUserStatus()
         navigate("/")
       } else {
         setError(true)
@@ -47,6 +49,7 @@ function Login() {
     })
   }, [])
 
+  if (loggedUser === undefined) return (<div style={{backgroundColor: "var(--dark)"}}></div>)
   return (
     <>
       <LoginRegisterHeader />

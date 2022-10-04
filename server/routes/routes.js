@@ -2,6 +2,18 @@ const router = require("express").Router()
 const { authorizeLogin } = require("../services/db/authorizeLogin")
 const { createNewUser } = require("../services/db/createNewUser")
 const { getUser } = require("../services/db/getUser")
+const { auth } = require("../middlewares/auth")
+const { updatePFP } = require("../services/db/updatePFP")
+
+router.put("/pfp", auth, async (req, res) => {
+    if (!req.user ) return res.json({success:false, error:"You are not logged in"})
+    if (!req?.body?.pfpURL) return res.json({success:false, error:"No URL received"})
+
+    const updatePFPResult = await updatePFP(req.user.username, req.body.pfpURL)
+    if (!updatePFPResult.success) return res.json({success:false, error: updatePFPResult.error})
+
+    return res.json({success:true})
+})
 
 router.delete("/signout", (req, res) => {
     try {
@@ -19,21 +31,22 @@ router.get("/auth", (req, res) => {
     res.json({auth: isAuth})
 })
 
-router.get("/user", async (req, res) => {
-    if (!req.session.auth) return res.sendStatus(401)
+router.get("/loggedUser", async (req, res) => {
+    if (!req.session.auth) return res.json({auth: false})
     const user = await getUser(req.session.username)
-    if (!user) return res.sendStatus(404)
+    if (!user) return res.json({auth: false})
     return res.json({
-        username: user.username,
-        "first-name": user["first-name"],
-        "last-name": user["last-name"],
-        pfp: user.pfp
+        auth: true,
+        user: {
+            username: user.username,
+            "firstName": user.firstName,
+            "lastName": user.lastName,
+            pfp: user.pfp
+        }
     })
 })
 
 router.post("/login", async (req, res) => {
-    console.log("Is auth?", req.session.auth)
-    console.log(req.session.id)
     if (req.session.auth) return
 
     const username = req?.body?.username + ""
@@ -54,8 +67,8 @@ router.post("/register", async (req, res) => {
         email: req?.body.email + "",
         username: req?.body.username + "",
         password: req?.body.password + "",
-        "first-name": req?.body["first-name"] + "",
-        "last-name": req?.body["last-name"] + ""
+        "firstName": req?.body.firstName + "",
+        "lastName": req?.body.lastName + ""
     }
 
     const result = await createNewUser(user)
@@ -68,12 +81,20 @@ router.post("/register", async (req, res) => {
 
 router.get("/:user", async (req, res) => {
     const user = await getUser(req.params.user)
-    if (!user) return res.sendStatus(404)
+    if (!user) return res.json({userExists: false})
+
+    const loggedUser = await getUser(req.session.username)
+    const auth = loggedUser !== null && loggedUser.username === user.username
+
     return res.json({
-        username: user.username,
-        "first-name": user["first-name"],
-        "last-name": user["last-name"],
-        pfp: user.pfp
+        userExists: true,
+        auth: auth,
+        user: {
+            username: user.username,
+            "firstName": user.firstName,
+            "lastName": user.lastName,
+            pfp: user.pfp
+        }
     })
 })
 

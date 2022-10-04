@@ -5,8 +5,8 @@ async function validateNewUser(user) {
     const email = user.email
     const username = user.username
     const password = user.password
-    const firstName = user["first-name"]
-    const lastName = user["last-name"]
+    const firstName = user.firstName
+    const lastName = user.lastName
     const errors = {}
 
     // TODO: CHECK EMAIL LIBRARY
@@ -53,7 +53,7 @@ async function validateNewUser(user) {
     const validFirstName = firstName.length >= 2
     
     if (!validFirstName) {
-      errors["first-name"] = {
+      errors.firstName = {
         errorMessage: "Invalid First Name"
       }
     }
@@ -61,7 +61,7 @@ async function validateNewUser(user) {
     const validLastName = lastName.length >= 2
     
     if (!validLastName) {
-      errors["last-name"] = {
+      errors.lastName = {
         errorMessage: "Invalid Last Name"
       }
     }

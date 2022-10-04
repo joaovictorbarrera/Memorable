@@ -12,7 +12,7 @@
     gap: 2rem;
 }
 
-#profile-picture {
+.profile-picture {
     width: 200px;
     height: 200px;
     border-radius: 50%;
@@ -22,8 +22,94 @@
     overflow: hidden;
 }
 
-#profile-picture img {
+.profile-picture img {
     object-fit: cover;
     height: 100%;
     width: 100%;
+}
+
+#click-to-change-pfp:hover {
+    filter: brightness(80%);
+    cursor: pointer;
+}
+
+#profile-name {
+    display: flex;
+    flex-direction: column;
+    gap: .1rem;
+}
+
+#profile-full-name {
+    font-size: .6rem;
+    color: lightgrey;
+}
+
+#click-to-change-pfp:hover::before {
+    width: min-content;
+    height: min-content;
+    font-size: 80px;
+    position: absolute;
+    top: 45%;  
+    left: 50%; 
+    transform: translate(-50%, -50%);
+    content: "📷"
+}
+
+#updatePFP-modal-container {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+#updatePFP-modal-container > * {
+    width: 100%;
+}
+
+#updatePFP-header {
+    margin-bottom: 1rem;
+}
+
+#updatePFP-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+}
+
+#updatePFP-buttons-wrapper {
+    display: flex;
+    justify-content:stretch;
+    width: 100%;
+    gap: 1rem;
+}
+
+#updatePFP-buttons-wrapper > button {
+    width: 100%;
+}
+
+#updatePFP-image-preview-container {
+    padding: 1rem;
+    background-color: var(--dark-lighter);
+    box-shadow: 0 0 2px 1px grey;
+    border-radius: 2rem;
+    width: max-content;
+    display: flex;
+    gap: 1rem;
+    flex-direction: column;
+    align-items: center;
+}
+
+#updatePFP-image-wrapper {
+    width: 300px;
+    height: 300px;
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+#updatePFP-image-wrapper > img {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
 }

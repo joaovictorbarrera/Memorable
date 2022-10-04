@@ -1,6 +1,6 @@
 import React, { useCallback, useReducer, useRef } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import FormInput from './components/FormInput'
+import FormInput from '../../components/FormInput'
 import LoginRegisterHeader from './components/LoginRegisterHeader'
 import { errorsReducer, ERRORS_INITIAL_STATE } from './hooks/errorsReducer'
 import "./Register.css"
@@ -80,7 +80,7 @@ function Register() {
     
     if (!validFirstName) {
       errors[firstNameRef.current.name] = {
-        errorMessage: "Invalid First Name"
+        errorMessage: "Invalid First Name."
       }
     }
 
@@ -88,7 +88,7 @@ function Register() {
     
     if (!validLastName) {
       errors[lastNameRef.current.name] = {
-        errorMessage: "Invalid Last Name"
+        errorMessage: "Invalid Last Name."
       }
     }
     
@@ -141,8 +141,8 @@ function Register() {
           <FormInput errorMessage={errors["username"].errorMessage} ref={usernameRef} placeholder='Username' type="text" name="username" id="register-username" />
           <FormInput errorMessage={errors["password"].errorMessage} ref={passwordRef} placeholder='Password' type="password" name="password" id="register-password"/>
           <FormInput errorMessage={errors["confirm-password"].errorMessage} ref={confirmPasswordRef} placeholder='Confirm Password' type="password" name="confirm-password" id="register-confirm-password" />
-          <FormInput errorMessage={errors["first-name"].errorMessage} ref={firstNameRef} placeholder='First Name' type="text" name="first-name" id="register-first-name"/>
-          <FormInput errorMessage={errors["last-name"].errorMessage} ref={lastNameRef} placeholder='Last Name' type="text" name="last-name" id="register-last-name" />
+          <FormInput errorMessage={errors.firstName.errorMessage} ref={firstNameRef} placeholder='First Name' type="text" name="firstName" id="register-firstName"/>
+          <FormInput errorMessage={errors.lastName.errorMessage} ref={lastNameRef} placeholder='Last Name' type="text" name="lastName" id="register-lastName" />
           <button id="register-btn" type="submit">Create Account</button>
         </form>
       <footer id="already-have-an-account">Already own an account? <Link to="/Login">Login</Link></footer>

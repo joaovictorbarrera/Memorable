@@ -1,20 +1,30 @@
-import { useLayoutEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 
 export default function useSearchUser(username) {
-    const [user, setUser] = useState()
+    const [searchedUser, setSearchedUser] = useState()
+    const [updator, setUpdator] = useState({})
+    const [auth, setAuth] = useState()
 
-    async function search() {
-        try {
-            return await (await fetch(`http://localhost:4000/${username}`)).json()
-        } catch (e) {
+    function search() {
+        return fetch(`http://localhost:4000/${username}`, {credentials: "include"})
+        .then(res => res.json())
+        .then(data => {
+            if(!data.userExists) return null
+            setAuth(data.auth)
+            return data.user
+        })
+        .catch(e => {
+            console.log(e)
             return null
-        }
+        })
     }
     
-    useLayoutEffect(() => {
-        setUser(undefined)
-        search().then(setUser)
-    }, [username])
+    useEffect(() => {
+        setSearchedUser(undefined)
+        search().then(setSearchedUser)
+    }, [username, updator])
 
-    return user
+    const refreshSearchedUser = useCallback(() => setUpdator({}))
+
+    return {auth, searchedUser, refreshSearchedUser}
 }

@@ -1,12 +1,11 @@
-import React, { useCallback, useState } from 'react'
+import React, { useState } from 'react'
 import { NavLink } from 'react-router-dom'
 import "../../App.css"
 import { useNavigate } from 'react-router-dom'
-import useUser from "../../hooks/useUser"
-import signUserOut from "../../services/signUserOut"
+import { useLoggedUser, useSignOut } from '../../contexts/AuthUserProvider'
 
 function NavBar() {
-    const {user, refreshUser} = useUser()
+    const user = useLoggedUser()
 
     return (
         <nav className='navbar'>
@@ -20,9 +19,9 @@ function NavBar() {
                 <ul className='nav-links'>
                     <li>
                         {
-                        user ? 
-                        <ProfileIconWithDropdown user={user} refreshUser={refreshUser}/>  :
-                        <NavLink to="/login" className="nav-link-no-style nav-link">Login</NavLink>
+                        user === undefined ? null : user === null ?
+                        <NavLink to="/login" className="nav-link-no-style nav-link">Login</NavLink> :
+                        <ProfileIconWithDropdown user={user}/>
                         }
                     </li>
                 </ul>
@@ -31,12 +30,9 @@ function NavBar() {
     )
 }
 
-function ProfileIconWithDropdown({user, refreshUser}) {
+function ProfileIconWithDropdown({user}) {
     const [open, setOpen] = useState(false)
-
-    const signOut = useCallback(() => {
-        signUserOut().then(refreshUser)
-    }, [])
+    const signOut = useSignOut()
 
     return (
         <div id="nav-profile-icon">
@@ -46,7 +42,7 @@ function ProfileIconWithDropdown({user, refreshUser}) {
             {
                 open ?
                 <ul id="nav-profile-dropdown">
-                    <li><NavLink to={`/${user.username}`} className='nav-link-no-style nav-link'>Profile</NavLink></li>
+                    <li><NavLink to={`/${user.username}`} onClick={() => setOpen(false)} className='nav-link-no-style nav-link'>Profile</NavLink></li>
                     <li><button id="sign-out-btn" className="nav-link" onClick={signOut}>Sign Out</button></li>
                 </ul> :
                 null

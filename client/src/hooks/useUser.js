@@ -1,20 +1,27 @@
-import { useCallback, useLayoutEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 
 function useUser() {
-    const [user, setUser] = useState(null)
+    const [user, setUser] = useState(undefined)
     const [updator, setUpdator] = useState({})
 
-    async function auth() {
-        try {
-            return await (await fetch("http://localhost:4000/user", {credentials: "include"})).json()
-        } catch (e) {
+    function auth() {
+        return fetch("http://localhost:4000/loggedUser", {credentials: "include"})
+        .then(res => res.json())
+        .then((data) => {
+            if (!data.auth) return null
+            return data.user
+        })
+        .catch(e => {
+            console.log(e)
             return null
-        }
+        })
     }
     
-    useLayoutEffect(() => {
+    useEffect(() => {
         setUser(undefined)
-        auth().then(setUser)
+        auth().then((data) => {
+            setUser(data)
+        })
     }, [updator])
 
     const refreshUser = useCallback(() => setUpdator({}), [])

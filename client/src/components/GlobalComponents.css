@@ -1,0 +1,61 @@
+.modal-overlay {
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    background-color: rgba(0,0,0,0.3);
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+
+.modal-card {
+    box-shadow: 0 0 2px 1px grey;
+    display: block;
+    border-radius: .5rem;
+    padding: 2rem;
+    color: white;
+    background-color:var(--dark-light);
+}
+
+
+.auth-input {
+    color: var(--text);
+    padding: .5rem .4rem;
+    width: 100%;
+    font-size: .8rem;
+    background-color: var(--dark);
+    filter: brightness(250%);
+    border: 1px solid var(--shadow);
+    border-radius: .15rem;
+    transition: filter 100ms;
+}
+
+.auth-input:focus {
+    outline: none;
+    filter: brightness(300%);
+}
+
+.input-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.error-message {
+    font-size: 0.5rem;
+    color: rgb(255, 50, 50);
+}
+
+.secondary-btn {
+    background: none;
+    border: none;
+    color: white;
+    background-color: var(--secondary);
+    padding: .25rem;
+    font-size: .8rem;
+    cursor: pointer;
+    border-radius: .15rem;
+}
