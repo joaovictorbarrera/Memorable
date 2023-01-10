@@ -1,4 +1,7 @@
 const express = require("express")
+const https = require("https")
+const fs = require("fs")
+
 import session from "express-session"
 import connectDB from "./services/db/connectDB"
 import cors from "cors"
@@ -18,11 +21,16 @@ const sessionStore = new MongoStore({
     collectionName: 'sessions'
 })
 
+const options = {
+    key: fs.readFileSync("./config/key.pem"),
+    cert: fs.readFileSync("./config/cert.pem"),
+}
+
 const app = express()
-const port = process.env.PORT || 4000
+const PORT = process.env.PORT || 4000
 
 app.use(cors({
-    origin:"http://localhost:3000", 
+    origin:"http://127.0.0.1:5173",
     credentials:true,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
 }))
@@ -42,14 +50,19 @@ app.use(session({
     store: sessionStore,
     cookie: {
         maxAge: 1000 * 60 * 60 * 24 * 7, // expires in 7 days
-        httpOnly: true
+        httpOnly: true,
+        sameSite: 'none',
+        secure: true
     }
 }))
 
 // import routes
 app.use("/", routes)
 
-app.listen(port, () => console.log("Server started"))
+https.createServer(options, app).listen(PORT, () => {
+    console.log(`HTTPS server started on port ${PORT}`);
+});
+
 }
 
 runServer()

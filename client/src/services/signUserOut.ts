@@ -1,5 +1,5 @@
 export default async function signUserOut() {
-    await fetch(process.env.REACT_APP_SIGNOUT as string, {
+    await fetch(`${import.meta.env.VITE_BASE_URL}/signout` as string, {
         method: "DELETE",
         credentials: "include"
     })

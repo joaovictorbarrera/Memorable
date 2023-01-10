@@ -1,10 +1,12 @@
-const router = require("express").Router()
+const express = require("express")
+const router = express.Router()
 
 import authorizeLogin from "../services/db/authorizeLogin"
 import createNewUser from "../services/db/createNewUser"
-import getUser from "../services/db/getUser"
+import {userExists, getUser, getCleanedUser} from "../services/db/getUser"
 import auth from "../middlewares/auth"
 import updatePFP from "../services/db/updatePFP"
+import { follow, getFollowers, getFollowing, unfollow } from "../services/db/followOperations"
 
 router.put("/pfp", auth, async (req:any, res:any) => {
     if (!req.user ) return res.json({success:false, error:"You are not logged in"})
@@ -34,16 +36,11 @@ router.get("/auth", (req:any, res:any) => {
 
 router.get("/loggedUser", async (req:any, res:any) => {
     if (!req.session.auth) return res.json({auth: false, user: null})
-    const user = await getUser(req.session.username)
+    const user = await getCleanedUser(req.session.username)
     if (!user) return res.json({auth: false, user: null})
     return res.json({
         auth: true,
-        user: {
-            username: user.username,
-            "firstName": user.firstName,
-            "lastName": user.lastName,
-            pfp: user.pfp
-        }
+        user
     })
 })
 
@@ -60,7 +57,7 @@ router.post("/login", async (req:any, res:any) => {
         req.session.username = username
         return res.status(200).json({auth: true})
     }
-    
+
     return res.status(401).json({auth: false})
 })
 
@@ -81,8 +78,8 @@ router.post("/register", async (req:any, res:any) => {
     }
 })
 
-router.get("/:user", async (req:any, res:any) => {
-    const user = await getUser(req.params.user)
+router.get("/profile/:username", async (req:any, res:any) => {
+    const user = await getCleanedUser(req.params.username)
     if (!user) return res.json({userExists: false, auth: false, user: null})
 
     const loggedUser = await getUser(req.session.username)
@@ -91,13 +88,37 @@ router.get("/:user", async (req:any, res:any) => {
     return res.json({
         userExists: true,
         auth: auth,
-        user: {
-            username: user.username,
-            "firstName": user.firstName,
-            "lastName": user.lastName,
-            pfp: user.pfp
-        }
+        user
     })
+})
+
+router.get("/:username/followers", async (req: any, res: any) => {
+    const username = req.params.username
+    const fullData = req?.query?.fullData
+
+    if (!userExists(username)) return res.json({username: username, error: "user does not exist"})
+
+    return res.json({username: username, followers: await getFollowers(username, {fullData: fullData === "true"})})
+})
+
+router.get("/:username/following", async (req: any, res: any) => {
+    const username = req.params.username
+    const fullData = req?.query?.fullData
+    if (!userExists(username)) return res.json({username: username, error: "user does not exist"})
+
+    return res.json({username: username, following: await getFollowing(username, {fullData: fullData === "true"})})
+})
+
+router.post("/:username/follow", auth, async (req: any, res: any) => {
+    const follower = req.session.username
+    const following = req.params.username
+    return res.json(await follow(follower, following))
+})
+
+router.delete("/:username/follow", auth, async (req: any, res: any) => {
+    const follower = req.session.username
+    const following = req.params.username
+    return res.json(await unfollow(follower, following))
 })
 
 export default router

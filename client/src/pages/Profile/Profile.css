@@ -49,8 +49,8 @@
     height: min-content;
     font-size: 80px;
     position: absolute;
-    top: 45%;  
-    left: 50%; 
+    top: 45%;
+    left: 50%;
     transform: translate(-50%, -50%);
     content: "📷"
 }
@@ -111,5 +111,48 @@
 #updatePFP-image-wrapper > img {
     height: 100%;
     width: 100%;
+    object-fit: cover;
+}
+
+.profile-follow-info-wrapper {
+    display: grid;
+    gap: .5rem;
+    grid-template-columns: 1fr 1fr;
+}
+
+.profile-follow-info-wrapper > button {
+    color: white;
+    background: none;
+    font-size: .6rem;
+    border: none;
+}
+
+.profile-follow-info-wrapper .follow-btn {
+    grid-column: span 2;
+    background-color: var(--secondary);
+    border-radius: .25rem;
+    padding: .25rem;
+    transition: background-color 300ms;
+}
+
+.profile-follow-info-wrapper .follow-btn.following {
+    background-color: var(--primary);
+}
+
+.follow-list {
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+}
+
+.follow-list > li {
+    display: flex;
+    gap: 1rem;
+}
+
+.follow-list img {
+    height: 2rem;
+    width: 2rem;
+    border-radius: 50%;
     object-fit: cover;
 }

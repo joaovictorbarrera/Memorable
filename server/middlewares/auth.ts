@@ -1,4 +1,4 @@
-import getUser from "../services/db/getUser"
+import {getUser} from "../services/db/getUser"
 
 export default async function auth(req:any, res:any, next:any) {
     if (!req.session.auth) {

@@ -4,3 +4,9 @@ export default interface User {
     lastName: string,
     pfp: string
 }
+
+export interface SearchedUser {
+    userExists: boolean,
+    auth: boolean,
+    user: User
+}

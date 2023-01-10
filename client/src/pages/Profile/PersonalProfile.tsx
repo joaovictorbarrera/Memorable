@@ -1,23 +1,24 @@
 import React, { FormEvent, useRef, useState } from 'react'
 import FormInput from '../../components/FormInput'
 import Modal from '../../components/Modal'
-import { useRefreshLoggedUserStatus } from '../../contexts/AuthUserProvider'
+import { useAuth } from '../../contexts/AuthUserProvider'
 import User from "../../interfaces/User"
+import FollowSection from './components/FollowSection'
 
-function MyProfile({user}: {user: User}) {
+function PersonalProfile({user}: {user: User}) {
     const [pfpModalOpen, setPfpModalOpen] = useState<boolean>(false)
-  
+
     return (
       <>
-      {pfpModalOpen ? 
+      {pfpModalOpen ?
       <Modal setOpen={setPfpModalOpen}>
-        <MyProfileModal setOpen={setPfpModalOpen} />
-      </Modal> 
+        <PersonalProfileModal setOpen={setPfpModalOpen} />
+      </Modal>
       : null}
       <div id='profile-page'>
         <section id='profile-items'>
           <div id="click-to-change-pfp" className='profile-picture' onClick={() => setPfpModalOpen(true)}>
-            <img 
+            <img
             src={user.pfp}
             alt="This users profile"
             />
@@ -26,17 +27,20 @@ function MyProfile({user}: {user: User}) {
             <h3 id='profile-username'>{`@${user.username}`}</h3>
             <span id='profile-full-name'>{`${user.firstName} ${user.lastName}`}</span>
           </div>
+
+          <FollowSection follawable={false} username={user.username} />
         </section>
         <section>
-          
+
         </section>
       </div>
       </>
     )
   }
 
-function MyProfileModal({setOpen}: {setOpen: (x: boolean) => void}) {
-    const refreshLoggedUserStatus = useRefreshLoggedUserStatus()
+function PersonalProfileModal({setOpen}: {setOpen: (x: boolean) => void}) {
+    const { refreshLoggedUser } = useAuth()
+
     const imageURLRef = useRef<HTMLInputElement>()
     const [URL, setURL] = useState<string | undefined | null>()
     const [error, setError] = useState<string | undefined | null>()
@@ -68,13 +72,13 @@ function MyProfileModal({setOpen}: {setOpen: (x: boolean) => void}) {
     function handleUpdatePFP(e: FormEvent) {
         e.preventDefault()
         const form = e.target
-    
+
         // Create new FormData object:
         const formData = new FormData(form as HTMLFormElement);
         // Convert formData object to URL-encoded string:
         const payload = new URLSearchParams(formData as any);
 
-        fetch(process.env.REACT_APP_CHANGE_PROFILE_PICTURE as string, {
+        fetch(`${import.meta.env.VITE_BASE_URL}/pfp`, {
             credentials:"include",
             method:"PUT",
             body: payload
@@ -82,11 +86,11 @@ function MyProfileModal({setOpen}: {setOpen: (x: boolean) => void}) {
         .then(res => res.json())
         .then(data => {
           if (data.success) {
-              refreshLoggedUserStatus()
+              refreshLoggedUser()
               setOpen(false)
               return
           }
-            
+
           setError(data.error)
         })
         .catch(e => {
@@ -100,7 +104,7 @@ function MyProfileModal({setOpen}: {setOpen: (x: boolean) => void}) {
           <h1>Change Your Profile Picture:</h1>
       </header>
 
-      {URL ? 
+      {URL ?
       <section id="updatePFP-image-preview-container">
         <h3>Profile picture preview: </h3>
         <section id="updatePFP-image-wrapper">
@@ -123,4 +127,4 @@ function MyProfileModal({setOpen}: {setOpen: (x: boolean) => void}) {
     )
 }
 
-export default MyProfile
+export default PersonalProfile

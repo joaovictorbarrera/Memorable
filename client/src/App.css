@@ -21,4 +21,8 @@ ul {
     list-style: none;
 }
 
+.clickable:hover {
+    cursor: pointer;
+    filter: brightness(90%)
+}
 

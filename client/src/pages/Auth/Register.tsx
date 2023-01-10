@@ -13,7 +13,7 @@ function Register() {
   const clientValidation = useCallback(function(formData: FormData) {
     const email = formData.get("email") as string
     const username = formData.get("username") as string
-    
+
     const password = formData.get("password") as string
     const confirmPassword = formData.get("confirm-password") as string
 
@@ -21,7 +21,7 @@ function Register() {
     const lastName = formData.get("lastName") as string
     const errors: ErrorReducerState = Object.assign(ERRORS_INITIAL_STATE)
 
-    const validEmail = new RegExp(/[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[a-zA-Z0-9]+/).test(email) 
+    const validEmail = new RegExp(/[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[a-zA-Z0-9]+/).test(email)
     if (!validEmail) {
       errors.email = {
         errorMessage: "Invalid Email Address."
@@ -72,7 +72,7 @@ function Register() {
     }
 
     const validFirstName = firstName.length >= 2
-    
+
     if (!validFirstName) {
       errors.firstName = {
         errorMessage: "Invalid First Name."
@@ -80,13 +80,13 @@ function Register() {
     }
 
     const validLastName = lastName.length >= 2
-    
+
     if (!validLastName) {
       errors.lastName = {
         errorMessage: "Invalid Last Name."
       }
     }
-    
+
     const success = !Object.values(errors).some(error => error.errorMessage != null)
 
     return {success, errors}
@@ -110,7 +110,7 @@ function Register() {
     const payload = new URLSearchParams(formData as any)
 
     // {success: true/false, errors: {empty | input-name: {errorMessage: ""}}}
-    fetch(process.env.REACT_APP_REGISTER_POST as string, {
+    fetch(`${import.meta.env.VITE_BASE_URL}/register` as string, {
       method:"POST",
       body: payload
     })

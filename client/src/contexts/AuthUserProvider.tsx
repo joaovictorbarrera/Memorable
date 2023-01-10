@@ -1,42 +1,34 @@
 import React, { useCallback, useContext } from 'react'
-import useUser, { LoggedUser } from "../hooks/useUser"
+import useUser from "../hooks/useUser"
 import signUserOut from '../services/signUserOut'
+import User from '../interfaces/User'
 
-const LoggedUserContext = React.createContext<LoggedUser["user"] | undefined | null>(undefined)
-const SignOutContext = React.createContext<() => void>(() => {})
-const RefreshLoggedUserStatus = React.createContext<() => void>(() => {})
-
-export function useLoggedUser() {
-    return useContext(LoggedUserContext)
+interface AuthUserContext {
+    loggedUser: User | undefined | null,
+    signOut: () => void,
+    refreshLoggedUser: () => void
 }
 
-export function useSignOut() {
-    return useContext(SignOutContext)
-}
+const AuthContext = React.createContext<AuthUserContext>({loggedUser: undefined, signOut: () => {}, refreshLoggedUser: () => {}})
 
-export function useRefreshLoggedUserStatus() {
-    return useContext(RefreshLoggedUserStatus)
+export function useAuth() {
+    return useContext(AuthContext)
 }
-
 interface Props {
     children: JSX.Element[] | JSX.Element
 }
 
 function AuthUserProvider({children}: Props) {
-    const {user, refreshUser} = useUser()
+    const { user, refetch: refreshUser } = useUser()
 
     const signOut = useCallback(() => {
-        signUserOut().then(refreshUser)
+        signUserOut().then(() => refreshUser())
     }, [])
 
     return (
-        <LoggedUserContext.Provider value={user}>
-            <SignOutContext.Provider value={signOut}>
-                <RefreshLoggedUserStatus.Provider value={refreshUser}>
-                    {children}
-                </RefreshLoggedUserStatus.Provider>
-            </SignOutContext.Provider>
-        </LoggedUserContext.Provider>
+        <AuthContext.Provider value={{loggedUser: user, signOut: signOut, refreshLoggedUser: refreshUser}}>
+            {children}
+        </AuthContext.Provider>
     )
 }
 

@@ -8,22 +8,27 @@ import Register from './pages/Auth/Register';
 import DefaultLayout from './layouts/DefaultLayout/DefaultLayout';
 import AuthLayout from './layouts/AuthLayout/AuthLayout';
 import AuthUserProvider from './contexts/AuthUserProvider';
+import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
 
 function App() {
-  return (
-    <AuthUserProvider>
-      <Routes>
-        <Route path="/" element={<DefaultLayout />}>
-          <Route index element={<Home />} />
-          <Route path=":username" element={<Profile />} />
-        </Route>
+  const client = new QueryClient()
 
-        <Route path="/" element={<AuthLayout />}>
-          <Route path="login" element={<Login />} />
-          <Route path="register" element={<Register />} />
-        </Route>
-      </Routes>
-    </AuthUserProvider>
+  return (
+    <QueryClientProvider client={client}>
+      <AuthUserProvider>
+        <Routes>
+          <Route path="/" element={<DefaultLayout />}>
+            <Route index element={<Home />} />
+            <Route path=":username" element={<Profile />} />
+          </Route>
+
+          <Route path="/" element={<AuthLayout />}>
+            <Route path="login" element={<Login />} />
+            <Route path="register" element={<Register />} />
+          </Route>
+        </Routes>
+      </AuthUserProvider>
+    </QueryClientProvider>
   )
 }
 

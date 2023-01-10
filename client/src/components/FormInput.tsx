@@ -1,5 +1,4 @@
 import React from 'react'
-import { JsxAttribute } from 'typescript'
 import "./GlobalComponents.css"
 
 interface props {
@@ -13,9 +12,9 @@ interface props {
 
 function FormInput({placeholder, type, name, id, errorMessage, children}: props, ref?: any) {
   return (
-    <div className='input-wrapper'>
-    <input ref={ref} className="auth-input" 
-    placeholder={placeholder} 
+  <div className='input-wrapper'>
+    <input ref={ref} className="auth-input"
+    placeholder={placeholder}
     type={type}
     name={name}
     id={id} required />

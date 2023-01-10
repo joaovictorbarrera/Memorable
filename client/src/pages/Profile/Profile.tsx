@@ -1,45 +1,41 @@
-import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import "./Profile.css"
-import useSearchUser from '../../hooks/useSearchUser'
 import RegularProfile from './RegularProfile'
-import MyProfile from './MyProfile'
-import { useLoggedUser } from '../../contexts/AuthUserProvider'
+import PersonalProfile from './PersonalProfile'
+import { useAuth } from '../../contexts/AuthUserProvider'
+import User, { SearchedUser } from '../../interfaces/User'
+import { useQuery } from '@tanstack/react-query'
 
 function Profile() {
   const { username: usernameParam } = useParams()
-  const { searchedUser, refreshSearchedUser } = useSearchUser(usernameParam)
-  const user = useLoggedUser()
+  const { loggedUser: user } = useAuth()
 
-  const loading = searchedUser === undefined
-  const userNotFound = searchedUser === null
+  const URL = `${import.meta.env.VITE_BASE_URL}/profile/${usernameParam}`
+  const { data: searchedUserData, isLoading: searchedUserLoading } = useQuery(['searched-user', usernameParam, user],
+  async (): Promise<SearchedUser> => {
+      const res =  await fetch(URL, {credentials: "include"})
+      return await res.json()
+  })
 
-  const center = {
-    display: "flex",
-    justifyContent: "center"
-  }
+  const searchedUser = searchedUserData?.userExists ? searchedUserData?.user : null
+  const auth = searchedUserData?.auth
 
-  // user logs out while on their own profile page
-  useEffect(() => {
-    if (searchedUser) refreshSearchedUser()
-  }, [user])
-
-  if (loading) {
+  if (searchedUserLoading) {
     return <div></div>
   }
 
-  if (userNotFound) {
-    return <div style={center}>User not found</div>
+  if (searchedUser == null) {
+    return <div style={{display: "flex", justifyContent: "center" }}>User not found</div>
   }
 
-  if (user && user.username === searchedUser.username) {
+  if (auth) {
     return (
-      <MyProfile user={user} />
+      <PersonalProfile user={searchedUser} />
     )
   }
-  
+
   return (
-    <RegularProfile searchedUser={searchedUser} />
+    <RegularProfile searchedUser={searchedUser} loggedIn={!!user} />
   )
 }
 

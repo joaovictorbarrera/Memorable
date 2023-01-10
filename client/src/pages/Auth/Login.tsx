@@ -3,15 +3,14 @@ import "./Login.css"
 import {Link, useNavigate} from "react-router-dom"
 import LoginRegisterHeader from './components/LoginRegisterHeader'
 import FormInput from '../../components/FormInput'
-import { useLoggedUser, useRefreshLoggedUserStatus } from '../../contexts/AuthUserProvider'
+import { useAuth } from '../../contexts/AuthUserProvider'
 
 function Login() {
   const [error, setError] = useState(false)
   const errorMessage = error ? "Incorrect Username/Password" : null
 
   const navigate = useNavigate()
-  const refreshLoggedUserStatus = useRefreshLoggedUserStatus()
-  const loggedUser = useLoggedUser()
+  const {loggedUser, refreshLoggedUser} = useAuth()
 
   useLayoutEffect(() => {
     if (loggedUser != null) navigate("/")
@@ -26,7 +25,7 @@ function Login() {
     const formData = new FormData(form);
     const payload = new URLSearchParams(formData as any)
 
-    fetch(process.env.REACT_APP_LOGIN_POST as string, {
+    fetch(`${import.meta.env.VITE_BASE_URL}/login`, {
       method:"POST",
       credentials: "include",
       body: payload,
@@ -34,7 +33,7 @@ function Login() {
     .then(res => res.json())
     .then(data => {
       if (data.auth) {
-        refreshLoggedUserStatus()
+        refreshLoggedUser()
         navigate("/")
       } else {
         setError(true)
@@ -51,7 +50,7 @@ function Login() {
     <>
       <LoginRegisterHeader />
       <form id="login-form" onSubmit={handleLogin}>
-        <FormInput placeholder='Username' type="text" name="username" id="login-username" 
+        <FormInput placeholder='Username' type="text" name="username" id="login-username"
         errorMessage={errorMessage}/>
 
         <FormInput placeholder='Password' type="password" name="password" id="login-password"
@@ -61,7 +60,7 @@ function Login() {
 
         <button id="login-btn" type="submit">Login</button>
       </form>
-      
+
       <footer id="login-needs-register">Need an account? <Link to="/register">Register</Link></footer>
     </>
   )

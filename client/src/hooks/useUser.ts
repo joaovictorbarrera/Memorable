@@ -1,38 +1,17 @@
-import { useCallback, useEffect, useState } from 'react'
 import User from "../interfaces/User"
-
-export interface LoggedUser {
-    auth: boolean,
-    user: User
-}
+import { useQuery } from '@tanstack/react-query'
 
 function useUser() {
-    const [user, setUser] = useState<LoggedUser["user"] | undefined | null>(undefined)
-    const [updator, setUpdator] = useState({})
-
-    function auth(): Promise<LoggedUser["user"] | null> {
-        return fetch(process.env.REACT_APP_LOGGED_USER as string, {credentials: "include"})
+    const { data: user, refetch } = useQuery(['auth'], async () => {
+        return fetch(`${import.meta.env.VITE_BASE_URL}/loggedUser`, {credentials: "include"})
         .then(res => res.json())
-        .then((data: LoggedUser) => {
-            if (!data.auth) return null
-            return data.user
+        .then(data => {
+            if (!data || !data?.auth) return null
+            return data?.user as User
         })
-        .catch(e => {
-            console.log(e)
-            return null
-        })
-    }
-    
-    useEffect(() => {
-        setUser(undefined)
-        auth().then((data) => {
-            setUser(data)
-        })
-    }, [updator])
+    })
 
-    const refreshUser = useCallback(() => setUpdator({}), [])
-
-    return {user, refreshUser}
+    return {user, refetch}
 }
 
 export default useUser

@@ -2,11 +2,11 @@ import React, { useState } from 'react'
 import { NavLink } from 'react-router-dom'
 import "../../App.css"
 import { useNavigate } from 'react-router-dom'
-import { useLoggedUser, useSignOut } from '../../contexts/AuthUserProvider'
+import { useAuth } from '../../contexts/AuthUserProvider'
 import User from "../../interfaces/User"
 
 function NavBar() {
-    const user = useLoggedUser()
+    const {loggedUser: user} = useAuth()
 
     return (
         <nav className='navbar'>
@@ -35,7 +35,7 @@ function NavBar() {
 
 function ProfileIconWithDropdown({user}: {user: User}) {
     const [open, setOpen] = useState(false)
-    const signOut = useSignOut()
+    const { signOut } = useAuth()
 
     return (
         <div id="nav-profile-icon">
