@@ -22,7 +22,7 @@ ENV DOTNET_RUNNING_IN_CONTAINER=true
 ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=true
 
 # Expose port (optional, for local testing)
-EXPOSE 8000
+EXPOSE 8080
 
 # Start the app
 ENTRYPOINT ["dotnet", "out/Server.dll"]
