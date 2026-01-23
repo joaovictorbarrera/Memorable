@@ -1,0 +1,51 @@
+# =========================
+# OS
+# =========================
+.DS_Store
+Thumbs.db
+
+# =========================
+# Node / Angular
+# =========================
+client/node_modules/
+client/dist/
+client/.angular/
+client/.cache/
+npm-debug.log*
+yarn-error.log*
+
+# =========================
+# .NET / ASP.NET Core
+# =========================
+server/**/bin/
+server/**/obj/
+server/**/publish/
+
+# =========================
+# ASP.NET Core secrets
+# =========================
+**/appsettings.Development.json
+**/secrets.json
+
+# =========================
+# Environment files
+# =========================
+.env
+.env.*
+!.env.example
+
+# =========================
+# IDEs
+# =========================
+.vscode/
+.vs/
+.idea/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# =========================
+# Logs
+# =========================
+*.log
