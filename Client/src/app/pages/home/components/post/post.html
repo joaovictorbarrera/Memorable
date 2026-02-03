@@ -1,0 +1,39 @@
+<app-card class="text-lg">
+    <div class="flex flex-col gap-1">
+        <div class="flex items-center gap-3">
+            <app-profile-icon [imageUrl]="post.userProfileImageUrl"></app-profile-icon>
+            <span>{{ post.username }}</span>
+        </div>
+        <p class="text-stone-400 text-sm">{{ formatTime(post.createdAt) }}</p>
+    </div>
+    <p class="py-3">{{ post.textContent }}</p>
+    @if (post.imageUrl) {
+        <img [src]="post.imageUrl" alt="Post image" class="w-full h-auto">
+    }
+
+    <!-- Thumbs Up Button -->
+    <div class="flex gap-2 items-start py-2">
+        <button (click)="toggleLike(post)" class="cursor-pointer hover:brightness-90 rounded-full">
+            @if (post.isLikedByCurrentUser) {
+                <mat-icon fontIcon="thumb_up" style="color: blue;" ></mat-icon>
+            } @else {
+                <mat-icon fontIcon="thumb_up" style="color: gray;" ></mat-icon>
+            }
+        </button>
+        <p>{{ `${post.likeCount} like${post.likeCount !== 1 ? 's' : ''}` }}</p>
+    </div>
+
+    <!-- Comments -->
+    <div class="flex flex-col text-sm">
+        @for (comment of post.comments; track comment.commentId) {
+            <app-comment class="pt-2" [comment]="comment"></app-comment>
+        }
+    </div>
+
+    <!-- CommentCreate -->
+    <div class="flex gap-2 items-center mt-3">
+        <app-profile-icon [imageUrl]="post.userProfileImageUrl"></app-profile-icon>
+        <input type="text" placeholder="Add a comment..." class="w-full p-2 bg-stone-800 rounded-lg border-stone-800/40 text-stone-100 placeholder:text-stone-500 focus-visible:ring-orange-900 focus-visible:border-orange-800">
+        <app-post-button></app-post-button>
+    </div>
+</app-card>

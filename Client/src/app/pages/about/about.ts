@@ -1,9 +1,8 @@
 import { Component } from '@angular/core';
-import { Card } from '../../shared/components/card/card';
 
 @Component({
   selector: 'app-about',
-  imports: [Card],
+  imports: [],
   templateUrl: './about.html',
   styleUrl: './about.scss',
 })

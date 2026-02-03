@@ -1,0 +1,10 @@
+<div class="flex gap-2 items-center">
+    <app-profile-icon [imageUrl]="comment.userProfileImageUrl"></app-profile-icon>
+    <div class="flex-col flex">
+        <div class="flex items-center gap-2">
+            <span class="font-bold">{{ comment.username }}
+            </span> {{ comment.textContent }}
+        </div>
+        <p class="text-stone-500 text-sm">{{ formatTime(comment.createdAt) }}</p>
+    </div>
+</div>

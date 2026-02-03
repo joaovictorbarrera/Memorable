@@ -1,23 +1,8 @@
 <main class="w-full flex justify-center">
     <div class="flex flex-col gap-10 w-2xl p-5">
-        <app-card class="flex text-">
-          <div class="inline-block">
-            <app-profile-icon></app-profile-icon>
-          </div>
-          <div class="inline-block w-full">
-            <div class="h-20 flex flex-col">
-                <textarea placeholder="Share a memory..." type="text" class="p-2 w-full h-full bg-transparent border-none focus:ring-0 resize-none"></textarea>
-            </div>
-            <hr class="border-stone-600 my-4">
-            <div class="flex items-center mt-2">
-                <span class="flex items-end gap-1">
-                    <mat-icon fontIcon="image"></mat-icon>
-                    Photo
-                </span>
-                <button class="ml-auto h-10 px-5 py-2 bg-orange-800 hover:bg-orange-700 text-orange-50 rounded-lg">Post</button>
-            </div>
-          </div>
-        </app-card>
-
+        <app-post-create (postCreated)="refreshFeed()"></app-post-create>
+        @for (post of feed(); track post.postId) {
+            <app-post [post]="post"></app-post>
+        }
     </div>
 </main>
