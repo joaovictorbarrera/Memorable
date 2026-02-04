@@ -32,7 +32,7 @@
 
     <!-- CommentCreate -->
     <div class="flex gap-2 items-center mt-3">
-        <app-profile-icon [imageUrl]="post.userProfileImageUrl"></app-profile-icon>
+        <app-profile-icon class="xs:block hidden" [imageUrl]="post.userProfileImageUrl"></app-profile-icon>
         <input type="text" placeholder="Add a comment..." class="w-full p-2 bg-stone-800 rounded-lg border-stone-800/40 text-stone-100 placeholder:text-stone-500 focus-visible:ring-orange-900 focus-visible:border-orange-800">
         <app-post-button></app-post-button>
     </div>

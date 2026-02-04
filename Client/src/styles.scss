@@ -6,6 +6,7 @@
 // custom components at https://material.angular.dev/guide/theming
 @use 'tailwindcss';
 @use '@angular/material' as mat;
+@use './styles/tailwind.css';
 
 html {
   @include mat.theme((
@@ -35,6 +36,10 @@ body {
   margin: 0;
 }
 /* You can add global styles to this file, and also import other style files */
+
+:root {
+  --breakpoint-xs: 30rem;
+}
 
 body {
     @apply bg-zinc-950 text-orange-50;
