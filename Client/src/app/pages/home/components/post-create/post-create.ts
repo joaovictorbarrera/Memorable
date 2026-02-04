@@ -5,6 +5,7 @@ import { ProfileIcon } from '../../../../shared/components/profile-icon/profile-
 import { PostButton } from "../post-button/post-button";
 import { FormsModule } from '@angular/forms';
 import { PostService } from '../../../../shared/services/post.service';
+import { CurrentUserService } from '../../../../shared/services/currentuser.service';
 
 @Component({
   selector: 'app-post-create',
@@ -15,9 +16,8 @@ import { PostService } from '../../../../shared/services/post.service';
 export class PostCreate {
   postContent = signal<string>("");
   @Output() postCreated = new EventEmitter<void>();
-  userProfileImage = signal<string>("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTFFbBnDucTQkErvyNTrqFvqD4eSkm9UcFNYg&s");
 
-  constructor (private postService: PostService) {}
+  constructor (private postService: PostService, public currentUserService: CurrentUserService) {}
 
   post(): void {
     if (this.postContent().trim() === "") {

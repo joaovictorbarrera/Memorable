@@ -26,7 +26,7 @@ namespace Server.Services
         {
             _users =
             [
-                new User { UserId = 1, Username = "joao", ProfileImageUrl = "https://t4.ftcdn.net/jpg/04/31/64/75/360_F_431647519_usrbQ8Z983hTYe8zgA7t1XVc5fEtqcpa.jpg" },
+                new User { UserId = 1, Username = "joao", ProfileImageUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTFFbBnDucTQkErvyNTrqFvqD4eSkm9UcFNYg&s" },
                 new User { UserId = 2, Username = "mariah", ProfileImageUrl = "https://img.freepik.com/free-photo/head-shot-happy-beautiful-young-woman-posing-indoors-looking-camera-smiling_74855-10218.jpg?semt=ais_hybrid&w=740&q=80" },
                 new User { UserId = 3, Username = "mike", ProfileImageUrl = "https://img.freepik.com/free-photo/portrait-white-man-isolated_53876-40306.jpg?semt=ais_hybrid&w=740&q=80" },
                 new User { UserId = 4, Username = "sarah", ProfileImageUrl = "https://images.squarespace-cdn.com/content/v1/5e3ee1cd772e5208fa93bad8/1600276711411-FBREG2YYKZ5Z9JS5YAWK/image-asset.jpeg" }

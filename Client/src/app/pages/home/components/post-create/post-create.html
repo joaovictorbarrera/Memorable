@@ -1,6 +1,6 @@
 <app-card class="flex text-">
     <div class="inline-block">
-    <app-profile-icon [imageUrl]="userProfileImage()"></app-profile-icon>
+    <app-profile-icon [imageUrl]="this.currentUserService.user()?.profileImageUrl ?? ''"></app-profile-icon>
     </div>
     <div class="inline-block w-full">
     <div class="h-20 flex flex-col">

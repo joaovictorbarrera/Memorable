@@ -29,7 +29,7 @@
                     type="text" placeholder="Search...">
                 </div>
 
-                <app-profile-icon [imageUrl]="userProfileImage()"></app-profile-icon>
+                <app-profile-icon [imageUrl]="currentUserService.user()?.profileImageUrl ?? ''"></app-profile-icon>
             </div>
         </div>
     </div>
