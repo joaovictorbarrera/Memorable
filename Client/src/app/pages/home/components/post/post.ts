@@ -1,4 +1,4 @@
-import { Component, computed, EventEmitter, Input, Output, Signal, signal } from '@angular/core';
+import { Component, computed, EventEmitter, Input, OnInit, Output, Signal, signal } from '@angular/core';
 import { PostDto } from '../../../../shared/models/post.dto';
 import { Card } from '../../../../shared/components/card/card';
 import { CommonModule } from '@angular/common';
@@ -16,11 +16,12 @@ import { PostService } from '../../../../shared/services/post.service';
   templateUrl: './post.html',
   styleUrl: './post.scss',
 })
-export class Post {
+export class Post implements OnInit {
   @Input() post!: PostDto;
   @Output() refreshFeed = new EventEmitter<void>();
 
   isCurrentUserPost: Signal<boolean> = signal(false);
+  timeAgo: string = '';
 
   constructor(private currentUserService: CurrentUserService, private postService: PostService) {
     this.isCurrentUserPost = computed(() => {
@@ -29,8 +30,8 @@ export class Post {
     })
   }
 
-  formatTime(date: Date): string {
-    return formattedTime(date);
+  ngOnInit(): void {
+    this.timeAgo = formattedTime(this.post.createdAt);
   }
 
   toggleLike(post: PostDto): void {
