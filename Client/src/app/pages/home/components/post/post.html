@@ -7,6 +7,19 @@
             <p class="text-stone-400 text-sm mb-2">{{ formatTime(post.createdAt) }}</p>
         </div>
 
+        <!-- Show edit and delete button if the current user is the author of the post -->
+        @if (isCurrentUserPost()) {
+            <div class="ml-auto flex gap-2">
+                <button (click)="editPost()" class="cursor-pointer">
+                    <mat-icon fontIcon="edit" style="color: gray;" ></mat-icon>
+                </button>
+
+                <button (click)="deletePost()" class="cursor-pointer">
+                    <mat-icon fontIcon="delete" style="color: red;" ></mat-icon>
+                </button>
+            </div>
+        }
+
     </div>
     <p class="py-3">{{ post.textContent }}</p>
     @if (post.imageUrl) {

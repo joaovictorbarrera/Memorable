@@ -43,13 +43,10 @@ export class PostService {
   /**
    * CREATE post
    */
-  createPost(post: {
-    textContent: string;
-    imageUrl?: string | null;
-  }): Observable<any> {
+  createPost(formData: FormData): Observable<any> {
     return this.http.post(
       `${this.apiUrl}/PostCreate`,
-      post
+      formData
     );
   }
 

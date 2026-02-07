@@ -1,18 +1,38 @@
 <app-card class="flex text-">
     <div class="inline-block">
-    <app-profile-icon [imageUrl]="this.currentUserService.user()?.profileImageUrl ?? ''"></app-profile-icon>
-    </div>
-    <div class="inline-block w-full">
-    <div class="h-20 flex flex-col">
-        <textarea [(ngModel)]="postContent" placeholder="Share a memory..." type="text" class="p-2 w-full h-full bg-transparent border-none focus:ring-0 resize-none"></textarea>
-    </div>
-    <hr class="border-stone-600 my-4">
-    <div class="flex items-center mt-2">
-        <span class="flex items-end gap-1">
-            <mat-icon fontIcon="image"></mat-icon>
-            Photo
-        </span>
-        <app-post-button class="ml-auto" (click)="post()"></app-post-button>
-    </div>
+        <app-profile-icon [imageUrl]="this.currentUserService.user()?.profileImageUrl ?? ''"></app-profile-icon>
+        </div>
+        <div class="inline-block w-full">
+        <div class="h-20 flex flex-col">
+            <textarea [(ngModel)]="postContent" placeholder="Share a memory..." type="text" class="p-2 w-full h-full bg-transparent border-none focus:ring-0 resize-none"></textarea>
+        </div>
+        @if (imagePreviewUrl()) {
+            <div class="relative">
+                <img [src]="imagePreviewUrl()" class="w-full rounded-lg mt-2 object-cover" />
+                <button (click)="removeSelectedImage()"
+                class="cursor-pointer absolute top-1 right-1 bg-stone-800/70 rounded-full w-8 h-8 hover:bg-stone-700 flex items-center justify-center">
+                    <mat-icon fontIcon="close" style="color: white;"></mat-icon>
+                </button>
+            </div>
+        }
+
+        <hr class="border-stone-600 my-4">
+        <div class="flex items-center mt-2">
+            <!-- Image picker trigger -->
+            <span class="flex items-end gap-1 cursor-pointer text-stone-400 hover:text-stone-200" (click)="openImageSelector()">
+                <mat-icon fontIcon="image"></mat-icon>
+                Photo
+            </span>
+
+            <input
+                #fileInput
+                type="file"
+                accept="image/*"
+                hidden
+                (change)="onImageSelected($event)"
+            />
+
+            <app-post-button class="ml-auto" (click)="post()"></app-post-button>
+        </div>
     </div>
 </app-card>

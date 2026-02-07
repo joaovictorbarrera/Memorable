@@ -1,7 +1,7 @@
 ﻿using Server.Dtos;
 using Server.Models;
 
-namespace Server.Services
+namespace Server.Services.Posts
 {
     public class PostService
     {

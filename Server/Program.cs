@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Identity.Web;
+using Server.Configuration;
+using Server.Services.ImageUpload;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,6 +20,12 @@ builder.Services.AddCors(options =>
               .AllowAnyMethod();
     });
 });
+
+builder.Services.AddHttpClient<IImageUploadService, ImgBbImageUploadService>();
+
+builder.Services.Configure<ImgBbOptions>(
+    builder.Configuration.GetSection("ImgBB")
+);
 
 var app = builder.Build();
 

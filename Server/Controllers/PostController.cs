@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using Server.Dtos;
 using Server.Models;
 using Server.Services;
+using Server.Services.ImageUpload;
+using Server.Services.Posts;
 
 namespace Server.Controllers
 {
@@ -17,21 +19,31 @@ namespace Server.Controllers
         }
 
         [HttpPost("PostCreate")]
-        public IActionResult Create([FromBody] PostCreateDto body)
+        [Consumes("multipart/form-data")]
+        public async Task<IActionResult> Create(
+            [FromForm] PostCreateDto body,
+            [FromServices] IImageUploadService imgBb)
         {
-            if (body.TextContent == null || string.IsNullOrWhiteSpace(body.TextContent))
+            if (body.Image == null && string.IsNullOrWhiteSpace(body.TextContent))
             {
                 return BadRequest("Post content is required");
             }
 
+            string? imageUrl = null;
+
+            if (body.Image != null)
+            {
+                imageUrl = await imgBb.UploadAsync(body.Image);
+            }
+
             int userId = 1; // Mocked user ID for demonstration
 
-            Post post = new Post
+            Post post = new()
             {
                 UserId = userId,
                 TextContent = body.TextContent,
                 CreatedAt = DateTime.UtcNow,
-                ImageUrl = body.ImageUrl
+                ImageUrl = imageUrl
             };
          
             Mockdata._posts.Add(post);
@@ -84,6 +96,9 @@ namespace Server.Controllers
                 return NotFound("Post not found");
             }
             Mockdata._posts.Remove(post);
+            Mockdata._comments.RemoveAll(c => c.PostId == postId);
+            Mockdata._likes.RemoveAll(l => l.PostId == postId);
+
             return Ok(new
             {
                 message = "Post deleted successfully"
@@ -108,6 +123,7 @@ namespace Server.Controllers
             {
                 message = "Post updated successfully"
             });
+            
         }
     }
 }

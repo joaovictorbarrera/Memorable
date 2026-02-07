@@ -2,7 +2,7 @@
 {
     public class PostCreateDto
     {
-        public required string TextContent { get; set; }
-        public string? ImageUrl { get; set; }
+        public string? TextContent { get; set; }
+        public IFormFile? Image { get; set; }
     }
 }
