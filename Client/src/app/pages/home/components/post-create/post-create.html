@@ -5,7 +5,7 @@
         </div>
         <div class="inline-block w-full pr-10">
             <div class="h-20 flex flex-col">
-                <textarea [(ngModel)]="postContent" placeholder="Share a memory..." type="text" class="p-2 w-full h-full text-[1rem] bg-transparent border-none focus:ring-0 resize-none"></textarea>
+                <textarea [(ngModel)]="textContent" placeholder="Share a memory..." type="text" class="p-2 w-full h-full text-[1rem] bg-transparent border-none focus:ring-0 resize-none"></textarea>
             </div>
             @if (imagePreviewUrl()) {
                 <div class="relative">
@@ -16,8 +16,6 @@
                     </button>
                 </div>
             }
-
-
         </div>
     </div>
     <div>
@@ -37,7 +35,12 @@
                 (change)="onImageSelected($event)"
             />
 
-            <app-post-button class="ml-auto" (click)="post()"></app-post-button>
+            <div class="flex ml-auto items-center gap-2">
+                @if (loading()) {
+                    <mat-icon class="animate-spin-slow" style="color: dimgrey" fontIcon="autorenew"></mat-icon>
+                }
+                <app-post-button [disabled]="this.shouldDisablePosting()" (click)="post()"></app-post-button>
+            </div>
         </div>
     </div>
 </app-card>

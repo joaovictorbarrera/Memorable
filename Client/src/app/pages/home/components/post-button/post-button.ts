@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-post-button',
@@ -7,5 +7,5 @@ import { Component } from '@angular/core';
   styleUrl: './post-button.scss',
 })
 export class PostButton {
-
+  @Input() disabled!: boolean;
 }
