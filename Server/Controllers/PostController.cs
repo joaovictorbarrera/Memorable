@@ -24,34 +24,42 @@ namespace Server.Controllers
             [FromForm] PostCreateDto body,
             [FromServices] IImageUploadService imgBb)
         {
-            if (body.Image == null && string.IsNullOrWhiteSpace(body.TextContent))
+            try
             {
-                return BadRequest("Post content is required");
+                if (body.Image == null && string.IsNullOrWhiteSpace(body.TextContent))
+                {
+                    return BadRequest("Post content is required");
+                }
+
+                string? imageUrl = null;
+
+                if (body.Image != null)
+                {
+                    imageUrl = await imgBb.UploadAsync(body.Image);
+                }
+
+                int userId = 1; // Mocked user ID for demonstration
+
+                Post post = new()
+                {
+                    UserId = userId,
+                    TextContent = body.TextContent,
+                    CreatedAt = DateTime.UtcNow,
+                    ImageUrl = imageUrl
+                };
+
+                Mockdata._posts.Add(post);
+
+                return Ok(new
+                {
+                    message = "Post created successfully"
+                });
             }
-
-            string? imageUrl = null;
-
-            if (body.Image != null)
+            catch (Exception ex)
             {
-                imageUrl = await imgBb.UploadAsync(body.Image);
+                _logger.LogError(ex, "Error creating post");
+                return StatusCode(500, ex.Message);
             }
-
-            int userId = 1; // Mocked user ID for demonstration
-
-            Post post = new()
-            {
-                UserId = userId,
-                TextContent = body.TextContent,
-                CreatedAt = DateTime.UtcNow,
-                ImageUrl = imageUrl
-            };
-         
-            Mockdata._posts.Add(post);
-
-            return Ok(new
-            {
-                message = "Post created successfully"
-            });
         }
 
         [HttpGet("PostGetFeed")]
