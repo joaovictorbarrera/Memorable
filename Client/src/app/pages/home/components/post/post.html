@@ -8,22 +8,51 @@
         </div>
 
         <!-- Show edit and delete button if the current user is the author of the post -->
-        @if (isCurrentUserPost()) {
+        @if (isCurrentUserPost() && !editMode()) {
             <div class="ml-auto flex gap-2">
-                <button (click)="editPost()" class="cursor-pointer">
+                <button (click)="editPost()" class="cursor-pointer hover:brightness-70">
                     <mat-icon fontIcon="edit" style="color: gray;" ></mat-icon>
                 </button>
 
-                <button (click)="deletePost()" class="cursor-pointer">
+                <button (click)="deletePost()" class="cursor-pointer hover:brightness-70">
                     <mat-icon fontIcon="delete" style="color: red;" ></mat-icon>
                 </button>
             </div>
         }
 
+        @if (editMode()) {
+            <div class="ml-auto flex gap-2">
+                <button (click)="saveEdits()" class="cursor-pointer hover:brightness-70">
+                    <mat-icon fontIcon="check" style="color: green;" ></mat-icon>
+                </button>
+
+                <button (click)="cancelEdit()" class="cursor-pointer hover:brightness-70">
+                    <mat-icon fontIcon="close" style="color: red;" ></mat-icon>
+                </button>
+            </div>
+         }
+
     </div>
-    <p class="py-2">{{ post.textContent }}</p>
+
+    @if (editMode()) {
+        <textarea [(ngModel)]="post.textContent" class="w-full p-2 bg-bg-quaternary rounded-lg border-stone-800/40 resize-none placeholder:text-stone-500 focus-visible:outline-0 focus-visible:ring-3 focus-visible:ring-accent-primary/80"></textarea>
+    }
+    @else {
+        <p class="whitespace-pre-wrap">{{ post.textContent }}</p>
+    }
+
     @if (post.imageUrl) {
-        <img [src]="post.imageUrl" alt="Post image" class="mt-5 w-full h-auto rounded-lg object-cover">
+        <div class="relative">
+            <img [src]="post.imageUrl" alt="Post image" class="mt-5 w-full h-auto rounded-lg object-cover">
+
+            @if (editMode()) {
+                <div class="hover:brightness-70 flex items-center justify-center gap-2 mt-2 absolute top-1 right-2 h-8 w-8 bg-bg-secondary/70 rounded-full cursor-pointer" (click)="removeImage()">
+                    <button (click)="removeImage()" class="cursor-pointer  flex items-center justify-center">
+                        <mat-icon fontIcon="close" style="color: gray;" ></mat-icon>
+                    </button>
+                </div>
+            }
+        </div>
     }
 
     <!-- Thumbs Up Button -->

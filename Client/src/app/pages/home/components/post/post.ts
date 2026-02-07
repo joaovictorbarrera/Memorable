@@ -10,10 +10,11 @@ import { formattedTime } from '../../../../shared/utilities/time';
 import { CurrentUserService } from '../../../../shared/services/currentuser.service';
 import { PostService } from '../../../../shared/services/post.service';
 import { CommentCreate } from '../comment-create/comment-create';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-post',
-  imports: [Card, CommonModule, ProfileIcon, MatIcon, Comment, CommentCreate],
+  imports: [Card, CommonModule, ProfileIcon, MatIcon, Comment, CommentCreate, FormsModule],
   templateUrl: './post.html',
   styleUrl: './post.scss',
 })
@@ -23,6 +24,8 @@ export class Post implements OnInit {
 
   isCurrentUserPost: Signal<boolean> = signal(false);
   timeAgo: string = '';
+  editMode = signal(false);
+  newPost: PostDto = {} as PostDto;
 
   constructor(private currentUserService: CurrentUserService, private postService: PostService) {
     this.isCurrentUserPost = computed(() => {
@@ -41,7 +44,30 @@ export class Post implements OnInit {
   }
 
   editPost(): void {
-    return; // TODO: implement edit post functionality
+    this.newPost = { ...this.post }; // Create a copy of the post to edit
+    this.editMode.set(true);
+  }
+
+  cancelEdit(): void {
+    // Revert changes by copying back the original post
+    this.post = { ...this.newPost };
+    this.editMode.set(false);
+  }
+
+  saveEdits(): void {
+    this.postService.updatePost(this.post).subscribe({
+      next: (updatedPost) => {
+        this.post = updatedPost;
+        this.editMode.set(false);
+      },
+      error: (error) => {
+        window.alert("Error updating post: " + error.message);
+      }
+    });
+  }
+
+  removeImage(): void {
+    this.post.imageUrl = undefined;
   }
 
   deletePost(): void {
