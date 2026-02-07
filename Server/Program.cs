@@ -15,9 +15,20 @@ builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(policy =>
     {
-        policy.AllowAnyOrigin()
-              .AllowAnyHeader()
-              .AllowAnyMethod();
+        if (builder.Environment.IsDevelopment())
+        {
+            // Allow all origins in development
+            policy.AllowAnyOrigin()
+                  .AllowAnyHeader()
+                  .AllowAnyMethod();
+        }
+        else
+        {
+            // Restrict to production frontend
+            policy.WithOrigins("https://memorable-two.vercel.app")
+                  .AllowAnyHeader()
+                  .AllowAnyMethod();
+        }
     });
 });
 
