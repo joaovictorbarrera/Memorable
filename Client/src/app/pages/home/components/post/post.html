@@ -4,7 +4,7 @@
         <app-profile-icon [imageUrl]="post.userProfileImageUrl"></app-profile-icon>
         <div class="flex flex-col">
             <span>{{ post.username }}</span>
-            <p class="text-stone-400 text-sm mb-2">{{ timeAgo }}</p>
+            <p class="text-text-secondary text-sm mb-2">{{ timeAgo }}</p>
         </div>
 
         <!-- Show edit and delete button if the current user is the author of the post -->
@@ -21,13 +21,13 @@
         }
 
     </div>
-    <p class="py-3">{{ post.textContent }}</p>
+    <p class="py-2">{{ post.textContent }}</p>
     @if (post.imageUrl) {
-        <img [src]="post.imageUrl" alt="Post image" class="w-full h-auto rounded-lg object-cover">
+        <img [src]="post.imageUrl" alt="Post image" class="mt-5 w-full h-auto rounded-lg object-cover">
     }
 
     <!-- Thumbs Up Button -->
-    <div class="flex gap-2 items-start py-3 border-t border-stone-600">
+    <div class="flex gap-2 items-start pt-3 pb-2 ">
         <button (click)="toggleLike(post)" class="cursor-pointer hover:brightness-90 rounded-full">
             @if (post.isLikedByCurrentUser) {
                 <mat-icon fontIcon="thumb_up" style="color: blue;" ></mat-icon>
@@ -46,9 +46,5 @@
     </div>
 
     <!-- CommentCreate -->
-    <div class="flex gap-2 items-center mt-3">
-        <app-profile-icon class="xs:block hidden" [imageUrl]="post.userProfileImageUrl"></app-profile-icon>
-        <input type="text" placeholder="Add a comment..." class="w-full p-2 bg-stone-800 rounded-lg border-stone-800/40 text-stone-100 placeholder:text-stone-500 focus-visible:ring-orange-900 focus-visible:border-orange-800">
-        <app-post-button></app-post-button>
-    </div>
+    <app-comment-create [post]="this.post"></app-comment-create>
 </app-card>

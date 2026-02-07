@@ -2,4 +2,24 @@
 
 @theme {
   --breakpoint-xs: 30rem;
+
+    /* Primary Colors */
+  --color-primary: #ea580c;
+  --color-primary-light: #f97316;
+  --color-primary-dark: #c2410c;
+  --color-primary-bg: #7c2d12;
+
+  /* Background Colors */
+  --color-bg-primary: var(--color-zinc-950);
+  --color-bg-secondary: oklch(21.6% .006 56.043);
+  --color-bg-tertiary: color-mix(in oklab, var(--color-stone-800) 30%, transparent);
+  --color-bg-quaternary: color-mix(in oklab, var(--color-zinc-950) 40%, transparent);
+
+  /* Text Colors */
+  --color-text-primary: #faf8f3;
+  --color-text-secondary: #a1a1aa;
+  --color-text-tertiary: #71717a;
+
+  /* Accent Colors */
+  --color-accent-primary: oklab(0.47 0.124883 0.0951489);
 }

@@ -42,8 +42,11 @@ body {
 }
 
 body {
-    @apply bg-zinc-950 text-orange-50;
+    @apply text-white;
+
+    background-color: var(--color-bg-primary);
 }
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+

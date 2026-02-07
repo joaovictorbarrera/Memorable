@@ -9,10 +9,11 @@ import { PostButton } from "../post-button/post-button";
 import { formattedTime } from '../../../../shared/utilities/time';
 import { CurrentUserService } from '../../../../shared/services/currentuser.service';
 import { PostService } from '../../../../shared/services/post.service';
+import { CommentCreate } from '../comment-create/comment-create';
 
 @Component({
   selector: 'app-post',
-  imports: [Card, CommonModule, ProfileIcon, MatIcon, Comment, PostButton],
+  imports: [Card, CommonModule, ProfileIcon, MatIcon, Comment, CommentCreate],
   templateUrl: './post.html',
   styleUrl: './post.scss',
 })

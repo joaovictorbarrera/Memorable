@@ -1,25 +1,30 @@
-<app-card class="flex">
-    <div class="inline-block">
-        <app-profile-icon [imageUrl]="this.currentUserService.user()?.profileImageUrl ?? ''"></app-profile-icon>
-    </div>
-    <div class="inline-block w-full pr-10">
-        <div class="h-20 flex flex-col">
-            <textarea [(ngModel)]="postContent" placeholder="Share a memory..." type="text" class="p-2 w-full h-full text-[1rem] bg-transparent border-none focus:ring-0 resize-none"></textarea>
+<app-card class="flex flex-col">
+    <div class="flex">
+        <div class="inline-block">
+            <app-profile-icon [imageUrl]="this.currentUserService.user()?.profileImageUrl ?? ''"></app-profile-icon>
         </div>
-        @if (imagePreviewUrl()) {
-            <div class="relative">
-                <img [src]="imagePreviewUrl()" class="w-full rounded-lg mt-2 object-cover" />
-                <button (click)="removeSelectedImage()"
-                class="cursor-pointer absolute top-1 right-1 bg-stone-800/70 rounded-full w-8 h-8 hover:bg-stone-700 flex items-center justify-center">
-                    <mat-icon fontIcon="close" style="color: white;"></mat-icon>
-                </button>
+        <div class="inline-block w-full pr-10">
+            <div class="h-20 flex flex-col">
+                <textarea [(ngModel)]="postContent" placeholder="Share a memory..." type="text" class="p-2 w-full h-full text-[1rem] bg-transparent border-none focus:ring-0 resize-none"></textarea>
             </div>
-        }
+            @if (imagePreviewUrl()) {
+                <div class="relative">
+                    <img [src]="imagePreviewUrl()" class="w-full rounded-lg mt-2 object-cover" />
+                    <button (click)="removeSelectedImage()"
+                    class="cursor-pointer absolute top-1 right-1 bg-bg-secondary/70 rounded-full w-8 h-8 hover:bg-bg-tertiary flex items-center justify-center">
+                        <mat-icon fontIcon="close" style="color: white;"></mat-icon>
+                    </button>
+                </div>
+            }
 
-        <hr class="border-stone-600 my-4">
+
+        </div>
+    </div>
+    <div>
+        <hr class="border-bg-secondary my-4">
         <div class="flex items-center mt-2">
             <!-- Image picker trigger -->
-            <span class="flex items-end gap-1 cursor-pointer hover:text-stone-400 text-stone-200" (click)="openImageSelector()">
+            <span class="flex items-end gap-1 cursor-pointer hover:text-text-tertiary text-text-secondary" (click)="openImageSelector()">
                 <mat-icon fontIcon="image"></mat-icon>
                 Photo
             </span>
@@ -33,7 +38,6 @@
             />
 
             <app-post-button class="ml-auto" (click)="post()"></app-post-button>
-
         </div>
     </div>
 </app-card>
