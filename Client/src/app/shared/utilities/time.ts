@@ -6,6 +6,15 @@ export function formattedTime(date: Date): string {
     const minutes = Math.floor(seconds / 60);
     const hours = Math.floor(minutes / 60);
     const days = Math.floor(hours / 24);
+
+    if (isNaN(diff) || diff < 0) {
+        return '';
+    }
+
+    if (seconds < 5) {
+        return 'A moment ago';
+    }
+
     if (days > 0) {
         return `${days} day${days > 1 ? 's' : ''} ago`;
     } else if (hours > 0) {
