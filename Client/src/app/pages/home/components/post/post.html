@@ -23,11 +23,11 @@
     </div>
     <p class="py-3">{{ post.textContent }}</p>
     @if (post.imageUrl) {
-        <img [src]="post.imageUrl" alt="Post image" class="w-full h-auto">
+        <img [src]="post.imageUrl" alt="Post image" class="w-full h-auto rounded-lg object-cover">
     }
 
     <!-- Thumbs Up Button -->
-    <div class="flex gap-2 items-start py-2">
+    <div class="flex gap-2 items-start py-3 border-t border-stone-600">
         <button (click)="toggleLike(post)" class="cursor-pointer hover:brightness-90 rounded-full">
             @if (post.isLikedByCurrentUser) {
                 <mat-icon fontIcon="thumb_up" style="color: blue;" ></mat-icon>
