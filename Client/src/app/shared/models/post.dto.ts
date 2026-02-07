@@ -1,10 +1,10 @@
 import { CommentDto } from "./comment.dto";
 
 export interface PostDto {
-    postId: number;
+    postId: string;
     textContent: string;
     createdAt: Date;
-    userId: number;
+    userId: string;
     imageUrl?: string;
 
     // Additional fields can be added as needed

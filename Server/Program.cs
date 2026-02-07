@@ -44,8 +44,10 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
 }
+
+// Temporary mock authentication middleware for development/testing
+app.UseMiddleware<MockAuthMiddleware>();
 
 app.UseCors();
 

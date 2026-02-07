@@ -2,7 +2,7 @@ import { Component, signal } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { ProfileIcon } from '../../../shared/components/profile-icon/profile-icon';
-import { CurrentUserService } from '../../../shared/services/currentuser.service';
+import { GlobalService } from '../../state/global';
 
 @Component({
   selector: 'app-header',
@@ -11,6 +11,6 @@ import { CurrentUserService } from '../../../shared/services/currentuser.service
   styleUrl: './header.scss',
 })
 export class Header {
-  constructor(public currentUserService: CurrentUserService) {
+  constructor(public globalService: GlobalService) {
   }
 }

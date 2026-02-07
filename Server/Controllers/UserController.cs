@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Server.Extensions;
 using Server.Models;
 using Server.Services;
 
@@ -14,10 +15,22 @@ namespace Server.Controllers
             _logger = logger;
         }
 
-        [HttpGet("UserGetById")]
-        public IActionResult GetById([FromQuery] int userId)
+        [HttpGet("AuthUserGet")]
+        public IActionResult GetByAuth()
         {
-            User? user = Mockdata._users.FirstOrDefault(p => p.UserId == userId);
+            Guid userId = HttpContext.GetUserId();
+            User? user = Mockdata._users.FirstOrDefault(p => p.UserId.Equals(userId));
+            if (user == null)
+            {
+                return NotFound(new { message = "User not found" });
+            }
+            return Ok(user);
+        }
+
+        [HttpGet("UserGetById")]
+        public IActionResult GetById([FromQuery] Guid userId)
+        {
+            User? user = Mockdata._users.FirstOrDefault(p => p.UserId.Equals(userId));
             if (user == null)
             {
                 return NotFound(new { message = "User not found" });

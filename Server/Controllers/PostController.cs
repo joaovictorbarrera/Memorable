@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Hosting;
 using Server.Dtos;
+using Server.Extensions;
 using Server.Models;
 using Server.Services;
 using Server.Services.ImageUpload;
@@ -38,7 +40,7 @@ namespace Server.Controllers
                     imageUrl = await imgBb.UploadAsync(body.Image);
                 }
 
-                int userId = 1; // Mocked user ID for demonstration
+                Guid userId = HttpContext.GetUserId();
 
                 Post post = new()
                 {
@@ -50,10 +52,9 @@ namespace Server.Controllers
 
                 Mockdata._posts.Add(post);
 
-                return Ok(new
-                {
-                    message = "Post created successfully"
-                });
+                PostDto postDto = PostService.GetPostDto(post.PostId);
+
+                return Ok(postDto);
             }
             catch (Exception ex)
             {
@@ -79,10 +80,8 @@ namespace Server.Controllers
         }
 
         [HttpGet("PostGetById")]
-        public IActionResult GetById([FromQuery] int postId)
+        public IActionResult GetById([FromQuery] Guid postId)
         {
-            if (postId <= 0) return BadRequest("PostId is required");
-
             Post? post = Mockdata._posts.FirstOrDefault(p => p.PostId == postId);
             if (post == null)
             {
@@ -95,9 +94,8 @@ namespace Server.Controllers
         }
 
         [HttpDelete("PostDelete")]
-        public IActionResult Delete([FromQuery] int postId)
+        public IActionResult Delete([FromQuery] Guid postId)
         {
-            if (postId <= 0) return BadRequest("PostId is required");
             var post = Mockdata._posts.FirstOrDefault(p => p.PostId == postId);
             if (post == null)
             {
@@ -114,11 +112,11 @@ namespace Server.Controllers
         }
 
         [HttpPut("PostUpdate")]
-        public IActionResult Update([FromBody] Post updatedPost)
+        public IActionResult Update([FromBody] PostDto updatedPost)
         {
-            if (updatedPost == null || updatedPost.PostId <= 0)
+            if (updatedPost == null)
             {
-                return BadRequest("Valid PostId is required");
+                return BadRequest("Invalid Input. Try again");
             }
             var existingPost = Mockdata._posts.FirstOrDefault(p => p.PostId == updatedPost.PostId);
             if (existingPost == null)
@@ -127,10 +125,10 @@ namespace Server.Controllers
             }
             existingPost.TextContent = updatedPost.TextContent;
             existingPost.ImageUrl = updatedPost.ImageUrl;
-            return Ok(new
-            {
-                message = "Post updated successfully"
-            });
+
+            PostDto postDto = PostService.GetPostDto(existingPost.PostId);
+
+            return Ok(postDto);
             
         }
     }

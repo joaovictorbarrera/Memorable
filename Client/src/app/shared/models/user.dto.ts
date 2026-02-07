@@ -1,5 +1,5 @@
 interface UserDto {
-    userId: number;
+    userId: string;
     username: string;
     profileImageUrl: string;
 }

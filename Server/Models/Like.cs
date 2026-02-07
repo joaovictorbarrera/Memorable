@@ -2,8 +2,8 @@
 {
     public class Like
     {
-        public int LikeId { get; set; }
-        public int PostId { get; set; }
-        public int UserId { get; set; }
+        public Guid LikeId { get; set; } = Guid.NewGuid();
+        public Guid PostId { get; set; }
+        public Guid UserId { get; set; }
     }
 }

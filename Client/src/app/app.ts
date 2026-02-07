@@ -13,11 +13,21 @@ import { GlobalService } from './core/state/global';
 export class App implements OnInit {
   protected readonly title = signal('Memorable');
 
-  constructor(private userService: CurrentUserService,
-    private globalVars: GlobalService) {}
+  constructor(private userService: CurrentUserService, private globalService: GlobalService) {}
 
   ngOnInit() {
-    const userId = this.globalVars.userId();
-    this.userService.loadUser(userId);
+    this.userService.checkLogin(this.OnUserLoaded.bind(this), this.OnFailedToLoadUser.bind(this));
+  }
+
+  OnUserLoaded(user: UserDto) {
+    if (user) {
+      this.globalService.user.set(user);
+    }
+  }
+
+  OnFailedToLoadUser(error: any) {
+    console.log('Failed to load user:', error);
+    this.globalService.user.set(null);
+    // Redirect to login page or show an error message
   }
 }

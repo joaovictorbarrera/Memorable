@@ -5,7 +5,7 @@ namespace Server.Services.Posts
 {
     public class PostService
     {
-        public static PostDto GetPostDto(int postId)
+        public static PostDto GetPostDto(Guid postId)
         {
             Post post = Mockdata._posts.First(p => p.PostId == postId);
 
@@ -37,14 +37,14 @@ namespace Server.Services.Posts
             };
         }
 
-        private static List<CommentDto> GetPostComments(int postId)
+        private static List<CommentDto> GetPostComments(Guid postId)
         {
             List<Comment> comments = Mockdata._comments.Where(c => c.PostId == postId).ToList();
             List<CommentDto> commentDtos = comments.Select(c => GetCommentDto(c.CommentId)).ToList();
             return commentDtos;
         }
 
-        private static CommentDto GetCommentDto(int commentId)
+        private static CommentDto GetCommentDto(Guid commentId)
         {
             Comment comment = Mockdata._comments.First(c => c.CommentId == commentId);
             if (comment == null)

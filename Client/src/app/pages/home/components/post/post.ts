@@ -11,6 +11,7 @@ import { CurrentUserService } from '../../../../shared/services/currentuser.serv
 import { PostService } from '../../../../shared/services/post.service';
 import { CommentCreate } from '../comment-create/comment-create';
 import { FormsModule } from '@angular/forms';
+import { GlobalService } from '../../../../core/state/global';
 
 @Component({
   selector: 'app-post',
@@ -27,10 +28,10 @@ export class Post implements OnInit {
   editMode = signal(false);
   newPost: PostDto = {} as PostDto;
 
-  constructor(private currentUserService: CurrentUserService, private postService: PostService) {
+  constructor(private globalService: GlobalService, private postService: PostService) {
     this.isCurrentUserPost = computed(() => {
 
-      return this.post.userId === currentUserService.user()?.userId;
+      return this.post.userId === this.globalService.user()?.userId;
     })
   }
 

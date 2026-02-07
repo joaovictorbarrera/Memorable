@@ -5,7 +5,7 @@ import { ProfileIcon } from '../../../../shared/components/profile-icon/profile-
 import { PostButton } from "../post-button/post-button";
 import { FormsModule } from '@angular/forms';
 import { PostService } from '../../../../shared/services/post.service';
-import { CurrentUserService } from '../../../../shared/services/currentuser.service';
+import { GlobalService } from '../../../../core/state/global';
 
 @Component({
   selector: 'app-post-create',
@@ -21,7 +21,7 @@ export class PostCreate {
   @Output() refreshFeed = new EventEmitter<void>();
   @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
 
-  constructor (private postService: PostService, public currentUserService: CurrentUserService) {}
+  constructor (private postService: PostService, public globalService: GlobalService) {}
 
   post(): void {
     if (!this.postContent().trim() && !this.selectedImage) {

@@ -12,11 +12,17 @@ namespace Server.Services
 
         public static List<Like> _likes { get; set; } = [];
 
-        public static int _currentUserId { get; set; } = 1;
+        public static Guid _currentUserId { get; set; } = Guid.NewGuid();
 
         static Mockdata()
         {
+            // Simulate logged-in user
+            const int LOGGED_IN_USER = 3;
+            
+            //_currentUserId = new Guid("f8b78691-d0eb-4e11-85eb-a81f4b028356");
             SeedUsers();
+            _currentUserId = _users[LOGGED_IN_USER-1].UserId;
+
             SeedPosts();
             SeedComments();
             SeedLikes();
@@ -26,10 +32,10 @@ namespace Server.Services
         {
             _users =
             [
-                new User { UserId = 1, Username = "joao", ProfileImageUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTFFbBnDucTQkErvyNTrqFvqD4eSkm9UcFNYg&s" },
-                new User { UserId = 2, Username = "mariah", ProfileImageUrl = "https://img.freepik.com/free-photo/head-shot-happy-beautiful-young-woman-posing-indoors-looking-camera-smiling_74855-10218.jpg?semt=ais_hybrid&w=740&q=80" },
-                new User { UserId = 3, Username = "mike", ProfileImageUrl = "https://img.freepik.com/free-photo/portrait-white-man-isolated_53876-40306.jpg?semt=ais_hybrid&w=740&q=80" },
-                new User { UserId = 4, Username = "sarah", ProfileImageUrl = "https://images.squarespace-cdn.com/content/v1/5e3ee1cd772e5208fa93bad8/1600276711411-FBREG2YYKZ5Z9JS5YAWK/image-asset.jpeg" }
+                new User { Username = "John Barrera", ProfileImageUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTFFbBnDucTQkErvyNTrqFvqD4eSkm9UcFNYg&s" },
+                new User { Username = "mariah", ProfileImageUrl = "https://img.freepik.com/free-photo/head-shot-happy-beautiful-young-woman-posing-indoors-looking-camera-smiling_74855-10218.jpg?semt=ais_hybrid&w=740&q=80" },
+                new User { Username = "mike", ProfileImageUrl = "https://img.freepik.com/free-photo/portrait-white-man-isolated_53876-40306.jpg?semt=ais_hybrid&w=740&q=80" },
+                new User { Username = "sarah", ProfileImageUrl = "https://images.squarespace-cdn.com/content/v1/5e3ee1cd772e5208fa93bad8/1600276711411-FBREG2YYKZ5Z9JS5YAWK/image-asset.jpeg" }
             ];
         }
 
@@ -37,7 +43,7 @@ namespace Server.Services
         {
             _posts.Add(new Post
             {
-                UserId = 1,
+                UserId = _users[0].UserId,
                 TextContent = "Just finished my first ASP.NET Core API 🚀",
                 CreatedAt = DateTime.UtcNow.AddHours(-10),
                 ImageUrl = null
@@ -45,7 +51,7 @@ namespace Server.Services
 
             _posts.Add(new Post
             {
-                UserId = 2,
+                UserId = _users[1].UserId,
                 TextContent = "Morning walks + coffee = perfect combo ☕🌿",
                 CreatedAt = DateTime.UtcNow.AddHours(-8),
                 ImageUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRvzwl1JFBR1Vu-1JnaZM74ioQIHqfbUrDykA&s"
@@ -53,7 +59,7 @@ namespace Server.Services
 
             _posts.Add(new Post
             {
-                UserId = 3,
+                UserId = _users[2].UserId,
                 TextContent = "Debugging at 2am hits different.",
                 CreatedAt = DateTime.UtcNow.AddHours(-6),
                 ImageUrl = null
@@ -61,7 +67,7 @@ namespace Server.Services
 
             _posts.Add(new Post
             {
-                UserId = 4,
+                UserId = _users[3].UserId,
                 TextContent = "Reading a new book on system design 📘",
                 CreatedAt = DateTime.UtcNow.AddHours(-4),
                 ImageUrl = "https://i.ytimg.com/vi/7gNxjvJqqKg/sddefault.jpg"
@@ -69,7 +75,7 @@ namespace Server.Services
 
             _posts.Add(new Post
             {
-                UserId = 1,
+                UserId = _users[0].UserId,
                 TextContent = "Consistency beats motivation. Gym day 💪",
                 CreatedAt = DateTime.UtcNow.AddHours(-2),
                 ImageUrl = "https://t3.ftcdn.net/jpg/02/14/59/60/360_F_214596042_QB9lDRVMmAr1mn9eFZFgjL9JONicmjn3.jpg"
@@ -80,32 +86,32 @@ namespace Server.Services
         {
             _comments.Add(new Comment
             {
-                PostId = 1,
-                UserId = 2,
+                PostId = _posts[0].PostId,
+                UserId = _users[1].UserId,
                 TextContent = "Nice! APIs are addictive 😄",
                 CreatedAt = DateTime.UtcNow.AddHours(-9)
             });
 
             _comments.Add(new Comment
             {
-                PostId = 1,
-                UserId = 3,
+                PostId = _posts[0].PostId,
+                UserId = _users[2].UserId,
                 TextContent = "Congrats! Keep going.",
                 CreatedAt = DateTime.UtcNow.AddHours(-9)
             });
 
             _comments.Add(new Comment
             {
-                PostId = 2,
-                UserId = 1,
+                PostId = _posts[1].UserId,
+                UserId = _users[0].UserId,
                 TextContent = "That sounds peaceful!",
                 CreatedAt = DateTime.UtcNow.AddHours(-7)
             });
 
             _comments.Add(new Comment
             {
-                PostId = 5,
-                UserId = 4,
+                PostId = _posts[4].UserId,
+                UserId = _users[3].UserId,
                 TextContent = "Respect the grind 💯",
                 CreatedAt = DateTime.UtcNow.AddHours(-1)
             });
@@ -115,14 +121,14 @@ namespace Server.Services
         {
             _likes =
             [
-                new Like { LikeId = 1, PostId = 1, UserId = 2 },
-                new Like { LikeId = 2, PostId = 1, UserId = 3 },
-                new Like { LikeId = 3, PostId = 2, UserId = 1 },
-                new Like { LikeId = 4, PostId = 2, UserId = 3 },
-                new Like { LikeId = 5, PostId = 3, UserId = 2 },
-                new Like { LikeId = 6, PostId = 5, UserId = 2 },
-                new Like { LikeId = 7, PostId = 5, UserId = 3 },
-                new Like { LikeId = 8, PostId = 5, UserId = 4 }
+                new Like { PostId = _posts[0].PostId, UserId = _posts[1].UserId },
+                new Like { PostId = _posts[0].PostId, UserId = _posts[2].UserId },
+                new Like { PostId = _posts[1].PostId, UserId = _posts[0].UserId },
+                new Like { PostId = _posts[1].PostId, UserId = _posts[2].UserId },
+                new Like { PostId = _posts[2].PostId, UserId = _posts[1].UserId },
+                new Like { PostId = _posts[4].PostId, UserId = _posts[1].UserId },
+                new Like { PostId = _posts[4].PostId, UserId = _posts[2].UserId },
+                new Like { PostId = _posts[4].PostId, UserId = _posts[3].UserId }
             ];
         }
     }

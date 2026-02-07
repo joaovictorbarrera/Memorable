@@ -30,7 +30,7 @@ export class PostService {
   /**
    * GET single post by id
    */
-  getById(postId: number): Observable<PostDto> {
+  getById(postId: string): Observable<PostDto> {
     const params = new HttpParams()
       .set('postId', postId);
 
@@ -53,11 +53,7 @@ export class PostService {
   /**
    * UPDATE post
    */
-  updatePost(post: {
-    postId: number;
-    textContent: string;
-    imageUrl?: string | null;
-  }): Observable<any> {
+  updatePost(post: PostDto): Observable<any> {
     return this.http.put(
       `${this.apiUrl}/PostUpdate`,
       post
@@ -67,7 +63,7 @@ export class PostService {
   /**
    * DELETE post
    */
-  deletePost(postId: number): Observable<any> {
+  deletePost(postId: string): Observable<any> {
     const params = new HttpParams()
       .set('postId', postId);
 
