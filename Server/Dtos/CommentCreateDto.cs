@@ -2,8 +2,7 @@
 {
     public class CommentCreateDto
     {
-        public required string TextContent;
-
-        public required Guid PostId;
+        public required string TextContent { get; set; }
+        public required Guid PostId { get; set; }
     }
 }

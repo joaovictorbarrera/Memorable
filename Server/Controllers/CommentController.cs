@@ -12,10 +12,24 @@ namespace Server.Controllers
     [ApiController]
     public class CommentController : ControllerBase
     {
+        private readonly ILogger<CommentController> _logger;
+        public CommentController(ILogger<CommentController> logger)
+        {
+            _logger = logger;
+        }
+
+
         [HttpPost("CommentCreate")]
         public IActionResult CreateComment([FromBody] CommentCreateDto body)
         {
-            if (body.TextContent.Trim().Length <= 0) return BadRequest("Cannot post empty comment");
+            _logger.LogInformation(body.TextContent);
+            _logger.LogInformation(body.PostId.ToString());
+
+            if (body == null)
+                return BadRequest("Invalid request body");
+
+            if (string.IsNullOrWhiteSpace(body.TextContent))
+                return BadRequest("Cannot post empty comment");
 
             Guid userId = HttpContext.GetUserId();
 
