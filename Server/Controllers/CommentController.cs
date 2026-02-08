@@ -57,7 +57,7 @@ namespace Server.Controllers
 
             Guid userId = HttpContext.GetUserId();
 
-            if (comment.CommentId != userId)
+            if (comment.UserId != userId)
             {
                 return Unauthorized("You can only delete your own comments");
             }

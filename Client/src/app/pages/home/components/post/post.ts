@@ -12,6 +12,8 @@ import { PostService } from '../../../../shared/services/post.service';
 import { CommentCreate } from '../comment-create/comment-create';
 import { FormsModule } from '@angular/forms';
 import { GlobalService } from '../../../../core/state/global';
+import { CommentService } from '../../../../shared/services/comment.service';
+import { CommentDto } from '../../../../shared/models/comment.dto';
 
 @Component({
   selector: 'app-post',
@@ -28,7 +30,11 @@ export class Post implements OnInit {
   editMode = signal(false);
   newPost: PostDto = {} as PostDto;
 
-  constructor(private globalService: GlobalService, private postService: PostService) {}
+  constructor(
+    private globalService: GlobalService,
+    private postService: PostService,
+    public commentService: CommentService
+  ) {}
 
   ngOnInit(): void {
     this.timeAgo = formattedTime(this.post.createdAt);
@@ -76,7 +82,6 @@ export class Post implements OnInit {
       error: (error) => {
         window.alert("Error deleting post: " + error.message);
       }
-    });
-
+    })
   }
 }

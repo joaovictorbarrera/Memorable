@@ -32,7 +32,7 @@ export class CommentCreate {
     .subscribe({
       next: (comment: CommentDto) => {
         this.commentContent.set("")
-        this.post.comments.push(comment)
+        this.commentService.add(this.post.postId, comment)
       },
       error: (err) => {
         console.log("Error creating comment: ", err)
