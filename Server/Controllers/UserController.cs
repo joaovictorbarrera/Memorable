@@ -22,7 +22,7 @@ namespace Server.Controllers
             User? user = Mockdata._users.FirstOrDefault(p => p.UserId.Equals(userId));
             if (user == null)
             {
-                return NotFound(new { message = "User not found" });
+                return NotFound("User not found");
             }
             return Ok(user);
         }
@@ -33,7 +33,7 @@ namespace Server.Controllers
             User? user = Mockdata._users.FirstOrDefault(p => p.UserId.Equals(userId));
             if (user == null)
             {
-                return NotFound(new { message = "User not found" });
+                return NotFound("User not found");
             }
 
             return Ok(user);

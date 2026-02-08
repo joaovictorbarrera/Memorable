@@ -23,17 +23,12 @@ export class Post implements OnInit {
   @Input() post!: PostDto;
   @Output() refreshFeed = new EventEmitter<void>();
 
-  isCurrentUserPost: Signal<boolean> = signal(false);
+  isCurrentUserPost: Signal<boolean> = computed(() => this.post.userId === this.globalService.user()?.userId);
   timeAgo: string = '';
   editMode = signal(false);
   newPost: PostDto = {} as PostDto;
 
-  constructor(private globalService: GlobalService, private postService: PostService) {
-    this.isCurrentUserPost = computed(() => {
-
-      return this.post.userId === this.globalService.user()?.userId;
-    })
-  }
+  constructor(private globalService: GlobalService, private postService: PostService) {}
 
   ngOnInit(): void {
     this.timeAgo = formattedTime(this.post.createdAt);

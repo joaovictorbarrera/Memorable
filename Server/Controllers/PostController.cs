@@ -96,19 +96,24 @@ namespace Server.Controllers
         [HttpDelete("PostDelete")]
         public IActionResult Delete([FromQuery] Guid postId)
         {
-            var post = Mockdata._posts.FirstOrDefault(p => p.PostId == postId);
+            Post? post = Mockdata._posts.FirstOrDefault(p => p.PostId == postId);
             if (post == null)
             {
                 return NotFound("Post not found");
             }
+
+            Guid userId = HttpContext.GetUserId();
+
+            if (post.PostId != userId)
+            {
+                return Unauthorized("You can only delete your own posts");
+            }
+
             Mockdata._posts.Remove(post);
             Mockdata._comments.RemoveAll(c => c.PostId == postId);
             Mockdata._likes.RemoveAll(l => l.PostId == postId);
 
-            return Ok(new
-            {
-                message = "Post deleted successfully"
-            });
+            return Ok(post);
         }
 
         [HttpPut("PostUpdate")]
@@ -118,18 +123,25 @@ namespace Server.Controllers
             {
                 return BadRequest("Invalid Input. Try again");
             }
-            var existingPost = Mockdata._posts.FirstOrDefault(p => p.PostId == updatedPost.PostId);
+            Post? existingPost = Mockdata._posts.FirstOrDefault(p => p.PostId == updatedPost.PostId);
             if (existingPost == null)
             {
                 return NotFound("Post not found");
             }
+
+            Guid userId = HttpContext.GetUserId();
+
+            if (existingPost.UserId != userId)
+            {
+                return Unauthorized("You can only update your own posts");
+            }
+
             existingPost.TextContent = updatedPost.TextContent;
             existingPost.ImageUrl = updatedPost.ImageUrl;
 
             PostDto postDto = PostService.GetPostDto(existingPost.PostId);
 
             return Ok(postDto);
-            
         }
     }
 }

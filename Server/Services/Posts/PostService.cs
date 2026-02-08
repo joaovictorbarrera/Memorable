@@ -44,7 +44,7 @@ namespace Server.Services.Posts
             return commentDtos;
         }
 
-        private static CommentDto GetCommentDto(Guid commentId)
+        public static CommentDto GetCommentDto(Guid commentId)
         {
             Comment comment = Mockdata._comments.First(c => c.CommentId == commentId);
             if (comment == null)
