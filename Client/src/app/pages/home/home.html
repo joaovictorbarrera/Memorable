@@ -1,8 +1,8 @@
 <main class="w-full flex justify-center">
     <div class="flex flex-col gap-8 w-2xl py-5 px-3">
         <app-post-create (refreshFeed)="refreshFeed()"></app-post-create>
-        @for (post of feed(); track post.postId) {
-            <app-post [post]="post" (refreshFeed)="refreshFeed()"></app-post>
+        @for (post of this.postStore.all()(); track post.postId) {
+            <app-post [postId]="post.postId" (refreshFeed)="refreshFeed()"></app-post>
         }
     </div>
 </main>

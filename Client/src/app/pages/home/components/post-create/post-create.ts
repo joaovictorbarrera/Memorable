@@ -7,6 +7,8 @@ import { FormsModule } from '@angular/forms';
 import { PostService } from '../../../../shared/services/post.service';
 import { GlobalService } from '../../../../core/state/global';
 import { finalize } from 'rxjs';
+import { PostDto } from '../../../../shared/models/post.dto';
+import { PostStore } from '../../../../shared/stores/post.store';
 
 @Component({
   selector: 'app-post-create',
@@ -26,7 +28,11 @@ export class PostCreate {
   @Output() refreshFeed = new EventEmitter<void>();
   @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
 
-  constructor (private postService: PostService, public globalService: GlobalService) {}
+  constructor (
+    private postService: PostService,
+    public globalService: GlobalService,
+    public postStore: PostStore
+  ) {}
 
   post(): void {
     if (!this.textContent().trim() && !this.selectedImage) {
@@ -49,13 +55,13 @@ export class PostCreate {
       )
     )
     .subscribe({
-      next: () => {
+      next: (post: PostDto) => {
         this.textContent.set("");
         this.removeSelectedImage();
-        this.refreshFeed.emit();
+        this.postStore.addPost(post)
       },
-      error: (error) => {
-        console.error("Error creating post:", error);
+      error: (err) => {
+        console.error("Error creating post:"+ err.message);
       },
     });
   }

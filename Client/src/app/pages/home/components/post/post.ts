@@ -5,15 +5,14 @@ import { CommonModule } from '@angular/common';
 import { ProfileIcon } from "../../../../shared/components/profile-icon/profile-icon";
 import { MatIcon } from '@angular/material/icon';
 import { Comment } from '../comment/comment';
-import { PostButton } from "../post-button/post-button";
 import { formattedTime } from '../../../../shared/utilities/time';
-import { CurrentUserService } from '../../../../shared/services/currentuser.service';
 import { PostService } from '../../../../shared/services/post.service';
 import { CommentCreate } from '../comment-create/comment-create';
 import { FormsModule } from '@angular/forms';
 import { GlobalService } from '../../../../core/state/global';
 import { CommentService } from '../../../../shared/services/comment.service';
 import { CommentDto } from '../../../../shared/models/comment.dto';
+import { PostStore } from '../../../../shared/stores/post.store';
 
 @Component({
   selector: 'app-post',
@@ -22,44 +21,58 @@ import { CommentDto } from '../../../../shared/models/comment.dto';
   styleUrl: './post.scss',
 })
 export class Post implements OnInit {
-  @Input() post!: PostDto;
-  @Output() refreshFeed = new EventEmitter<void>();
-
-  isCurrentUserPost: Signal<boolean> = computed(() => this.post.userId === this.globalService.user()?.userId);
-  timeAgo: string = '';
-  editMode = signal(false);
-  newPost: PostDto = {} as PostDto;
+  @Input() postId!: string;
 
   constructor(
     private globalService: GlobalService,
     private postService: PostService,
+    private postStore: PostStore,
     public commentService: CommentService
   ) {}
 
+  post!: Signal<PostDto | undefined>
+  isCurrentUserPost: Signal<boolean> = computed(() => this.post()?.userId === this.globalService.user()?.userId);
+  timeAgo: string = '';
+  editMode = signal(false);
+
+  mutableTextContent: string = ""
+  mutableImageUrl: string | undefined = undefined
+
   ngOnInit(): void {
-    this.timeAgo = formattedTime(this.post.createdAt);
+    this.post = this.postStore.getPost(this.postId)
+    const post = this.post();
+    this.timeAgo = post ? formattedTime(post.createdAt) : '';
+    this.mutableImageUrl = post?.imageUrl
+    this.mutableTextContent = post?.textContent ?? ""
   }
 
-  toggleLike(post: PostDto): void {
-    post.isLikedByCurrentUser = !post.isLikedByCurrentUser
-    post.likeCount += post.isLikedByCurrentUser ? 1 : -1;
+  toggleLike(): void {
+    // TODO: LikeService
+    this.postStore.togglePostLike(this.postId)
   }
 
   editPost(): void {
-    this.newPost = { ...this.post }; // Create a copy of the post to edit
+    const post = this.post()
+    if (!post) return
+
     this.editMode.set(true);
   }
 
   cancelEdit(): void {
-    // Revert changes by copying back the original post
-    this.post = { ...this.newPost };
+    this.mutableImageUrl = this.post()?.imageUrl
     this.editMode.set(false);
   }
 
   saveEdits(): void {
-    this.postService.updatePost(this.post).subscribe({
-      next: (updatedPost) => {
-        this.post = updatedPost;
+    const post = this.post()
+    if (!post) return
+
+    post.imageUrl = this.mutableImageUrl
+    post.textContent = this.mutableTextContent
+
+    this.postService.updatePost(post).subscribe({
+      next: (updatedPost: PostDto) => {
+        this.postStore.setPost(updatedPost)
         this.editMode.set(false);
       },
       error: (error) => {
@@ -69,15 +82,18 @@ export class Post implements OnInit {
   }
 
   removeImage(): void {
-    this.post.imageUrl = undefined;
+    this.mutableImageUrl = undefined
   }
 
   deletePost(): void {
+    const post = this.post()
+    if (!post) return
+
     if (!window.confirm("Are you sure you want to delete this post?")) return;
 
-    this.postService.deletePost(this.post.postId).subscribe({
+    this.postService.deletePost(post.postId).subscribe({
       next: () => {
-        this.refreshFeed.emit();
+        this.postStore.removePost(this.postId)
       },
       error: (error) => {
         window.alert("Error deleting post: " + error.message);

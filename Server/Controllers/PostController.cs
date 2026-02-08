@@ -104,7 +104,7 @@ namespace Server.Controllers
 
             Guid userId = HttpContext.GetUserId();
 
-            if (post.PostId != userId)
+            if (post.UserId != userId)
             {
                 return Unauthorized("You can only delete your own posts");
             }

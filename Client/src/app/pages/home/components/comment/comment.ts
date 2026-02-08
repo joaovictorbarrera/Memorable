@@ -1,10 +1,11 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { CommentDto } from '../../../../shared/models/comment.dto';
 import { ProfileIcon } from "../../../../shared/components/profile-icon/profile-icon";
 import { formattedTime } from '../../../../shared/utilities/time';
 import { GlobalService } from '../../../../core/state/global';
 import { MatIcon } from '@angular/material/icon';
 import { CommentService } from '../../../../shared/services/comment.service';
+import { PostStore } from '../../../../shared/stores/post.store';
 @Component({
   selector: 'app-comment',
   imports: [ProfileIcon, MatIcon],
@@ -15,7 +16,11 @@ export class Comment implements OnInit {
   @Input() comment!: CommentDto;
   timeAgo: string = '';
 
-  constructor(public globalService: GlobalService, private commentService: CommentService) { }
+  constructor(
+    public globalService: GlobalService,
+    private commentService: CommentService,
+    private postStore: PostStore,
+  ) { }
 
   ngOnInit(): void {
     this.timeAgo = formattedTime(this.comment.createdAt);
@@ -26,10 +31,10 @@ export class Comment implements OnInit {
       this.commentService.deletePost(this.comment.commentId)
       .subscribe({
           next: () => {
-            this.commentService.remove(this.comment.postId, this.comment.commentId)
+            this.postStore.removeComment(this.comment.postId, this.comment.commentId)
           },
           error: (err) => {
-            console.log("Error deleting comment: ", err)
+            window.alert("Error deleting comment: "+ err.message)
           }
       })
     }

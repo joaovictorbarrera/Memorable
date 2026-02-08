@@ -25,8 +25,8 @@ export class App implements OnInit {
     }
   }
 
-  OnFailedToLoadUser(error: any) {
-    console.log('Failed to load user:', error);
+  OnFailedToLoadUser(err: any) {
+    console.log('Failed to load user:'+ err.message);
     this.globalService.user.set(null);
     // Redirect to login page or show an error message
   }
