@@ -1,4 +1,4 @@
-<div class="flex gap-2 items-center mt-3">
+<div class="flex gap-2 items-center mt-4">
     <app-profile-icon class="xs:block hidden" [imageUrl]="this.globalService.user()?.profileImageUrl" [username]="this.globalService.user()?.username"></app-profile-icon>
     <input [(ngModel)]="this.commentContent" type="text" placeholder="Add a comment..." class="w-full p-2 bg-bg-quaternary rounded-lg border-stone-800/40 text-stone-100 placeholder:text-stone-500 focus-visible:outline-0 focus-visible:ring-3 focus-visible:ring-accent-primary/80">
     <app-post-button (click)="this.createComment()" [disabled]="this.commentContent().trim() === ''"></app-post-button>
