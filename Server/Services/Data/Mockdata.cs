@@ -80,6 +80,46 @@ namespace Server.Services
                 CreatedAt = DateTime.UtcNow.AddHours(-2),
                 ImageUrl = "https://t3.ftcdn.net/jpg/02/14/59/60/360_F_214596042_QB9lDRVMmAr1mn9eFZFgjL9JONicmjn3.jpg"
             });
+
+            _posts.Add(new Post
+            {
+                UserId = _users[1].UserId,
+                TextContent = "Baking some cookies today 🍪 Anyone else into baking?",
+                CreatedAt = DateTime.UtcNow.AddHours(-1.5),
+                ImageUrl = "https://images.unsplash.com/photo-1617196033691-42d1a52e0bbf"
+            });
+
+            _posts.Add(new Post
+            {
+                UserId = _users[2].UserId,
+                TextContent = "Late night coding session... fueled by pizza 🍕",
+                CreatedAt = DateTime.UtcNow.AddMinutes(-90),
+                ImageUrl = null
+            });
+
+            _posts.Add(new Post
+            {
+                UserId = _users[3].UserId,
+                TextContent = "Just watched an amazing documentary on AI 🤯",
+                CreatedAt = DateTime.UtcNow.AddMinutes(-80),
+                ImageUrl = "https://images.unsplash.com/photo-1604079628959-17f290f3f1e5"
+            });
+
+            _posts.Add(new Post
+            {
+                UserId = _users[0].UserId,
+                TextContent = "Feeling grateful for small wins today ✨",
+                CreatedAt = DateTime.UtcNow.AddMinutes(-60),
+                ImageUrl = null
+            });
+
+            _posts.Add(new Post
+            {
+                UserId = _users[2].UserId,
+                TextContent = "Nature hike yesterday was refreshing 🌲🍃",
+                CreatedAt = DateTime.UtcNow.AddMinutes(-30),
+                ImageUrl = "https://images.unsplash.com/photo-1506744038136-46273834b3fb"
+            });
         }
 
         private static void SeedComments()
@@ -115,6 +155,46 @@ namespace Server.Services
                 TextContent = "Respect the grind 💯",
                 CreatedAt = DateTime.UtcNow.AddHours(-1)
             });
+
+            _comments.Add(new Comment
+            {
+                PostId = _posts[5].PostId,
+                UserId = _users[0].UserId,
+                TextContent = "Cookies sound amazing! Save me some 😋",
+                CreatedAt = DateTime.UtcNow.AddMinutes(-85)
+            });
+
+            _comments.Add(new Comment
+            {
+                PostId = _posts[6].PostId,
+                UserId = _users[1].UserId,
+                TextContent = "Pizza is essential for late night coding 🍕🔥",
+                CreatedAt = DateTime.UtcNow.AddMinutes(-70)
+            });
+
+            _comments.Add(new Comment
+            {
+                PostId = _posts[7].PostId,
+                UserId = _users[2].UserId,
+                TextContent = "AI is fascinating, right? Mind-blowing stuff 🤖",
+                CreatedAt = DateTime.UtcNow.AddMinutes(-65)
+            });
+
+            _comments.Add(new Comment
+            {
+                PostId = _posts[8].PostId,
+                UserId = _users[3].UserId,
+                TextContent = "Small wins add up! Keep it up 🙌",
+                CreatedAt = DateTime.UtcNow.AddMinutes(-50)
+            });
+
+            _comments.Add(new Comment
+            {
+                PostId = _posts[9].PostId,
+                UserId = _users[1].UserId,
+                TextContent = "That hike looks epic! Nature always recharges the soul 🌿",
+                CreatedAt = DateTime.UtcNow.AddMinutes(-20)
+            });
         }
 
         private static void SeedLikes()
@@ -128,7 +208,17 @@ namespace Server.Services
                 new Like { PostId = _posts[2].PostId, UserId = _posts[1].UserId },
                 new Like { PostId = _posts[4].PostId, UserId = _posts[1].UserId },
                 new Like { PostId = _posts[4].PostId, UserId = _posts[2].UserId },
-                new Like { PostId = _posts[4].PostId, UserId = _posts[3].UserId }
+                new Like { PostId = _posts[4].PostId, UserId = _posts[3].UserId },
+                new Like { PostId = _posts[5].PostId, UserId = _users[2].UserId },
+                new Like { PostId = _posts[5].PostId, UserId = _users[3].UserId },
+                new Like { PostId = _posts[6].PostId, UserId = _users[0].UserId },
+                new Like { PostId = _posts[6].PostId, UserId = _users[3].UserId },
+                new Like { PostId = _posts[7].PostId, UserId = _users[0].UserId },
+                new Like { PostId = _posts[7].PostId, UserId = _users[1].UserId },
+                new Like { PostId = _posts[8].PostId, UserId = _users[1].UserId },
+                new Like { PostId = _posts[8].PostId, UserId = _users[2].UserId },
+                new Like { PostId = _posts[9].PostId, UserId = _users[0].UserId },
+                new Like { PostId = _posts[9].PostId, UserId = _users[3].UserId }
             ];
         }
     }
