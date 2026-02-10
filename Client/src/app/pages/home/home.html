@@ -1,8 +1,14 @@
 <main class="w-full flex justify-center">
     <div class="flex flex-col gap-8 w-2xl py-5 px-3">
-        <app-post-create (refreshFeed)="refreshFeed()"></app-post-create>
+        <app-post-create></app-post-create>
         @for (post of this.postStore.all()(); track post.postId) {
-            <app-post [postId]="post.postId" (refreshFeed)="refreshFeed()"></app-post>
+            <app-post [postId]="post.postId"></app-post>
+        }
+
+        <div #scrollAnchor class="h-1"></div>
+
+        @if (this.loading) {
+        <p class="text-center text-gray-500 py-4">Loading more…</p>
         }
     </div>
 </main>
