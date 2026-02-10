@@ -22,9 +22,6 @@ namespace Server.Controllers
         [HttpPost("CommentCreate")]
         public IActionResult CreateComment([FromBody] CommentCreateDto body)
         {
-            _logger.LogInformation(body.TextContent);
-            _logger.LogInformation(body.PostId.ToString());
-
             if (body == null)
                 return BadRequest("Invalid request body");
 
@@ -33,7 +30,7 @@ namespace Server.Controllers
 
             Guid userId = HttpContext.GetUserId();
 
-            Comment comment = new Comment
+            Comment comment = new()
             {
                 UserId = userId,
                 PostId = body.PostId,
@@ -51,6 +48,8 @@ namespace Server.Controllers
         [HttpDelete("CommentDelete")]
         public IActionResult DeleteComment([FromQuery] Guid commentId)
         {
+            if (commentId == Guid.Empty) return BadRequest("Invalid CommentId");
+
             Comment? comment = Mockdata._comments.FirstOrDefault(c => c.CommentId == commentId);
 
             if (comment == null) return NotFound("Comment Not Found");
