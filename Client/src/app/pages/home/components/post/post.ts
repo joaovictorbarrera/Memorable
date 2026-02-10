@@ -11,12 +11,13 @@ import { CommentCreate } from '../comment-create/comment-create';
 import { FormsModule } from '@angular/forms';
 import { GlobalService } from '../../../../core/state/global';
 import { CommentService } from '../../../../shared/services/comment.service';
-import { CommentDto } from '../../../../shared/models/comment.dto';
 import { PostStore } from '../../../../shared/stores/post.store';
+import { Modal } from "../../../../shared/components/modal/modal";
+import { LikeService } from '../../../../shared/services/like.service';
 
 @Component({
   selector: 'app-post',
-  imports: [Card, CommonModule, ProfileIcon, MatIcon, Comment, CommentCreate, FormsModule],
+  imports: [Card, CommonModule, ProfileIcon, MatIcon, Comment, CommentCreate, FormsModule, Modal],
   templateUrl: './post.html',
   styleUrl: './post.scss',
 })
@@ -27,7 +28,8 @@ export class Post implements OnInit {
     private globalService: GlobalService,
     private postService: PostService,
     private postStore: PostStore,
-    public commentService: CommentService
+    public commentService: CommentService,
+    private likeService: LikeService,
   ) {}
 
   post!: Signal<PostDto | undefined>
@@ -47,7 +49,21 @@ export class Post implements OnInit {
   }
 
   toggleLike(): void {
-    // TODO: LikeService
+    let apiCall;
+    if (this.postStore.isLikedByUser(this.postId))
+      apiCall = this.likeService.deleteLike(this.postId)
+    else
+      apiCall = this.likeService.createLike(this.postId)
+
+    apiCall.subscribe({
+      next() {
+        console.log("Liked!")
+      },
+      error(err) {
+        console.log("Error liking post: " + err.message)
+      }
+    })
+
     this.postStore.togglePostLike(this.postId)
   }
 
@@ -67,10 +83,15 @@ export class Post implements OnInit {
     const post = this.post()
     if (!post) return
 
-    post.imageUrl = this.mutableImageUrl
-    post.textContent = this.mutableTextContent
+    const newPost = {
+      ...post,
+      imageUrl: this.mutableImageUrl,
+      textContent: this.mutableTextContent
+    }
 
-    this.postService.updatePost(post).subscribe({
+    if (!newPost.imageUrl && !newPost.textContent) return window.alert("Post cannot be empty")
+
+    this.postService.updatePost(newPost).subscribe({
       next: (updatedPost: PostDto) => {
         this.postStore.setPost(updatedPost)
         this.editMode.set(false);

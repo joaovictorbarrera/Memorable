@@ -82,6 +82,8 @@ namespace Server.Controllers
         [HttpGet("PostGetById")]
         public IActionResult GetById([FromQuery] Guid postId)
         {
+            if (postId == Guid.Empty) return BadRequest("Invalid PostId");
+
             Post? post = Mockdata._posts.FirstOrDefault(p => p.PostId == postId);
             if (post == null)
             {
@@ -96,6 +98,8 @@ namespace Server.Controllers
         [HttpDelete("PostDelete")]
         public IActionResult Delete([FromQuery] Guid postId)
         {
+            if (postId == Guid.Empty) return BadRequest("Invalid PostId");
+
             Post? post = Mockdata._posts.FirstOrDefault(p => p.PostId == postId);
             if (post == null)
             {

@@ -25,7 +25,6 @@ export class PostCreate {
     (!this.textContent().trim() && !this.selectedImage()) || this.loading()
   )
 
-  @Output() refreshFeed = new EventEmitter<void>();
   @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
 
   constructor (

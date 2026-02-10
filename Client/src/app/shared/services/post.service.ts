@@ -8,9 +8,7 @@ import { environment } from '../../../environments/environment';
   providedIn: 'root'
 })
 export class PostService {
-
   private readonly apiUrl = `${environment.apiUrl}/post`;
-
   constructor(private http: HttpClient) {}
 
   /**

@@ -32,6 +32,14 @@ export class PostStore {
         this.posts.set(map);
     }
 
+    addManyPosts(posts: PostDto[]) {
+        const map = new Map<string, PostDto>(this.posts())
+
+        posts.forEach(p => map.set(p.postId, p))
+
+        this.posts.set(map)
+    }
+
     removePost(postId: string) {
         const map = new Map(this.posts());
         map.delete(postId);
@@ -76,5 +84,12 @@ export class PostStore {
         post.isLikedByCurrentUser = !post.isLikedByCurrentUser
 
         this.posts.set(map);
+    }
+
+    isLikedByUser(postId: string) {
+        const post = this.posts().get(postId);
+        if (!post) return;
+
+        return post.isLikedByCurrentUser
     }
 }
