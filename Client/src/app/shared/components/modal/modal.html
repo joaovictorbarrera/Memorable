@@ -1,0 +1,28 @@
+<!-- Clickable trigger -->
+<div (click)="open()" class="cursor-pointer">
+  <ng-content select="[modal-trigger]"></ng-content>
+</div>
+
+<!-- Modal overlay -->
+@if (this.isOpen) {
+    <div
+    class="fixed inset-0 bg-black/60 flex items-center justify-center z-50"
+    (click)="close()"
+    >
+        <div
+            class="bg-stone-900 pb-8 p-5 max-w-5xl max-h-[90vh] overflow-auto relative"
+            (click)="$event.stopPropagation()"
+        >
+            <!-- Close button -->
+            <button
+            class="cursor-pointer absolute top-2 right-2 text-text-tertiary hover:brightness-75 text-2xl"
+            (click)="close()"
+            >
+            <mat-icon>close</mat-icon>
+            </button>
+
+            <!-- Modal content -->
+            <ng-content select="[modal-body]"></ng-content>
+        </div>
+    </div>
+}
