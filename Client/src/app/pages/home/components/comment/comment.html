@@ -1,11 +1,11 @@
 <div class="flex gap-2 items-center">
     <app-profile-icon [imageUrl]="comment.userProfileImageUrl"></app-profile-icon>
-    <div class="flex-col flex">
-        <div class="flex items-center gap-2">
-            <span class="font-bold">{{ comment.username }}
-            </span> {{ comment.textContent }}
+    <div class="flex-col flex gap-1">
+        <div class="flex gap-2">
+            <span class="font-bold">{{ comment.username }} </span>
+            <span class="text-stone-500 text-sm">{{ timeAgo }}</span>
         </div>
-        <p class="text-stone-500 text-sm">{{ timeAgo }}</p>
+        <span> {{ comment.textContent }} </span>
     </div>
     @if (this.globalService.user()?.userId === this.comment.userId) {
         <button (click)="deleteComment()" class="ml-auto cursor-pointer hover:brightness-70">

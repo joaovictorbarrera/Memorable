@@ -12,12 +12,11 @@ import { FormsModule } from '@angular/forms';
 import { GlobalService } from '../../../../core/state/global';
 import { CommentService } from '../../../../shared/services/comment.service';
 import { PostStore } from '../../../../shared/stores/post.store';
-import { Modal } from "../../../../shared/components/modal/modal";
 import { LikeService } from '../../../../shared/services/like.service';
 
 @Component({
   selector: 'app-post',
-  imports: [Card, CommonModule, ProfileIcon, MatIcon, Comment, CommentCreate, FormsModule, Modal],
+  imports: [Card, CommonModule, ProfileIcon, MatIcon, Comment, CommentCreate, FormsModule],
   templateUrl: './post.html',
   styleUrl: './post.scss',
 })
