@@ -7,5 +7,6 @@ export interface CommentDto {
 
     // Additional fields can be added as needed
     username: string;
+    displayName: string;
     userProfileImageUrl: string;
 }

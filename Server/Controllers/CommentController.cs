@@ -40,7 +40,7 @@ namespace Server.Controllers
 
             Mockdata._comments.Add(comment);
 
-            CommentDto commentDto = PostService.GetCommentDto(comment.CommentId);
+            CommentDto commentDto = Service.GetCommentDto(comment.CommentId);
 
             return Ok(commentDto);
         }

@@ -6,9 +6,10 @@ import { GlobalService } from '../../../../core/state/global';
 import { MatIcon } from '@angular/material/icon';
 import { CommentService } from '../../../../shared/services/comment.service';
 import { PostStore } from '../../../../shared/stores/post.store';
+import { RouterModule } from '@angular/router';
 @Component({
   selector: 'app-comment',
-  imports: [ProfileIcon, MatIcon],
+  imports: [ProfileIcon, MatIcon, RouterModule],
   templateUrl: './comment.html',
   styleUrl: './comment.scss',
 })

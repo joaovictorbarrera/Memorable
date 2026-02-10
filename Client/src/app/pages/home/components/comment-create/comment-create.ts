@@ -7,6 +7,7 @@ import { FormsModule } from '@angular/forms';
 import { CommentService } from '../../../../shared/services/comment.service';
 import { finalize } from 'rxjs';
 import { PostStore } from '../../../../shared/stores/post.store';
+import { GlobalService } from '../../../../core/state/global';
 
 @Component({
   selector: 'app-comment-create',
@@ -23,6 +24,7 @@ export class CommentCreate implements OnInit {
   constructor(
     private commentService: CommentService,
     private postStore: PostStore,
+    public globalService: GlobalService
   ) {}
 
    ngOnInit(): void {

@@ -17,7 +17,7 @@ namespace Server.Services
         static Mockdata()
         {
             // Simulate logged-in user
-            const int LOGGED_IN_USER = 3;
+            const int LOGGED_IN_USER = 1;
             
             //_currentUserId = new Guid("f8b78691-d0eb-4e11-85eb-a81f4b028356");
             SeedUsers();
@@ -30,13 +30,41 @@ namespace Server.Services
 
         private static void SeedUsers()
         {
-            _users =
-            [
-                new User { Username = "John Barrera", ProfileImageUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTFFbBnDucTQkErvyNTrqFvqD4eSkm9UcFNYg&s" },
-                new User { Username = "mariah", ProfileImageUrl = "https://img.freepik.com/free-photo/head-shot-happy-beautiful-young-woman-posing-indoors-looking-camera-smiling_74855-10218.jpg?semt=ais_hybrid&w=740&q=80" },
-                new User { Username = "mike", ProfileImageUrl = "https://img.freepik.com/free-photo/portrait-white-man-isolated_53876-40306.jpg?semt=ais_hybrid&w=740&q=80" },
-                new User { Username = "sarah", ProfileImageUrl = "https://images.squarespace-cdn.com/content/v1/5e3ee1cd772e5208fa93bad8/1600276711411-FBREG2YYKZ5Z9JS5YAWK/image-asset.jpeg" }
+            _users = [
+                new User {
+                    FirstName = "John",
+                    LastName = "Barrera",
+                    ProfileImageUrl = "https://www.pigstarcraft.com/wp-content/uploads/2020/11/logo_pig_400.jpg",
+                    Username = "john.barrera",
+                    UserEmail = "test@test.com",
+                    Password = "Password123"
+                },
+                new User {
+                    FirstName = "Artanis",
+                    LastName = "Tal'Daarim",
+                    ProfileImageUrl = "https://www.giantbomb.com/a/uploads/scale_super/3/33745/1681250-artanis.jpg",
+                    Username = "artanis.taldaarim",
+                    UserEmail = "test@test.com",
+                    Password = "Password123"
+                },
+                new User {
+                    FirstName = "Jim",
+                    LastName = "Raynor",
+                    ProfileImageUrl = "https://alchetron.com/cdn/jim-raynor-386f452a-8282-4f87-a6d7-f9c4a9a7f46-resize-750.jpeg",
+                    Username = "jim.raynorrr",
+                    UserEmail = "test@test.com",
+                    Password = "Password123"
+                },
+                new User {
+                    FirstName = "Sarah",
+                    LastName = "Kerrigan",
+                    ProfileImageUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRefLAeMA3-ij1r9nf6b4aeRHkS6V1uOV7t8Q&s",
+                    Username = "sarah.kerrigan",
+                    UserEmail = "test@test.com",
+                    Password = "Password123"
+                }
             ];
+
         }
 
         private static void SeedPosts()
@@ -86,7 +114,7 @@ namespace Server.Services
                 UserId = _users[1].UserId,
                 TextContent = "Baking some cookies today 🍪 Anyone else into baking?",
                 CreatedAt = DateTime.UtcNow.AddHours(-1.5),
-                ImageUrl = "https://images.unsplash.com/photo-1617196033691-42d1a52e0bbf"
+                ImageUrl = "https://cookiesandcups.com/wp-content/uploads/2013/03/The-Perfect-Cookie-Base-2-scaled.jpg"
             });
 
             _posts.Add(new Post
@@ -102,7 +130,7 @@ namespace Server.Services
                 UserId = _users[3].UserId,
                 TextContent = "Just watched an amazing documentary on AI 🤯",
                 CreatedAt = DateTime.UtcNow.AddMinutes(-80),
-                ImageUrl = "https://images.unsplash.com/photo-1604079628959-17f290f3f1e5"
+                ImageUrl = "https://i.ytimg.com/vi/-sB12gk9ESA/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLAIbQUSDjeewuXlwswqbGorwFhl8Q"
             });
 
             _posts.Add(new Post

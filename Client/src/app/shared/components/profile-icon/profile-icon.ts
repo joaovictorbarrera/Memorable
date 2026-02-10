@@ -1,11 +1,15 @@
 import { Component, Input } from '@angular/core';
-
+import { RouterModule } from '@angular/router';
+import { fallbackProfileImageUrl } from '../../../core/state/constants';
 @Component({
   selector: 'app-profile-icon',
-  imports: [],
+  imports: [RouterModule],
   templateUrl: './profile-icon.html',
   styleUrl: './profile-icon.scss',
 })
 export class ProfileIcon {
-  @Input() imageUrl!: string;
+  @Input() imageUrl!: string | undefined;
+  @Input() username!: string | undefined;
+
+  readonly fallbackImage = fallbackProfileImageUrl
 }

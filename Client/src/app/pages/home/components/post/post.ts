@@ -13,10 +13,11 @@ import { GlobalService } from '../../../../core/state/global';
 import { CommentService } from '../../../../shared/services/comment.service';
 import { PostStore } from '../../../../shared/stores/post.store';
 import { LikeService } from '../../../../shared/services/like.service';
+import { RouterModule } from "@angular/router";
 
 @Component({
   selector: 'app-post',
-  imports: [Card, CommonModule, ProfileIcon, MatIcon, Comment, CommentCreate, FormsModule],
+  imports: [Card, CommonModule, ProfileIcon, MatIcon, Comment, CommentCreate, FormsModule, RouterModule],
   templateUrl: './post.html',
   styleUrl: './post.scss',
 })

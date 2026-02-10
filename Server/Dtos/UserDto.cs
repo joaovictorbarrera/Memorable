@@ -1,15 +1,13 @@
-﻿namespace Server.Models
+﻿namespace Server.Dtos
 {
-    public class User
+    public class UserDto
     {
-        public Guid UserId { get; set; } = Guid.NewGuid();
+        public Guid UserId { get; set; }
+        public required string DisplayName { get; set; }
         public required string FirstName { get; set; }
         public required string LastName { get; set; }
         public required string ProfileImageUrl { get; set; }
         public required string Username { get; set; }
         public required string UserEmail { get; set; }
-        public required string Password { get; set; }
-
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     }
 }

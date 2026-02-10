@@ -52,7 +52,7 @@ namespace Server.Controllers
 
                 Mockdata._posts.Add(post);
 
-                PostDto postDto = PostService.GetPostDto(post.PostId);
+                PostDto postDto = Service.GetPostDto(post.PostId);
 
                 return Ok(postDto);
             }
@@ -74,7 +74,7 @@ namespace Server.Controllers
                 .Take(pageSize)
                 .ToList();
 
-            List<PostDto> postDtos = pagedPosts.Select(p => PostService.GetPostDto(p.PostId)).ToList();
+            List<PostDto> postDtos = pagedPosts.Select(p => Service.GetPostDto(p.PostId)).ToList();
 
             return Ok(postDtos);
         }
@@ -90,7 +90,7 @@ namespace Server.Controllers
                 return NotFound("Post not found");
             }
 
-            PostDto postDto = PostService.GetPostDto(post.PostId);
+            PostDto postDto = Service.GetPostDto(post.PostId);
 
             return Ok(postDto);
         }
@@ -143,7 +143,7 @@ namespace Server.Controllers
             existingPost.TextContent = updatedPost.TextContent;
             existingPost.ImageUrl = updatedPost.ImageUrl;
 
-            PostDto postDto = PostService.GetPostDto(existingPost.PostId);
+            PostDto postDto = Service.GetPostDto(existingPost.PostId);
 
             return Ok(postDto);
         }

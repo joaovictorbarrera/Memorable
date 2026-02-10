@@ -1,9 +1,11 @@
 <app-card class="text-lg">
     <!-- Post Header -->
-    <div class="flex gap-2 items-center">
-        <app-profile-icon [imageUrl]="post()?.userProfileImageUrl ?? ''"></app-profile-icon>
+    <div class="flex gap-3 items-center">
+        <app-profile-icon [imageUrl]="post()?.userProfileImageUrl" [username]="post()?.username"></app-profile-icon>
         <div class="flex flex-col">
-            <span>{{ post()?.username ?? ''}}</span>
+            <a [routerLink]="['/user', post()?.username]" routerLinkActive="active">
+                <span>{{ post()?.displayName ?? ''}}</span>
+            </a>
             <p class="text-text-secondary text-sm mb-2">{{ timeAgo }}</p>
         </div>
 

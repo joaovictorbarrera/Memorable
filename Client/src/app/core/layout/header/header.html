@@ -29,7 +29,7 @@
                     type="text" placeholder="Search...">
                 </div>
 
-                <app-profile-icon [imageUrl]="globalService.user()?.profileImageUrl ?? globalService.fallbackProfileImageUrl"></app-profile-icon>
+                <app-profile-icon [imageUrl]="globalService.user()?.profileImageUrl" [username]="globalService.user()?.username"></app-profile-icon>
             </div>
         </div>
     </div>

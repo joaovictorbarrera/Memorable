@@ -1,5 +1,9 @@
 interface UserDto {
     userId: string;
-    username: string;
+    displayName: string;
     profileImageUrl: string;
+    firstName: string,
+    lastName: string,
+    createdAt: Date,
+    username: string
 }

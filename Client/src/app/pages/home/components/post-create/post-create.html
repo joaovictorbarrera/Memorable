@@ -1,7 +1,7 @@
 <app-card class="flex flex-col">
     <div class="flex">
         <div class="inline-block">
-            <app-profile-icon [imageUrl]="this.globalService.user()?.profileImageUrl ?? this.globalService.fallbackProfileImageUrl"></app-profile-icon>
+            <app-profile-icon [imageUrl]="this.globalService.user()?.profileImageUrl" [username]="this.globalService.user()?.username"></app-profile-icon>
         </div>
         <div class="inline-block w-full pr-10">
             <div class="h-20 flex flex-col">

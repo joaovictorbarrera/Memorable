@@ -4,11 +4,12 @@
     {
         public required Guid PostId { get; set; }
         public string? TextContent { get; set; }
+        public String? ImageUrl { get; set; }
         public required DateTime CreatedAt { get; set; }
         public required Guid UserId { get; set; }
-        public String? ImageUrl { get; set; }
 
         public required string Username { get; set; }
+        public required string DisplayName { get; set; }
         public required string UserProfileImageUrl { get; set; }
         public required int LikeCount { get; set; } = 0;
 

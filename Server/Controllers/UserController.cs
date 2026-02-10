@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Server.Dtos;
 using Server.Extensions;
 using Server.Models;
 using Server.Services;
+using Server.Services.Posts;
 
 namespace Server.Controllers
 {
@@ -24,7 +26,10 @@ namespace Server.Controllers
             {
                 return NotFound("User not found");
             }
-            return Ok(user);
+
+            UserDto userDto = Service.GetUserDto(userId);
+
+            return Ok(userDto);
         }
 
         [HttpGet("UserGetById")]
@@ -36,7 +41,9 @@ namespace Server.Controllers
                 return NotFound("User not found");
             }
 
-            return Ok(user);
+            UserDto userDto = Service.GetUserDto(userId);
+
+            return Ok(userDto);
         }
     }
 }
