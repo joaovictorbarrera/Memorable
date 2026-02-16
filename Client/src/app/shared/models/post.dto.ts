@@ -13,5 +13,7 @@ export interface PostDto {
     userProfileImageUrl: string;
     likeCount: number;
     isLikedByCurrentUser: boolean;
-    comments: CommentDto[];
+    initialComments?: CommentDto[];
+    commentPageCount: number;
+    commentCount: number;
 }

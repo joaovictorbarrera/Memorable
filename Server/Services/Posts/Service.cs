@@ -16,7 +16,9 @@ namespace Server.Services.Posts
 
             UserDto userDto = GetUserDto(post.UserId);
 
-            List<CommentDto> commentDtos = GetPostComments(postId);
+            int commentCount = Mockdata._comments.Count(c => c.PostId == postId);
+
+            List<CommentDto> initialComments = GetPostComments(postId, pageSize: 5, pageNumber: 1);
 
             return new PostDto
             {
@@ -30,14 +32,24 @@ namespace Server.Services.Posts
                 Username = userDto.Username,
                 LikeCount = Mockdata._likes.Count(l => l.PostId == postId),
                 IsLikedByCurrentUser = Mockdata._likes.Any(l => l.PostId == postId && l.UserId == Mockdata._currentUserId),
-                Comments = commentDtos
+                InitialComments = initialComments,
+                CommentCount = commentCount
             };
         }
 
-        private static List<CommentDto> GetPostComments(Guid postId)
+        public static List<CommentDto> GetPostComments(Guid postId, int pageSize, int pageNumber)
         {
-            List<Comment> comments = Mockdata._comments.Where(c => c.PostId == postId).ToList();
-            List<CommentDto> commentDtos = comments.Select(c => GetCommentDto(c.CommentId)).ToList();
+            List<Comment> pagedComments = Mockdata._comments
+                .Where(c => c.PostId == postId)
+                .OrderBy(c => c.CreatedAt) // oldest first
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
+
+            List<CommentDto> commentDtos = pagedComments
+                .Select(c => Service.GetCommentDto(c.CommentId))
+                .ToList();
+
             return commentDtos;
         }
 

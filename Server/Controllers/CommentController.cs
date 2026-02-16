@@ -65,5 +65,28 @@ namespace Server.Controllers
 
             return Ok(comment);
         }
+
+
+        [HttpGet("CommentGetByPostId")]
+        public IActionResult GetByPostId(
+        [FromQuery] Guid postId,
+        [FromQuery] int pageNumber,
+        [FromQuery] int pageSize)
+        {
+            if (postId == Guid.Empty)
+                return BadRequest("Invalid PostId");
+
+            if (pageNumber <= 0 || pageSize <= 0)
+                return BadRequest("Invalid pagination parameters");
+
+            bool postExists = Mockdata._posts.Any(p => p.PostId == postId);
+            if (!postExists)
+                return NotFound("Post not found");
+
+            List<CommentDto> commentDtos = Service.GetPostComments(postId, pageSize, pageNumber);
+
+            return Ok(commentDtos);
+        }
+
     }
 }

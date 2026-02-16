@@ -66,7 +66,8 @@ namespace Server.Controllers
         [HttpGet("PostGetFeed")]
         public IActionResult GetFeed([FromQuery] int pageSize, [FromQuery] int pageNumber)
         {
-            if (pageSize <= 0) return BadRequest();
+            if (pageSize <= 0 || pageNumber <= 0)
+                return BadRequest("Invalid pagination parameters");
 
             List<Post> pagedPosts = Mockdata._posts
                 .OrderByDescending(p => p.CreatedAt)
@@ -74,7 +75,9 @@ namespace Server.Controllers
                 .Take(pageSize)
                 .ToList();
 
-            List<PostDto> postDtos = pagedPosts.Select(p => Service.GetPostDto(p.PostId)).ToList();
+            List<PostDto> postDtos = pagedPosts
+                .Select(p => Service.GetPostDto(p.PostId))
+                .ToList();
 
             return Ok(postDtos);
         }
@@ -147,5 +150,32 @@ namespace Server.Controllers
 
             return Ok(postDto);
         }
+
+        [HttpGet("PostGetForProfile")]
+        public IActionResult GetForProfile(
+    [FromQuery] Guid userId,
+    [FromQuery] int pageSize,
+    [FromQuery] int pageNumber)
+        {
+            if (userId == Guid.Empty)
+                return BadRequest("Invalid userId");
+
+            if (pageSize <= 0 || pageNumber <= 0)
+                return BadRequest("Invalid pagination parameters");
+
+            List<Post> pagedPosts = Mockdata._posts
+                .Where(p => p.UserId == userId)
+                .OrderByDescending(p => p.CreatedAt)
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
+
+            List<PostDto> postDtos = pagedPosts
+                .Select(p => Service.GetPostDto(p.PostId))
+                .ToList();
+
+            return Ok(postDtos);
+        }
+
     }
 }

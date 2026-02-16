@@ -14,6 +14,7 @@ import { CommentService } from '../../../../shared/services/comment.service';
 import { PostStore } from '../../../../shared/stores/post.store';
 import { LikeService } from '../../../../shared/services/like.service';
 import { RouterModule } from "@angular/router";
+import { CommentDto } from '../../../../shared/models/comment.dto';
 
 @Component({
   selector: 'app-post',
@@ -33,6 +34,8 @@ export class Post implements OnInit {
   ) {}
 
   post!: Signal<PostDto | undefined>
+  comments!: Signal<CommentDto[] | undefined>;
+
   isCurrentUserPost: Signal<boolean> = computed(() => this.post()?.userId === this.globalService.user()?.userId);
   timeAgo: string = '';
   editMode = signal(false);
@@ -42,10 +45,27 @@ export class Post implements OnInit {
 
   ngOnInit(): void {
     this.post = this.postStore.getPost(this.postId)
+    this.comments = this.postStore.getComments(this.postId)
+
     const post = this.post();
+
     this.timeAgo = post ? formattedTime(post.createdAt) : '';
     this.mutableImageUrl = post?.imageUrl
     this.mutableTextContent = post?.textContent ?? ""
+
+    if (post && post?.initialComments) this.postStore.addManyComments(this.postId, post.initialComments)
+  }
+
+  loadComments(): void {
+    const post = this.post();
+    if (!post) return
+
+    this.commentService.getCommentsByPostId(post).subscribe({
+      next: (comments) => {
+        this.postStore.addManyComments(post.postId, comments)
+        this.postStore.setCommentPage(post.postId, (post.commentPageCount ?? 0) + 1)
+      }
+    })
   }
 
   toggleLike(): void {

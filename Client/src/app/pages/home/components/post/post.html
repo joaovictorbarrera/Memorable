@@ -39,7 +39,7 @@
 
     <!-- Text Content -->
     @if (editMode()) {
-        <textarea [(ngModel)]="this.mutableTextContent" class="w-full p-2 bg-bg-quaternary rounded-lg border-stone-800/40 resize-none placeholder:text-stone-500 focus-visible:outline-0 focus-visible:ring-3 focus-visible:ring-accent-primary/80"></textarea>
+        <textarea [(ngModel)]="this.mutableTextContent" class="w-full p-2 bg-bg-quaternary rounded-lg border-bg-tertiary resize-none placeholder:text-stone-500 focus-visible:outline-0 focus-visible:ring-3 focus-visible:ring-accent-primary/80"></textarea>
     }
     @else {
         <p class="whitespace-pre-wrap">{{ post()?.textContent ?? '' }}</p>
@@ -73,8 +73,14 @@
 
     <!-- Comments -->
     <div class="flex flex-col text-sm gap-2">
-        @for (comment of this.post()?.comments ?? []; track comment.commentId) {
+        @for (comment of this.comments() ?? []; track comment.commentId) {
             <app-comment class="pt-2" [comment]="comment"></app-comment>
+        }
+
+        @if (this.post() && this.post()?.commentCount && (this.comments()?.length ?? 0) < (this.post()?.commentCount ?? 0)) {
+            <button (click)="loadComments()" class="self-start text-text-secondary hover:underline cursor-pointer">
+                Load more comments...
+            </button>
         }
     </div>
 

@@ -5,6 +5,7 @@ import { PostService } from '../../shared/services/post.service';
 import { Post } from './components/post/post';
 import { CommonModule } from '@angular/common';
 import { PostStore } from '../../shared/stores/post.store';
+import { postPageSize } from '../../core/state/constants';
 
 @Component({
   selector: 'app-home',
@@ -17,7 +18,6 @@ export class Home implements OnInit, AfterViewInit {
   @ViewChild('scrollAnchor') scrollAnchor!: ElementRef;
 
   private page = 1;
-  private readonly pageSize = 5;
   public loading = false;
   private hasMore = true;
   private observer!: IntersectionObserver;
@@ -53,9 +53,9 @@ export class Home implements OnInit, AfterViewInit {
 
     this.loading = true;
 
-    this.postService.getFeed(this.pageSize, this.page).subscribe({
+    this.postService.getFeed(this.page).subscribe({
       next: (posts: PostDto[]) => {
-        if (posts.length < this.pageSize) {
+        if (posts.length < postPageSize) {
           this.hasMore = false;
         }
 

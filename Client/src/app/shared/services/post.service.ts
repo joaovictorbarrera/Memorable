@@ -3,6 +3,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { PostDto } from '../models/post.dto';
 import { environment } from '../../../environments/environment';
+import { postPageSize } from '../../core/state/constants';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +15,9 @@ export class PostService {
   /**
    * GET feed with pagination
    */
-  getFeed(pageSize: number, pageNumber: number): Observable<PostDto[]> {
+  getFeed(pageNumber: number): Observable<PostDto[]> {
+    const pageSize = postPageSize;
+
     const params = new HttpParams()
       .set('pageSize', pageSize)
       .set('pageNumber', pageNumber);

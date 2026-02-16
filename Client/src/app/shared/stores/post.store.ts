@@ -5,6 +5,7 @@ import { CommentDto } from "../models/comment.dto";
 @Injectable({ providedIn: 'root' })
 export class PostStore {
     private posts = signal<Map<string, PostDto>>(new Map());
+    private comments = signal<Map<string, CommentDto[]>>(new Map());
 
     all() {
         return computed(() => Array.from(this.posts().values()));
@@ -53,21 +54,39 @@ export class PostStore {
     }
 
     addComment(postId: string, comment: CommentDto) {
-        const map = new Map(this.posts());
-        const post = map.get(postId);
-        if (!post) return;
-
-        post.comments.push(comment);
-        this.posts.set(map);
+        const map = new Map(this.comments());
+        const comments = map.get(postId);
+        if (!comments) {
+            map.set(postId, [comment]);
+        } else {
+            comments.push(comment);
+        }
+        this.comments.set(map);
     }
 
     removeComment(postId: string, commentId: string) {
-        const map = new Map(this.posts());
-        const post = map.get(postId);
-        if (!post) return;
+        const map = new Map(this.comments());
+        const comments = map.get(postId);
+        if (!comments) return;
 
-        post.comments = post.comments.filter(c => c.commentId !== commentId);
-        this.posts.set(map);
+        const filteredComments = comments.filter(c => c.commentId !== commentId);
+        map.set(postId, filteredComments);
+        this.comments.set(map);
+    }
+
+    addManyComments(postId: string, comments: CommentDto[]) {
+        const map = new Map(this.comments());
+        const existingComments = map.get(postId);
+        if (!existingComments) {
+            map.set(postId, comments);
+        } else {
+            existingComments.push(...comments);
+        }
+        this.comments.set(map);
+    }
+
+    getComments(postId: string) {
+        return computed(() => this.comments().get(postId));
     }
 
     togglePostLike(postId: string) {
@@ -83,6 +102,14 @@ export class PostStore {
 
         post.isLikedByCurrentUser = !post.isLikedByCurrentUser
 
+        this.posts.set(map);
+    }
+
+    setCommentPage(postId: string, pageNumber: number) {
+        const map = new Map(this.posts());
+        const post = map.get(postId);
+        if (!post) return;
+        post.commentPageCount = pageNumber;
         this.posts.set(map);
     }
 
