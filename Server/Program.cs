@@ -1,7 +1,5 @@
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.Identity.Web;
 using Server.Configuration;
+using Server.Services;
 using Server.Services.ImageUpload;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -56,3 +54,5 @@ app.UseHttpsRedirection();
 app.MapControllers();
 
 app.Run();
+
+
