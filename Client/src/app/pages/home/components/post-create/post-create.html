@@ -4,7 +4,7 @@
             <app-profile-icon [imageUrl]="this.globalService.user()?.profileImageUrl" [username]="this.globalService.user()?.username"></app-profile-icon>
         </div>
         <div class="inline-block w-full pr-10">
-            <div class="h-full flex flex-col">
+            <div class="min-h-20 flex flex-col">
                 <textarea [(ngModel)]="textContent" placeholder="Share a memory..." type="text" class="p-2 min-h-20 resize-y w-full h-full text-[1rem] bg-transparent outline-none focus:ring-2 focus:ring-accent-primary/80 "></textarea>
             </div>
             @if (imagePreviewUrl()) {
