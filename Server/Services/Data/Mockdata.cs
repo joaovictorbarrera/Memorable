@@ -12,6 +12,8 @@ namespace Server.Services
 
         public static List<Like> _likes { get; set; } = [];
 
+        public static List<Follow> _follows { get; set; } = [];
+
         public static Guid _currentUserId { get; set; } = Guid.NewGuid();
 
         static Mockdata()
