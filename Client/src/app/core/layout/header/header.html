@@ -10,19 +10,19 @@
                 </h1>
 
                 <nav class="flex gap-8 text-lg/5">
-                    <a routerLink="/" routerLinkActive="active" class="flex gap-1 items-end">
+                    <a routerLink="/" routerLinkActive="active" [ngClass]="{'active': isActive('/')}" class="flex gap-1 items-end">
                         <mat-icon fontIcon="home"></mat-icon>
                         Home
                     </a>
 
-                    <a routerLink="/about" routerLinkActive="active" class="flex gap-1 items-end">
+                    <a routerLink="/about" routerLinkActive="active" [ngClass]="{'active': isActive('/about')}" class="flex gap-1 items-end">
                         <mat-icon fontIcon="info"></mat-icon>
                         About
                     </a>
                 </nav>
             </div>
 
-            <div class="md:ml-auto flex gap-5 items-center">
+            <div class="md:ml-auto flex gap-5 items-center" >
                 <div class="flex items-center relative">
                     <mat-icon fontIcon="search" class="absolute left-2"></mat-icon>
                     <input type="text" class="text-xl pl-10 w-64 bg-bg-tertiary p-1 rounded-lg border-border-secondary text-text-primary placeholder:text-text-tertiary focus-visible:outline-0 focus-visible:ring-4 focus-visible:ring-accent-primary"

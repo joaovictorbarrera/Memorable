@@ -1,3 +1,9 @@
 * {
     user-select: none;
 }
+
+nav a.active {
+    padding-bottom: 0.25rem;
+    padding-inline: .25rem;
+    border-bottom: 3px solid var(--color-accent-primary);
+}
