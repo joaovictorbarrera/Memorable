@@ -78,9 +78,6 @@ export class Post implements OnInit {
       apiCall = this.likeService.createLike(this.postId)
 
     apiCall.subscribe({
-      next() {
-        console.log("Liked!")
-      },
       error(err) {
         console.log("Error liking post: " + err.message)
       }
