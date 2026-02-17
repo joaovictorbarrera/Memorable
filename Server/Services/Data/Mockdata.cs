@@ -81,7 +81,6 @@ namespace Server.Services
                     Password = "Password123"
                 },
 
-                // User 1 (2 posts)
                 new User {
                     FirstName = "Elon",
                     LastName = "Synth",
@@ -92,7 +91,6 @@ namespace Server.Services
                     Password = "Password123"
                 },
 
-                // User 2 (2 posts)
                 new User {
                     FirstName = "Mira",
                     LastName = "Vale",
@@ -100,6 +98,28 @@ namespace Server.Services
                     ProfileImageUrl = "https://randomuser.me/api/portraits/women/68.jpg",
                     Username = "mira.vale",
                     UserEmail = "mira@test.com",
+                    Password = "Password123"
+                },
+
+                // User with 0 activity
+                new User {
+                    FirstName = "Laura",
+                    LastName = "Keepy",
+                    DisplayName = "Laura Keepy",
+                    ProfileImageUrl = "https://randomuser.me/api/portraits/women/45.jpg",
+                    Username = "laura.keepy",
+                    UserEmail = "laura@test.com",
+                    Password = "Password123"
+                },
+
+                // User with 0 activity
+                new User {
+                    FirstName = "Elizabeth",
+                    LastName = "Mohr",
+                    DisplayName = "Elizabeth Mohr",
+                    ProfileImageUrl = "https://randomuser.me/api/portraits/women/46.jpg",
+                    Username = "elizabeth.mohr",
+                    UserEmail = "elizabeth@test.com",
                     Password = "Password123"
                 }
 
@@ -189,7 +209,6 @@ namespace Server.Services
                 ImageUrl = "https://images.unsplash.com/photo-1506744038136-46273834b3fb"
             });
 
-            // Elon posts
             _posts.Add(new Post
             {
                 UserId = _users[5].UserId,
@@ -206,7 +225,6 @@ namespace Server.Services
                 ImageUrl = null
             });
 
-            // Mira posts
             _posts.Add(new Post
             {
                 UserId = _users[6].UserId,

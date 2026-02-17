@@ -68,7 +68,7 @@ namespace Server.Controllers
             return Ok(userDtos);
         }
 
-        [HttpGet("UserGetRandom")]
+        [HttpGet("UserGetStranger")]
         public IActionResult GetRandom()
         {
             if (Mockdata._users == null || !Mockdata._users.Any())
@@ -76,15 +76,17 @@ namespace Server.Controllers
 
             Guid currentUserId = HttpContext.GetUserId();
 
-            Guid randomUserId = Guid.Empty;
+            List<Guid> following = UserHelper.GetFollowingList(currentUserId);
+            List<User> notFollowedUsers = Mockdata._users
+                                            .FindAll(u => u.UserId != currentUserId &&
+                                                        !following.Contains(u.UserId));
 
-            do
-            {
-                var random = new Random();
-                int index = random.Next(Mockdata._users.Count);
+            if (notFollowedUsers.Count < 1) return Ok(null);
 
-                randomUserId = Mockdata._users.ElementAt(index).UserId;
-            } while (randomUserId == currentUserId);
+            var random = new Random();
+            int index = random.Next(notFollowedUsers.Count);
+
+            Guid randomUserId = notFollowedUsers[index].UserId;
 
             UserDto randomUserDto = Service.GetUserDto(randomUserId, currentUserId);
 

@@ -27,9 +27,9 @@ export class UserService {
         .get<UserDto[]>(`${this.apiUrl}/UserGetByUsernameQuery`, { params })
     }
 
-    getRandomUser(): Observable<UserDto> {
+    getStranger(): Observable<UserDto> {
         return this.http
-        .get<UserDto>(`${this.apiUrl}/UserGetRandom`)
+        .get<UserDto>(`${this.apiUrl}/UserGetStranger`)
     }
 
 }

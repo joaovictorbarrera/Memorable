@@ -21,6 +21,7 @@ export class Header implements OnInit {
   query = signal('');
   suggestions = signal<any[]>([]);
   loading = signal(false);
+  randomUserButtonDisabled = signal(false);
 
   constructor(private userService: UserService, public globalService: GlobalService) {
     this.loading.set(true);
@@ -41,7 +42,18 @@ export class Header implements OnInit {
   }
 
   ngOnInit() {
-
+    // Determine whether we should disable the random user button.
+    // If request fails, then disable the button
+    this.userService.getStranger().subscribe({
+      next: (user) => {
+        if (!user) {
+          this.randomUserButtonDisabled.set(true);
+        }
+      },
+      error: (err) => {
+        this.randomUserButtonDisabled.set(true);
+      }
+    })
   }
 
   clearSearch() {
@@ -53,9 +65,13 @@ export class Header implements OnInit {
     this.clearSearch();
   }
 
-  randomUser() {
-    this.userService.getRandomUser().subscribe({
+  findUsers() {
+    this.userService.getStranger().subscribe({
       next: (user) => {
+        if (!user) {
+          window.location.href = '/';
+          return;
+        }
         window.location.href = `/user/${user.username}`;
       },
       error: (err) => {
