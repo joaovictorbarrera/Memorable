@@ -24,6 +24,7 @@ import { CommentDto } from '../../../../shared/models/comment.dto';
 })
 export class Post implements OnInit {
   @Input() postId!: string;
+  @Output() postDeleted = new EventEmitter<PostDto>();
 
   constructor(
     private globalService: GlobalService,
@@ -136,6 +137,7 @@ export class Post implements OnInit {
     this.postService.deletePost(post.postId).subscribe({
       next: () => {
         this.postStore.removePost(this.postId)
+        this.postDeleted.emit(this.post())
       },
       error: (error) => {
         window.alert("Error deleting post: " + error.message);

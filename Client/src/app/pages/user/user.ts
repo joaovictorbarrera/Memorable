@@ -113,10 +113,24 @@ export class User implements OnInit, AfterViewInit {
     });
   }
 
-  updateFollowerCount(wasFollowed: boolean): void {
+  updateFollowerCount(followStatus: boolean): void {
     const user = this.user();
     if (!user) return;
-    user.followerCount = wasFollowed ? user.followerCount + 1 : user.followerCount - 1;
+    user.followerCount = followStatus ? user.followerCount + 1 : user.followerCount - 1;
+    this.user.set(user);
+  }
+
+  increasePostCount(): void {
+    const user = this.user();
+    if (!user) return;
+    user.postCount += 1;
+    this.user.set(user);
+  }
+
+  decreasePostCount(): void {
+    const user = this.user();
+    if (!user) return;
+    user.postCount -= 1;
     this.user.set(user);
   }
 }

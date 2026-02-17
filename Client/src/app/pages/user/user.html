@@ -45,10 +45,10 @@
         <!-- User Posts -->
         <div class="mt-5 flex flex-col gap-8 w-full max-w-2xl">
             @if (this.isCurrentUserProfile()) {
-                <app-post-create></app-post-create>
+                <app-post-create (postCreated)="increasePostCount()"></app-post-create>
             }
             @for (postId of this.postStore.allPostsForProfile(this.user()?.userId ?? '')(); track postId) {
-                <app-post [postId]="postId"></app-post>
+                <app-post  [postId]="postId" (postDeleted)="decreasePostCount()"></app-post>
             }
         </div>
 

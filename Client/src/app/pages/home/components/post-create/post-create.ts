@@ -17,6 +17,8 @@ import { PostStore } from '../../../../shared/stores/post.store';
   styleUrl: './post-create.scss',
 })
 export class PostCreate {
+  @Output() postCreated = new EventEmitter<PostDto>();
+
   textContent = signal<string>("");
   selectedImage = signal<File | null>(null);
   imagePreviewUrl = signal<string | null>(null);
@@ -58,6 +60,7 @@ export class PostCreate {
         this.textContent.set("");
         this.removeSelectedImage();
         this.postStore.addPost(post)
+        this.postCreated.emit(post);
       },
       error: (err) => {
         console.error("Error creating post:"+ err.message);
