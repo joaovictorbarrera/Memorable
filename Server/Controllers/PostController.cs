@@ -69,7 +69,12 @@ namespace Server.Controllers
             if (pageSize <= 0 || pageNumber <= 0)
                 return BadRequest("Invalid pagination parameters");
 
+            Guid userId = HttpContext.GetUserId();
+
+            List<Guid> usersFollowing = UserHelper.GetFollowingList(userId);
+
             List<Post> pagedPosts = Mockdata._posts
+                .FindAll(p => usersFollowing.Contains(p.UserId) || p.UserId == userId)
                 .OrderByDescending(p => p.CreatedAt)
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize)

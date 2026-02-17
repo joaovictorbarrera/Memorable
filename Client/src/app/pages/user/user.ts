@@ -78,7 +78,7 @@ export class User implements OnInit, AfterViewInit {
       },
       {
         root: null,
-        rootMargin: '1000px',
+        rootMargin: '200px',
         threshold: 0,
       }
     );

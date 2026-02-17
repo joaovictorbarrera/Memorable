@@ -1,4 +1,6 @@
-﻿namespace Server.Services.Posts
+﻿using Server.Models;
+
+namespace Server.Services.Posts
 {
     public class UserHelper
     {
@@ -20,6 +22,11 @@
         public static bool IsFollowing(Guid profileUserId, Guid currentUserId)
         {
             return Mockdata._follows.Any(f => f.FollowerId == currentUserId && f.FollowingId == profileUserId);
+        }
+
+        public static List<Guid> GetFollowingList(Guid userId)
+        {
+            return Mockdata._follows.FindAll(f => f.FollowerId == userId).Select(f => f.FollowingId).ToList();
         }
     }
 }
