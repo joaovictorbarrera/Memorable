@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ViewEncapsulation } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { fallbackProfileImageUrl } from '../../../core/state/constants';
 @Component({
@@ -6,6 +6,7 @@ import { fallbackProfileImageUrl } from '../../../core/state/constants';
   imports: [RouterModule],
   templateUrl: './profile-icon.html',
   styleUrl: './profile-icon.scss',
+  encapsulation: ViewEncapsulation.None
 })
 export class ProfileIcon {
   @Input() imageUrl!: string | undefined;

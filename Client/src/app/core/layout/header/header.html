@@ -10,12 +10,12 @@
                 </h1>
 
                 <nav class="flex gap-8 text-lg/5">
-                    <a routerLink="/" routerLinkActive="active" [ngClass]="{'active': isActive('/')}" class="flex gap-1 items-end">
+                    <a routerLink="/" [routerLinkActiveOptions]="{ exact: true }" routerLinkActive="active" class="flex gap-1 items-end">
                         <mat-icon fontIcon="home"></mat-icon>
                         Home
                     </a>
 
-                    <a routerLink="/about" routerLinkActive="active" [ngClass]="{'active': isActive('/about')}" class="flex gap-1 items-end">
+                    <a routerLink="/about" routerLinkActive="active" class="flex gap-1 items-end">
                         <mat-icon fontIcon="info"></mat-icon>
                         About
                     </a>

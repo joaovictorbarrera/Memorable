@@ -14,9 +14,4 @@ import { CommonModule } from '@angular/common';
 export class Header {
   constructor(public globalService: GlobalService, private router: Router) {
   }
-
-  isActive(route: string): boolean {
-    console.log(this.router.url, route)
-    return this.router.url === route;
-  }
 }
