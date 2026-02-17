@@ -38,30 +38,38 @@ export class User implements OnInit, AfterViewInit {
    ngOnInit() {
     this.route.paramMap.subscribe(async params => {
       const username = params.get('username');
+      if (!username) return;
+      this.username.set(username);
+
       this.hasMore = true;
       this.page = 1;
 
-      if (!username) return;
-
-      this.username.set(username);
-
       this.loadingUser.set(true);
-      this.userService.getUserByUsername(username).subscribe({
-        next: (user) => {
-          this.user.set(user);
-          this.loadingUser.set(false);
-          this.postStore.clearAll()
-          this.loadUserPosts(user.userId);
-        },
-        error: (err) => {
-          console.error('Error fetching user:', err);
-          this.loadingUser.set(false);
-        }
-      });
+      this.loadUserAndPosts(username);
     });
   }
 
+  loadUserAndPosts(username: string): void {
+    this.userService.getUserByUsername(username).subscribe({
+      next: (user) => {
+        this.user.set(user);
+        this.loadingUser.set(false);
+        this.postStore.clearAll()
+        this.loadUserPosts(user.userId);
+      },
+      error: (err) => {
+        console.error('Error fetching user:', err);
+        this.loadingUser.set(false);
+      }
+    });
+  }
+
+
   ngAfterViewInit(): void {
+    this.setupObserver();
+  }
+
+  setupObserver(): void {
     this.observer = new IntersectionObserver(
       (entries) => {
         if (entries[0].isIntersecting) {
@@ -77,7 +85,6 @@ export class User implements OnInit, AfterViewInit {
 
     this.observer.observe(this.scrollAnchor.nativeElement);
   }
-
 
   isCurrentUserProfile(): boolean {
     return this.globalService.user()?.userId === this.user()?.userId
@@ -106,4 +113,10 @@ export class User implements OnInit, AfterViewInit {
     });
   }
 
+  updateFollowerCount(wasFollowed: boolean): void {
+    const user = this.user();
+    if (!user) return;
+    user.followerCount = wasFollowed ? user.followerCount + 1 : user.followerCount - 1;
+    this.user.set(user);
+  }
 }

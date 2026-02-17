@@ -20,7 +20,7 @@ namespace Server.Controllers
         [HttpPost("FollowCreate")]
         public IActionResult Follow([FromQuery] Guid userId)
         {
-            if (userId == Guid.Empty) return BadRequest("Invalid PostId");
+            if (userId == Guid.Empty) return BadRequest("Invalid UserId");
 
             Guid currentUserId = HttpContext.GetUserId();
 

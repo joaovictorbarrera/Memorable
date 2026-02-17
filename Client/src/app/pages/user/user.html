@@ -33,7 +33,8 @@
                         <div class="ml-auto">
                             <app-follow-button
                                 [userId]="this.user()?.userId ?? ''"
-                                [following]="this.user()?.IsFollowedByCurrentUser ?? false">
+                                [isFollowedByCurrentUser]="this.user()?.isFollowedByCurrentUser ?? false"
+                                (followChange)="updateFollowerCount($event)">
                             </app-follow-button>
                         </div>
                     }

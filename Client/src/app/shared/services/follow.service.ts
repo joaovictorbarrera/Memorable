@@ -14,11 +14,14 @@ export class FollowService {
    * FOLLOW
    */
   follow(userId: string): Observable<any> {
+    console.log({userId})
+
     const params = new HttpParams()
         .set('userId', userId);
 
     return this.http.post(
       `${this.apiUrl}/FollowCreate`,
+      null,
       { params }
     );
   }
