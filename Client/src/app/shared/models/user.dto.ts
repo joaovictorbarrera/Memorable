@@ -9,5 +9,5 @@ interface UserDto {
     postCount: number,
     followerCount: number,
     followingCount: number,
-    isFollowing: boolean
+    IsFollowedByCurrentUser: boolean
 }

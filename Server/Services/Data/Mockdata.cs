@@ -36,6 +36,7 @@ namespace Server.Services
                 new User {
                     FirstName = "John",
                     LastName = "Barrera",
+                    DisplayName = "John Barrera",
                     ProfileImageUrl = "https://www.pigstarcraft.com/wp-content/uploads/2020/11/logo_pig_400.jpg",
                     Username = "john.barrera",
                     UserEmail = "test@test.com",
@@ -44,6 +45,7 @@ namespace Server.Services
                 new User {
                     FirstName = "Artanis",
                     LastName = "Tal'Daarim",
+                    DisplayName = "Artanis Tal'Daarim",
                     ProfileImageUrl = "https://www.giantbomb.com/a/uploads/scale_super/3/33745/1681250-artanis.jpg",
                     Username = "artanis.taldaarim",
                     UserEmail = "test@test.com",
@@ -52,6 +54,7 @@ namespace Server.Services
                 new User {
                     FirstName = "Jim",
                     LastName = "Raynor",
+                    DisplayName = "Jim Raynor",
                     ProfileImageUrl = "https://alchetron.com/cdn/jim-raynor-386f452a-8282-4f87-a6d7-f9c4a9a7f46-resize-750.jpeg",
                     Username = "jim.raynorrr",
                     UserEmail = "test@test.com",
@@ -60,6 +63,7 @@ namespace Server.Services
                 new User {
                     FirstName = "Sarah",
                     LastName = "Kerrigan",
+                    DisplayName = "Sarah Kerrigan",
                     ProfileImageUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRefLAeMA3-ij1r9nf6b4aeRHkS6V1uOV7t8Q&s",
                     Username = "sarah.kerrigan",
                     UserEmail = "test@test.com",

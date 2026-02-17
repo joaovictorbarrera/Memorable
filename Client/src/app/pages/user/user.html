@@ -33,7 +33,7 @@
                         <div class="ml-auto">
                             <app-follow-button
                                 [userId]="this.user()?.userId ?? ''"
-                                [following]="this.user()?.isFollowing ?? false">
+                                [following]="this.user()?.IsFollowedByCurrentUser ?? false">
                             </app-follow-button>
                         </div>
                     }

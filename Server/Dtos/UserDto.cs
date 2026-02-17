@@ -10,5 +10,10 @@
         public required string Username { get; set; }
         public required string UserEmail { get; set; }
         public required DateTime CreatedAt { get; set; }
+        public int PostCount { get; set; } = 0;
+        public int FollowerCount { get; set; } = 0;
+        public int FollowingCount { get; set; } = 0;
+
+        public bool IsFollowedByCurrentUser { get; set; } = false;
     }
 }

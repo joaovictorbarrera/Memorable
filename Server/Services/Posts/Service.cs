@@ -14,7 +14,12 @@ namespace Server.Services.Posts
                 throw new Exception("Post not found");
             }
 
-            UserDto userDto = GetUserDto(post.UserId);
+            User? user = Mockdata._users.FirstOrDefault(u => u.UserId == post.UserId);
+
+            if (user == null)
+            {
+                throw new Exception("User not found");
+            }
 
             int commentCount = Mockdata._comments.Count(c => c.PostId == postId);
 
@@ -27,9 +32,9 @@ namespace Server.Services.Posts
                 CreatedAt = post.CreatedAt,
                 UserId = post.UserId,
                 ImageUrl = post.ImageUrl,
-                DisplayName = userDto.DisplayName,
-                UserProfileImageUrl = userDto.ProfileImageUrl,
-                Username = userDto.Username,
+                DisplayName = user.DisplayName,
+                UserProfileImageUrl = user.ProfileImageUrl,
+                Username = user.Username,
                 LikeCount = Mockdata._likes.Count(l => l.PostId == postId),
                 IsLikedByCurrentUser = Mockdata._likes.Any(l => l.PostId == postId && l.UserId == Mockdata._currentUserId),
                 InitialComments = initialComments,
@@ -62,22 +67,27 @@ namespace Server.Services.Posts
                 throw new Exception("Comment not found");
             }
 
-            UserDto userDto = GetUserDto(comment.UserId);
+            User? user = Mockdata._users.FirstOrDefault(u => u.UserId == comment.UserId);
+
+            if (user == null)
+            {
+                throw new Exception("User not found");
+            }
 
             return new CommentDto
             {
                 CommentId = comment.CommentId,
                 PostId = comment.PostId,
                 UserId = comment.UserId,
-                Username = userDto.Username,
+                Username = user.Username,
                 TextContent = comment.TextContent,
                 CreatedAt = comment.CreatedAt,
-                DisplayName = userDto.DisplayName,
-                UserProfileImageUrl = userDto.ProfileImageUrl
+                DisplayName = user.DisplayName,
+                UserProfileImageUrl = user.ProfileImageUrl
             };
         }
 
-        public static UserDto GetUserDto(Guid userId)
+        public static UserDto GetUserDto(Guid userId, Guid? currentUserId)
         {
             User? user = Mockdata._users.FirstOrDefault(p => p.UserId.Equals(userId)) ?? throw new Exception("User not found");
 
@@ -91,7 +101,11 @@ namespace Server.Services.Posts
                 ProfileImageUrl = user.ProfileImageUrl,
                 Username = user.Username,
                 UserEmail = user.UserEmail,
-                CreatedAt = user.CreatedAt
+                CreatedAt = user.CreatedAt,
+                PostCount = UserHelper.GetPostCount(user.UserId),
+                FollowerCount = UserHelper.GetFollowerCount(user.UserId),
+                FollowingCount = UserHelper.GetFollowingCount(user.UserId),
+                IsFollowedByCurrentUser = UserHelper.IsFollowing(user.UserId, currentUserId ?? Guid.Empty)
             };
 
             return userDto;

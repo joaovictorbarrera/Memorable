@@ -153,9 +153,9 @@ namespace Server.Controllers
 
         [HttpGet("PostGetForProfile")]
         public IActionResult GetForProfile(
-    [FromQuery] Guid userId,
-    [FromQuery] int pageSize,
-    [FromQuery] int pageNumber)
+            [FromQuery] Guid userId,
+            [FromQuery] int pageSize,
+            [FromQuery] int pageNumber)
         {
             if (userId == Guid.Empty)
                 return BadRequest("Invalid userId");

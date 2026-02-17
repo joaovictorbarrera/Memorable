@@ -18,7 +18,7 @@ namespace Server.Controllers
         }
 
         [HttpGet("AuthUserGet")]
-        public IActionResult GetByAuth()
+        public IActionResult GetForAuth()
         {
             Guid userId = HttpContext.GetUserId();
             User? user = Mockdata._users.FirstOrDefault(p => p.UserId.Equals(userId));
@@ -27,7 +27,7 @@ namespace Server.Controllers
                 return NotFound("User not found");
             }
 
-            UserDto userDto = Service.GetUserDto(userId);
+            UserDto userDto = Service.GetUserDto(userId, null);
 
             return Ok(userDto);
         }
