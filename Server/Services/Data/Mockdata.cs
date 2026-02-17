@@ -20,14 +20,15 @@ namespace Server.Services
         {
             // Simulate logged-in user
             const int LOGGED_IN_USER = 1;
-            
+
             //_currentUserId = new Guid("f8b78691-d0eb-4e11-85eb-a81f4b028356");
             SeedUsers();
-            _currentUserId = _users[LOGGED_IN_USER-1].UserId;
+            _currentUserId = _users[LOGGED_IN_USER - 1].UserId;
 
             SeedPosts();
             SeedComments();
             SeedLikes();
+            SeedFollows();
         }
 
         private static void SeedUsers()
@@ -68,7 +69,40 @@ namespace Server.Services
                     Username = "sarah.kerrigan",
                     UserEmail = "test@test.com",
                     Password = "Password123"
+                },
+                // User with 0 activity
+                new User {
+                    FirstName = "Nova",
+                    LastName = "Silent",
+                    DisplayName = "Nova Silent",
+                    ProfileImageUrl = "https://randomuser.me/api/portraits/women/44.jpg",
+                    Username = "nova.silent",
+                    UserEmail = "nova@test.com",
+                    Password = "Password123"
+                },
+
+                // User 1 (2 posts)
+                new User {
+                    FirstName = "Elon",
+                    LastName = "Synth",
+                    DisplayName = "Elon Synth",
+                    ProfileImageUrl = "https://randomuser.me/api/portraits/men/32.jpg",
+                    Username = "elon.synth",
+                    UserEmail = "elon@test.com",
+                    Password = "Password123"
+                },
+
+                // User 2 (2 posts)
+                new User {
+                    FirstName = "Mira",
+                    LastName = "Vale",
+                    DisplayName = "Mira Vale",
+                    ProfileImageUrl = "https://randomuser.me/api/portraits/women/68.jpg",
+                    Username = "mira.vale",
+                    UserEmail = "mira@test.com",
+                    Password = "Password123"
                 }
+
             ];
 
         }
@@ -154,6 +188,40 @@ namespace Server.Services
                 CreatedAt = DateTime.UtcNow.AddMinutes(-30),
                 ImageUrl = "https://images.unsplash.com/photo-1506744038136-46273834b3fb"
             });
+
+            // Elon posts
+            _posts.Add(new Post
+            {
+                UserId = _users[5].UserId,
+                TextContent = "Exploring microservices architecture today ⚙️",
+                CreatedAt = DateTime.UtcNow.AddMinutes(-25),
+                ImageUrl = null
+            });
+
+            _posts.Add(new Post
+            {
+                UserId = _users[5].UserId,
+                TextContent = "Dark mode > Light mode. Always.",
+                CreatedAt = DateTime.UtcNow.AddMinutes(-20),
+                ImageUrl = null
+            });
+
+            // Mira posts
+            _posts.Add(new Post
+            {
+                UserId = _users[6].UserId,
+                TextContent = "Sketching UI ideas in my notebook ✏️",
+                CreatedAt = DateTime.UtcNow.AddMinutes(-15),
+                ImageUrl = null
+            });
+
+            _posts.Add(new Post
+            {
+                UserId = _users[6].UserId,
+                TextContent = "Weekend hiking trip was unreal 🌄",
+                CreatedAt = DateTime.UtcNow.AddMinutes(-10),
+                ImageUrl = "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee"
+            });
         }
 
         private static void SeedComments()
@@ -176,7 +244,7 @@ namespace Server.Services
 
             _comments.Add(new Comment
             {
-                PostId = _posts[1].UserId,
+                PostId = _posts[1].PostId,
                 UserId = _users[0].UserId,
                 TextContent = "That sounds peaceful!",
                 CreatedAt = DateTime.UtcNow.AddHours(-7)
@@ -184,7 +252,7 @@ namespace Server.Services
 
             _comments.Add(new Comment
             {
-                PostId = _posts[4].UserId,
+                PostId = _posts[4].PostId,
                 UserId = _users[3].UserId,
                 TextContent = "Respect the grind 💯",
                 CreatedAt = DateTime.UtcNow.AddHours(-1)
@@ -229,6 +297,71 @@ namespace Server.Services
                 TextContent = "That hike looks epic! Nature always recharges the soul 🌿",
                 CreatedAt = DateTime.UtcNow.AddMinutes(-20)
             });
+
+            _comments.Add(new Comment
+            {
+                PostId = _posts[10].PostId,
+                UserId = _users[0].UserId,
+                TextContent = "Microservices are powerful when done right!",
+                CreatedAt = DateTime.UtcNow.AddMinutes(-24)
+            });
+
+            _comments.Add(new Comment
+            {
+                PostId = _posts[10].PostId,
+                UserId = _users[2].UserId,
+                TextContent = "Are you using Docker?",
+                CreatedAt = DateTime.UtcNow.AddMinutes(-23)
+            });
+
+            _comments.Add(new Comment
+            {
+                PostId = _posts[11].PostId,
+                UserId = _users[1].UserId,
+                TextContent = "Dark mode supremacy 🔥",
+                CreatedAt = DateTime.UtcNow.AddMinutes(-19)
+            });
+
+            _comments.Add(new Comment
+            {
+                PostId = _posts[12].PostId,
+                UserId = _users[3].UserId,
+                TextContent = "UI sketching hits different on paper.",
+                CreatedAt = DateTime.UtcNow.AddMinutes(-14)
+            });
+
+            _comments.Add(new Comment
+            {
+                PostId = _posts[13].PostId,
+                UserId = _users[5].UserId,
+                TextContent = "That view looks insane!",
+                CreatedAt = DateTime.UtcNow.AddMinutes(-9)
+            });
+
+            _comments.Add(new Comment
+            {
+                PostId = _posts[2].PostId,
+                UserId = _users[6].UserId,
+                TextContent = "2am debugging builds character 😅",
+                CreatedAt = DateTime.UtcNow.AddMinutes(-5)
+            });
+
+            _comments.Add(new Comment
+            {
+                PostId = _posts[4].PostId,
+                UserId = _users[6].UserId,
+                TextContent = "Gym consistency is elite mindset 💪",
+                CreatedAt = DateTime.UtcNow.AddMinutes(-4)
+            });
+
+            _comments.Add(new Comment
+            {
+                PostId = _posts[7].PostId,
+                UserId = _users[5].UserId,
+                TextContent = "AI documentaries are addictive!",
+                CreatedAt = DateTime.UtcNow.AddMinutes(-3)
+            });
+
         }
 
         private static void SeedLikes()
@@ -252,8 +385,75 @@ namespace Server.Services
                 new Like { PostId = _posts[8].PostId, UserId = _users[1].UserId },
                 new Like { PostId = _posts[8].PostId, UserId = _users[2].UserId },
                 new Like { PostId = _posts[9].PostId, UserId = _users[0].UserId },
-                new Like { PostId = _posts[9].PostId, UserId = _users[3].UserId }
+                new Like { PostId = _posts[9].PostId, UserId = _users[3].UserId },
+                new Like { PostId = _posts[10].PostId, UserId = _users[0].UserId },
+                new Like { PostId = _posts[10].PostId, UserId = _users[1].UserId },
+                new Like { PostId = _posts[11].PostId, UserId = _users[2].UserId },
+                new Like { PostId = _posts[12].PostId, UserId = _users[0].UserId },
+                new Like { PostId = _posts[13].PostId, UserId = _users[3].UserId },
+                new Like { PostId = _posts[0].PostId, UserId = _users[5].UserId },
+                new Like { PostId = _posts[1].PostId, UserId = _users[6].UserId },
+                new Like { PostId = _posts[3].PostId, UserId = _users[5].UserId },
+                new Like { PostId = _posts[8].PostId, UserId = _users[6].UserId }
             ];
         }
+
+
+        private static void SeedFollows()
+        {
+            _follows = new List<Follow>();
+
+            var john = _users[0];     // logged in
+            var artanis = _users[1];
+            var raynor = _users[2];
+            var kerrigan = _users[3];
+            var nova = _users[4];     // 0 activity user
+            var elon = _users[5];
+            var mira = _users[6];
+
+            // 🔥 Popular user (Kerrigan) - many followers
+            _follows.AddRange(new[]
+            {
+                new Follow { FollowerId = john.UserId, FollowingId = kerrigan.UserId },
+                new Follow { FollowerId = artanis.UserId, FollowingId = kerrigan.UserId },
+                new Follow { FollowerId = raynor.UserId, FollowingId = kerrigan.UserId },
+                new Follow { FollowerId = elon.UserId, FollowingId = kerrigan.UserId },
+                new Follow { FollowerId = mira.UserId, FollowingId = kerrigan.UserId },
+            });
+
+            // 💪 John follows multiple people (active user behavior)
+            _follows.AddRange(new[]
+            {
+                new Follow { FollowerId = john.UserId, FollowingId = artanis.UserId },
+                new Follow { FollowerId = john.UserId, FollowingId = raynor.UserId },
+                new Follow { FollowerId = john.UserId, FollowingId = elon.UserId },
+                new Follow { FollowerId = john.UserId, FollowingId = mira.UserId }
+            });
+
+            // 🤝 Mutual friendships
+            _follows.AddRange(new[]
+            {
+                new Follow { FollowerId = artanis.UserId, FollowingId = raynor.UserId },
+                new Follow { FollowerId = raynor.UserId, FollowingId = artanis.UserId },
+
+                new Follow { FollowerId = elon.UserId, FollowingId = mira.UserId },
+                new Follow { FollowerId = mira.UserId, FollowingId = elon.UserId }
+            });
+
+            // 👀 Lurker behavior (Nova follows but nobody follows back)
+            _follows.AddRange(new[]
+            {
+                new Follow { FollowerId = nova.UserId, FollowingId = john.UserId },
+                new Follow { FollowerId = nova.UserId, FollowingId = kerrigan.UserId }
+            });
+
+            // 🧠 A few asymmetric follows (more realistic)
+            _follows.AddRange(new[]
+            {
+                new Follow { FollowerId = mira.UserId, FollowingId = john.UserId },
+                new Follow { FollowerId = elon.UserId, FollowingId = john.UserId }
+            });
+        }
+
     }
 }
