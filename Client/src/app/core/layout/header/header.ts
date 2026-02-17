@@ -52,4 +52,15 @@ export class Header implements OnInit {
   onUserClick() {
     this.clearSearch();
   }
+
+  randomUser() {
+    this.userService.getRandomUser().subscribe({
+      next: (user) => {
+        window.location.href = `/user/${user.username}`;
+      },
+      error: (err) => {
+        window.alert("Error fetching random user: " + err.message);
+      }
+    })
+  }
 }

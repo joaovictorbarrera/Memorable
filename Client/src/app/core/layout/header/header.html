@@ -1,8 +1,8 @@
 <header>
     <div class="bg-bg-secondary">
-        <div class="flex md:flex-row flex-col p-5 items-center max-w-7xl mx-auto gap-5">
+        <div class="flex lg:flex-row flex-col p-5 items-center max-w-7xl mx-auto gap-5">
             <!-- Navigation -->
-            <div class="xs:flex-row flex-col flex gap-10 items-center text-text-offwhite">
+            <div class="sm:flex-row flex-col flex gap-10 items-center text-text-offwhite">
                 <h1
                     class="text-4xl font-bold "
                     style="font-family: 'Playfair Display', serif"
@@ -21,10 +21,14 @@
                         About
                     </a>
 
+                    <span class="flex gap-1 items-end cursor-pointer" (click)="randomUser()">
+                        <mat-icon fontIcon="shuffle"></mat-icon>
+                        Random User
+                    </span>
                 </nav>
             </div>
 
-            <div class="md:ml-auto flex gap-5 items-center" >
+            <div class="lg:ml-auto flex gap-5 items-center" >
 
                 <!-- Search Box -->
                 <div class="flex items-center relative w-64">

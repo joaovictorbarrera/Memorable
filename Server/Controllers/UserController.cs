@@ -4,6 +4,7 @@ using Server.Extensions;
 using Server.Models;
 using Server.Services;
 using Server.Services.Posts;
+using System.Security.Cryptography;
 
 namespace Server.Controllers
 {
@@ -65,6 +66,29 @@ namespace Server.Controllers
                 .ToList();
 
             return Ok(userDtos);
+        }
+
+        [HttpGet("UserGetRandom")]
+        public IActionResult GetRandom()
+        {
+            if (Mockdata._users == null || !Mockdata._users.Any())
+                return NotFound("No users available.");
+
+            Guid currentUserId = HttpContext.GetUserId();
+
+            Guid randomUserId = Guid.Empty;
+
+            do
+            {
+                var random = new Random();
+                int index = random.Next(Mockdata._users.Count);
+
+                randomUserId = Mockdata._users.ElementAt(index).UserId;
+            } while (randomUserId == currentUserId);
+
+            UserDto randomUserDto = Service.GetUserDto(randomUserId, currentUserId);
+
+            return Ok(randomUserDto);
         }
     }
 }
