@@ -1,6 +1,7 @@
 <header>
     <div class="bg-bg-secondary">
         <div class="flex md:flex-row flex-col p-5 items-center max-w-7xl mx-auto gap-5">
+            <!-- Navigation -->
             <div class="xs:flex-row flex-col flex gap-10 items-center text-text-offwhite">
                 <h1
                     class="text-4xl font-bold "
@@ -19,16 +20,77 @@
                         <mat-icon fontIcon="info"></mat-icon>
                         About
                     </a>
+
                 </nav>
             </div>
 
             <div class="md:ml-auto flex gap-5 items-center" >
-                <div class="flex items-center relative">
+
+                <!-- Search Box -->
+                <div class="flex items-center relative w-64">
+
                     <mat-icon fontIcon="search" class="absolute left-2"></mat-icon>
-                    <input type="text" class="text-xl pl-10 w-64 bg-bg-tertiary p-1 rounded-lg border-border-secondary text-text-primary placeholder:text-text-tertiary focus-visible:outline-0 focus-visible:ring-4 focus-visible:ring-accent-primary"
-                    type="text" placeholder="Search...">
+
+                    <input
+                        type="text"
+                        class="text-xl pl-10 pr-10 w-full bg-bg-tertiary p-1 rounded-lg
+                            border-border-secondary text-text-primary
+                            placeholder:text-text-tertiary
+                            focus-visible:outline-0 focus-visible:ring-4
+                            focus-visible:ring-accent-primary"
+                        placeholder="Search..."
+                        [(ngModel)]="query"
+                    >
+
+                    <!-- X Clear Button -->
+                    @if (query().length > 0) {
+                        <button
+                            class="absolute top-9/16 right-2 transform -translate-y-1/2 cursor-pointer text-text-tertiary hover:text-text-primary"
+                            (click)="clearSearch()">
+                            <mat-icon fontIcon="close"></mat-icon>
+                        </button>
+                    }
+
+                    <!-- Dropdown -->
+                    @if (query().length > 0) {
+                        <div class="absolute top-full mt-1 bg-bg-secondary
+                                    rounded-lg shadow-lg w-full z-50">
+
+                            <!-- Loading Tile -->
+                            @if (loading()) {
+                                <div class="px-4 py-3 text-text-tertiary">
+                                    Loading...
+                                </div>
+                            }
+
+                            <!-- Suggestions -->
+                            @if (!loading() && suggestions().length > 0) {
+                                @for (user of suggestions(); track user.userId) {
+                                    <a
+                                        [routerLink]="['/user', user.username]"
+                                        (click)="onUserClick()"
+                                        class="flex items-center gap-3 px-4 py-2 hover:bg-bg-tertiary"
+                                    >
+                                        <app-profile-icon
+                                            [imageUrl]="user.profileImageUrl"
+                                            [username]="user.username">
+                                        </app-profile-icon>
+                                        <span>{{ user.displayName }}</span>
+                                    </a>
+                                }
+                            }
+
+                            <!-- No Results -->
+                            @if (!loading() && suggestions().length === 0) {
+                                <div class="px-4 py-3 text-text-tertiary">
+                                    No users found
+                                </div>
+                            }
+                        </div>
+                    }
                 </div>
 
+                <!-- Logged In User Profile Icon -->
                 <app-profile-icon [imageUrl]="globalService.user()?.profileImageUrl" [username]="globalService.user()?.username"></app-profile-icon>
             </div>
         </div>

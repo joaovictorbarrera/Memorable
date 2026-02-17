@@ -48,5 +48,23 @@ namespace Server.Controllers
 
             return Ok(userDto);
         }
+
+        [HttpGet("UserGetByUsernameQuery")]
+        public IActionResult GetByUsernameQuery([FromQuery] String query)
+        {
+            List<User> userSuggestions = Mockdata._users
+                .OrderBy(p => p.Username.Length)
+                .Where(p => p.Username.ToLower().Contains(query.ToLower()))
+                .Take(5)
+                .ToList();
+
+            Guid currentUserId = HttpContext.GetUserId();
+
+            List<UserDto> userDtos = userSuggestions
+                .Select(u => Service.GetUserDto(u.UserId, currentUserId))
+                .ToList();
+
+            return Ok(userDtos);
+        }
     }
 }

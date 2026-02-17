@@ -18,4 +18,13 @@ export class UserService {
         .get<UserDto>(`${this.apiUrl}/UserGetByUsername`, { params })
     }
 
+    getUserByUsernameQuery(query: string): Observable<UserDto[]> {
+
+        const params = new HttpParams()
+      .set('query', query);
+
+        return this.http
+        .get<UserDto[]>(`${this.apiUrl}/UserGetByUsernameQuery`, { params })
+    }
+
 }
