@@ -73,14 +73,14 @@
                                     <a
                                         [routerLink]="['/user', user.username]"
                                         (click)="onUserClick()"
-                                        class="flex items-center px-4 py-2 hover:bg-bg-tertiary"
+                                        class="flex items-center px-4 py-3 hover:bg-bg-tertiary"
                                     >
-                                        <div class="flex gap-3">
+                                        <div class="flex gap-3 items-center">
                                             <app-profile-icon
                                             [imageUrl]="user.profileImageUrl"
                                             [username]="user.username">
                                             </app-profile-icon>
-                                            <div class="flex flex-col leading-4">
+                                            <div class="flex flex-col leading-4 h-full">
                                                 <span>{{ user.displayName }}</span>
                                                 <span class="text-sm text-text-secondary">@{{ user.username }}</span>
                                             </div>
