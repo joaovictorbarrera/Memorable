@@ -11,6 +11,18 @@ export class PostStore {
         return computed(() => Array.from(this.posts().values()));
     }
 
+    allPostsForProfile(userId: string) {
+        return computed(() => Array
+        .from(this.posts().values())
+        .filter(p => p.userId === userId)
+        .map(post => post.postId));
+    }
+
+    clearAll() {
+        this.posts.set(new Map());
+        this.comments.set(new Map());
+    }
+
     getPost(postId: string) {
         return computed(() => this.posts().get(postId));
     }
@@ -76,12 +88,11 @@ export class PostStore {
 
     addManyComments(postId: string, comments: CommentDto[]) {
         const map = new Map(this.comments());
-        const existingComments = map.get(postId);
-        if (!existingComments) {
-            map.set(postId, comments);
-        } else {
-            existingComments.push(...comments);
-        }
+        const existingComments = map.get(postId) ?? [];
+
+        existingComments.push(...comments)
+        map.set(postId, [...existingComments])
+
         this.comments.set(map);
     }
 
@@ -102,14 +113,6 @@ export class PostStore {
 
         post.isLikedByCurrentUser = !post.isLikedByCurrentUser
 
-        this.posts.set(map);
-    }
-
-    setCommentPage(postId: string, pageNumber: number) {
-        const map = new Map(this.posts());
-        const post = map.get(postId);
-        if (!post) return;
-        post.commentPageCount = pageNumber;
         this.posts.set(map);
     }
 

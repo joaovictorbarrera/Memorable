@@ -34,7 +34,7 @@ export class PostCreate {
   ) {}
 
   post(): void {
-    if (!this.textContent().trim() && !this.selectedImage) {
+    if (this.shouldDisablePosting() || !this.textContent().trim() && !this.selectedImage()) {
       return; // Do not post empty content
     }
 

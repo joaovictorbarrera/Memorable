@@ -1,10 +1,10 @@
 import { HttpClient } from '@angular/common/http';
-import { computed, Injectable, Signal, signal } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 import { environment } from '../../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
-export class CurrentUserService {
-  private readonly apiUrl = `${environment.apiUrl}/User`
+export class AuthService {
+  private readonly apiUrl = `${environment.apiUrl}/Auth`
 
   private loading = signal(false);
 

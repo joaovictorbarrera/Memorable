@@ -1,7 +1,7 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { Header } from "./core/layout/header/header";
-import { CurrentUserService } from './shared/services/currentuser.service';
+import { AuthService } from './shared/services/auth.service';
 import { GlobalService } from './core/state/global';
 
 @Component({
@@ -13,7 +13,7 @@ import { GlobalService } from './core/state/global';
 export class App implements OnInit {
   protected readonly title = signal('Memorable');
 
-  constructor(private userService: CurrentUserService, private globalService: GlobalService) {}
+  constructor(private userService: AuthService, private globalService: GlobalService) {}
 
   ngOnInit() {
     this.userService.checkLogin(this.OnUserLoaded.bind(this), this.OnFailedToLoadUser.bind(this));

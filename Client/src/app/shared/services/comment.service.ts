@@ -39,16 +39,14 @@ export class CommentService {
       );
   }
 
-  getCommentsByPostId(post: PostDto): Observable<CommentDto[]> {
+  getCommentsByPostId(post: PostDto, pageNumber: number, skip: number): Observable<CommentDto[]> {
     const pageSize = commentPageSize;
-
-     // Load the next page of comments
-    const pageNumber = post.commentPageCount + 1;
 
     const params = new HttpParams()
       .set('postId', post.postId)
       .set('pageSize', pageSize.toString())
       .set('pageNumber', pageNumber.toString())
+      .set('skip', skip.toString())
     return this.http.get<CommentDto[]>(`${this.apiUrl}/CommentGetByPostId`, { params });
   }
 }

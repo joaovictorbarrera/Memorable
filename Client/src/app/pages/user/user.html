@@ -1,6 +1,60 @@
-<main class="p-5">
-    <div class="text-5xl text-text-primary flex flex-col gap-3 items-center ">
-        <p class=" ">[WIP] User Page</p>
-        <p>{{ this.username }}</p>
+<main class="p-5 text-lg text-text-primary flex items-center w-full justify-center">
+    <div class="flex flex-col gap-8 w-2xl py-5 px-3">
+    <!-- Profile Header -->
+    @if (this.loadingUser()) {
+        <p class="text-center text-gray-500 py-4">User loading...</p>
+    }
+    @else if (this.user() === undefined) {
+        <p class="text-center text-gray-500 py-4">User not found.</p>
+    }
+    @else {
+        <div class="flex md:flex-row flex-col gap-8 items-center">
+            <picture>
+                <img class="w-24 h-24 rounded-full" [src]="this.user()?.profileImageUrl" alt="Profile Picture">
+            </picture>
+
+            <div class="flex flex-col gap-2">
+                <p class="text-3xl text-nowrap">{{ this.user()?.displayName ?? '' }}</p>
+                <div class="flex gap-5">
+                    <span>{{this.user()?.postCount ?? 0}} posts</span>
+
+                    <span>{{ this.user()?.followingCount ?? 0 }} following</span>
+
+                    <span>{{ this.user()?.followerCount ?? 0 }} followers</span>
+                </div>
+
+                <div class="flex items-center gap-5 ">
+                    <div class="flex flex-col gap-2">
+                        <span class="text-text-secondary">@{{ this.username() }}</span>
+                        <span class="text-sm text-text-secondary">Joined {{ this.user()?.createdAt | date:'mediumDate' }}</span>
+                    </div>
+
+                    @if (!this.isCurrentUserProfile()) {
+                        <div class="ml-auto">
+                            <app-follow-button
+                                [userId]="this.user()?.userId ?? ''"
+                                [following]="this.user()?.isFollowing ?? false">
+                            </app-follow-button>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+     }
+        <!-- User Posts -->
+        <div class="mt-5 flex flex-col gap-8 w-full max-w-2xl">
+            @if (this.isCurrentUserProfile()) {
+                <app-post-create></app-post-create>
+            }
+            @for (postId of this.postStore.allPostsForProfile(this.user()?.userId ?? '')(); track postId) {
+                <app-post [postId]="postId"></app-post>
+            }
+        </div>
+
+        @if (this.loadingPosts()) {
+        <p class="text-center text-gray-500 py-4">Loading more posts…</p>
+        }
+
+        <div #scrollAnchor class="h-1"></div>
     </div>
 </main>

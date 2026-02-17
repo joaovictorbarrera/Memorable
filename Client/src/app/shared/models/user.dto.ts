@@ -5,5 +5,9 @@ interface UserDto {
     firstName: string,
     lastName: string,
     createdAt: Date,
-    username: string
+    username: string,
+    postCount: number,
+    followerCount: number,
+    followingCount: number,
+    isFollowing: boolean
 }

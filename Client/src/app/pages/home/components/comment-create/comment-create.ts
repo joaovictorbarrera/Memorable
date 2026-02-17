@@ -32,6 +32,7 @@ export class CommentCreate implements OnInit {
    }
 
   createComment() {
+    if (this.commentContent().trim() === '') return
     this.loading.set(true)
 
     this.commentService.createComment(this.commentContent(), this.postId)

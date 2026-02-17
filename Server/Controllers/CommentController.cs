@@ -70,6 +70,7 @@ namespace Server.Controllers
         [HttpGet("CommentGetByPostId")]
         public IActionResult GetByPostId(
         [FromQuery] Guid postId,
+        [FromQuery] int skip,
         [FromQuery] int pageNumber,
         [FromQuery] int pageSize)
         {
@@ -83,7 +84,7 @@ namespace Server.Controllers
             if (!postExists)
                 return NotFound("Post not found");
 
-            List<CommentDto> commentDtos = Service.GetPostComments(postId, pageSize, pageNumber);
+            List<CommentDto> commentDtos = Service.GetPostComments(postId, skip, pageSize, pageNumber);
 
             return Ok(commentDtos);
         }

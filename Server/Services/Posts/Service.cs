@@ -18,7 +18,7 @@ namespace Server.Services.Posts
 
             int commentCount = Mockdata._comments.Count(c => c.PostId == postId);
 
-            List<CommentDto> initialComments = GetPostComments(postId, pageSize: 5, pageNumber: 1);
+            List<CommentDto> initialComments = GetPostComments(postId, 0, pageSize: 5, pageNumber: 1);
 
             return new PostDto
             {
@@ -37,11 +37,12 @@ namespace Server.Services.Posts
             };
         }
 
-        public static List<CommentDto> GetPostComments(Guid postId, int pageSize, int pageNumber)
+        public static List<CommentDto> GetPostComments(Guid postId, int skip, int pageSize, int pageNumber)
         {
             List<Comment> pagedComments = Mockdata._comments
                 .Where(c => c.PostId == postId)
                 .OrderBy(c => c.CreatedAt) // oldest first
+                .Skip(skip)
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize)
                 .ToList();
@@ -89,7 +90,8 @@ namespace Server.Services.Posts
                 LastName = user.LastName,
                 ProfileImageUrl = user.ProfileImageUrl,
                 Username = user.Username,
-                UserEmail = user.UserEmail
+                UserEmail = user.UserEmail,
+                CreatedAt = user.CreatedAt
             };
 
             return userDto;

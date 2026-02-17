@@ -42,6 +42,22 @@ export class PostService {
   }
 
   /**
+   * GET posts by userId with pagination
+   */
+  getForProfile(userId: string, pageNumber: number): Observable<PostDto[]> {
+    const pageSize = postPageSize;
+    const params = new HttpParams()
+      .set('userId', userId)
+      .set('pageSize', pageSize)
+      .set('pageNumber', pageNumber);
+
+    return this.http.get<PostDto[]>(
+      `${this.apiUrl}/PostGetForProfile`,
+      { params }
+    );
+  }
+
+  /**
    * CREATE post
    */
   createPost(formData: FormData): Observable<any> {

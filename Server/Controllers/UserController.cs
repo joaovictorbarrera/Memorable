@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Server.Dtos;
-using Server.Extensions;
 using Server.Models;
 using Server.Services;
 using Server.Services.Posts;
@@ -17,10 +16,9 @@ namespace Server.Controllers
             _logger = logger;
         }
 
-        [HttpGet("AuthUserGet")]
-        public IActionResult GetByAuth()
+        [HttpGet("UserGetById")]
+        public IActionResult GetById([FromQuery] Guid userId)
         {
-            Guid userId = HttpContext.GetUserId();
             User? user = Mockdata._users.FirstOrDefault(p => p.UserId.Equals(userId));
             if (user == null)
             {
@@ -32,16 +30,16 @@ namespace Server.Controllers
             return Ok(userDto);
         }
 
-        [HttpGet("UserGetById")]
-        public IActionResult GetById([FromQuery] Guid userId)
+        [HttpGet("UserGetByUsername")]
+        public IActionResult GetByUsername([FromQuery] String username)
         {
-            User? user = Mockdata._users.FirstOrDefault(p => p.UserId.Equals(userId));
+            User? user = Mockdata._users.FirstOrDefault(p => p.Username.Equals(username));
             if (user == null)
             {
                 return NotFound("User not found");
             }
 
-            UserDto userDto = Service.GetUserDto(userId);
+            UserDto userDto = Service.GetUserDto(user.UserId);
 
             return Ok(userDto);
         }

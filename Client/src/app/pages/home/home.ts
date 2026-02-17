@@ -45,6 +45,7 @@ export class Home implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
+    this.postStore.clearAll()
     this.loadNextPage();
   }
 

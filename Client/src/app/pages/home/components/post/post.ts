@@ -35,6 +35,7 @@ export class Post implements OnInit {
 
   post!: Signal<PostDto | undefined>
   comments!: Signal<CommentDto[] | undefined>;
+  commentPageCount = signal<number>(1)
 
   isCurrentUserPost: Signal<boolean> = computed(() => this.post()?.userId === this.globalService.user()?.userId);
   timeAgo: string = '';
@@ -60,10 +61,10 @@ export class Post implements OnInit {
     const post = this.post();
     if (!post) return
 
-    this.commentService.getCommentsByPostId(post).subscribe({
+    this.commentService.getCommentsByPostId(post, this.commentPageCount(), post.initialComments?.length ?? 0).subscribe({
       next: (comments) => {
         this.postStore.addManyComments(post.postId, comments)
-        this.postStore.setCommentPage(post.postId, (post.commentPageCount ?? 0) + 1)
+        this.commentPageCount.set(this.commentPageCount() + 1)
       }
     })
   }

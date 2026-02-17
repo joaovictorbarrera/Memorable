@@ -9,5 +9,6 @@
         public required string ProfileImageUrl { get; set; }
         public required string Username { get; set; }
         public required string UserEmail { get; set; }
+        public required DateTime CreatedAt { get; set; }
     }
 }

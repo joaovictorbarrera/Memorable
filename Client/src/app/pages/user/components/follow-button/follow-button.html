@@ -1,0 +1,18 @@
+@if (this.following) {
+    <button class="
+        cursor-pointer ml-auto text-sm h-10 px-5 py-2
+        bg-bg-secondary hover:bg-bg-tertiary
+        text-text-primary rounded-lg"
+        (click)="this.toggleFollow()"
+        >Following
+    </button>
+}
+@else {
+    <button class="
+        cursor-pointer ml-auto text-sm h-10 px-5 py-2
+        bg-accent-primary hover:bg-accent-primary/80
+        text-text-primary rounded-lg"
+        (click)="this.toggleFollow()"
+        >Follow
+    </button>
+}

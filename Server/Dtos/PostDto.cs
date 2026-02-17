@@ -14,8 +14,7 @@
         public required int LikeCount { get; set; } = 0;
 
         public required bool IsLikedByCurrentUser { get; set; } = false;
-        public required List<CommentDto> InitialComments { get; set; } = new List<CommentDto>();
-        public int CommentPageCount { get; set; } = 1;
-        public required int CommentCount { get; set; }
+        public required List<CommentDto> InitialComments { get; set; } = [];
+        public required int CommentCount { get; set; } = 0;
     }
 }
