@@ -60,15 +60,22 @@
     }
 
     <!-- Thumbs Up Button -->
-    <div class="flex gap-2 items-start pt-3 pb-2 ">
-        <button (click)="toggleLike()" class="cursor-pointer hover:brightness-90 rounded-full">
-            @if (post()?.isLikedByCurrentUser) {
-                <mat-icon fontIcon="thumb_up" style="color: royalblue;" ></mat-icon>
-            } @else {
-                <mat-icon fontIcon="thumb_up" style="color: gray;" ></mat-icon>
-            }
-        </button>
-        <p>{{ `${post()?.likeCount ?? 0} like${post()?.likeCount !== 1 ? 's' : ''}` }}</p>
+     <div class="flex gap-5">
+        <div class="flex gap-2 items-start pt-3 pb-2 ">
+            <button (click)="toggleLike()" class="cursor-pointer hover:brightness-90 rounded-full">
+                @if (post()?.isLikedByCurrentUser) {
+                    <mat-icon fontIcon="thumb_up" style="color: royalblue;" ></mat-icon>
+                } @else {
+                    <mat-icon fontIcon="thumb_up" style="color: gray;" ></mat-icon>
+                }
+            </button>
+            <p>{{ `${post()?.likeCount ?? 0} like${post()?.likeCount !== 1 ? 's' : ''}` }}</p>
+        </div>
+        <div class="flex gap-2 items-center pt-3 pb-2 comments">
+            <mat-icon fontIcon="comment" style="color: gray; font-size: 1.4rem" ></mat-icon>
+
+            <p>{{ `${post()?.commentCount ?? 0} comment${post()?.commentCount !== 1 ? 's' : ''}` }}</p>
+        </div>
     </div>
 
     <!-- Comments -->
