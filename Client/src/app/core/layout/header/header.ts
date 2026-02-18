@@ -29,7 +29,6 @@ export class Header implements OnInit {
       .pipe(
         tap(() => this.loading.set(true)),
         debounceTime(500),
-        distinctUntilChanged(),
         switchMap(q => {
           if (!q.trim()) return of([]);
           return this.userService.getUserByUsernameQuery(q);
