@@ -13,10 +13,10 @@ import { GlobalService } from './core/state/global';
 export class App implements OnInit {
   protected readonly title = signal('Memorable');
 
-  constructor(private userService: AuthService, private globalService: GlobalService) {}
+  constructor(private authService: AuthService, private globalService: GlobalService) {}
 
   ngOnInit() {
-    this.userService.checkLogin(this.OnUserLoaded.bind(this), this.OnFailedToLoadUser.bind(this));
+    this.authService.checkLogin(this.OnUserLoaded.bind(this), this.OnFailedToLoadUser.bind(this));
   }
 
   OnUserLoaded(user: UserDto) {
