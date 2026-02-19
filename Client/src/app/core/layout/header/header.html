@@ -10,23 +10,23 @@
                     <a routerLink="/" routerLinkActive="active">memorable</a>
                 </h1>
 
-                <nav class="flex gap-8 text-lg/5 xs:flex-row flex-col items-center">
+                <nav class="flex gap-8 text-lg/5 items-center">
                     <a routerLink="/" [routerLinkActiveOptions]="{ exact: true }" routerLinkActive="active" class="flex gap-1 items-end">
                         <mat-icon fontIcon="home"></mat-icon>
-                        Home
+                        <span class="hidden xs:inline-block">Home</span>
                     </a>
 
                     <a routerLink="/about" routerLinkActive="active" class="flex gap-1 items-end">
                         <mat-icon fontIcon="info"></mat-icon>
-                        About
+                        <span class="hidden xs:inline-block">About</span>
                     </a>
 
-                    <span class="flex gap-1 items-end cursor-pointer"
+                    <span class="gap-1 items-end cursor-pointer flex"
                           (click)="findUsers()"
                           [class.opacity-50]="randomUserButtonDisabled()"
                           [class.pointer-events-none]="randomUserButtonDisabled()">
                         <mat-icon fontIcon="shuffle"></mat-icon>
-                        Find Users
+                        <span class="hidden xs:inline-block">Find Users</span>
                     </span>
                 </nav>
             </div>
