@@ -5,7 +5,10 @@
         </div>
         <div class="inline-block w-full pr-10">
             <div class="min-h-20 flex flex-col">
-                <textarea [(ngModel)]="textContent" placeholder="Share a memory..." type="text" class="p-2 min-h-20 resize-y w-full h-full bg-transparent outline-none focus:ring-2 focus:ring-accent-primary/80 "></textarea>
+                <textarea [(ngModel)]="textContent" placeholder="Share a memory..." type="text"
+                class="p-2 min-h-20 resize-y w-full h-full bg-transparent outline-none focus:ring-2 focus:ring-accent-primary/80"
+                (keydown.enter)="post()">
+            </textarea>
                 @if (error()) {
                     <span class="text-red-500 text-xs mt-1">{{ error() }}</span>
                 }
