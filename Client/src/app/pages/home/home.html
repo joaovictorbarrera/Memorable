@@ -1,5 +1,5 @@
 <main class="w-full flex justify-center">
-    <div class="flex flex-col gap-8 max-w-2xl w-full py-5 px-3">
+    <div class="flex flex-col gap-8 max-w-xl w-full py-5 px-3">
         <app-post-create></app-post-create>
         @for (post of this.postStore.all()(); track post.postId) {
             <app-post [postId]="post.postId"></app-post>

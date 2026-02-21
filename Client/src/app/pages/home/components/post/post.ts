@@ -41,6 +41,7 @@ export class Post implements OnInit {
   isCurrentUserPost: Signal<boolean> = computed(() => this.post()?.userId === this.globalService.user()?.userId);
   timeAgo: string = '';
   editMode = signal(false);
+  seeMore = signal(false);
 
   mutableTextContent: string = ""
   mutableImageUrl: string | undefined = undefined
@@ -55,7 +56,14 @@ export class Post implements OnInit {
     this.mutableImageUrl = post?.imageUrl
     this.mutableTextContent = post?.textContent ?? ""
 
+    if (post && post.textContent && post.textContent.length > 100 && post.imageUrl) {
+      this.seeMore.set(true)
+    }
     if (post && post?.initialComments) this.postStore.addManyComments(this.postId, post.initialComments)
+  }
+
+  openSeeMore(): void {
+    this.seeMore.set(false)
   }
 
   loadComments(): void {

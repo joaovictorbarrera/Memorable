@@ -1,5 +1,5 @@
 <div class="flex gap-2 items-center text-sm">
-    <app-profile-icon [imageUrl]="comment.userProfileImageUrl" [username]="comment.username"></app-profile-icon>
+    <app-profile-icon class="mb-auto" [imageUrl]="comment.userProfileImageUrl" [username]="comment.username"></app-profile-icon>
     <div class="flex-col flex gap-1 min-w-0">
         <div class="flex gap-2 items-center">
             <a [routerLink]="['/user', comment.username]" routerLinkActive="active">
@@ -7,7 +7,14 @@
             </a>
             <p class="text-stone-500 text-sm">{{ timeAgo }}</p>
         </div>
-        <p class="text-text-offwhite wrap-break-word">{{ comment.textContent }}</p>
+        @if (seeMore()) {
+            <p class="text-text-offwhite wrap-break-word">{{ comment.textContent | slice:0:100 }}...
+                <button (click)="openSeeMore()" class="text-text-secondary hover:underline">See more</button>
+            </p>
+        }
+        @else {
+            <p class="text-text-offwhite wrap-break-word">{{ comment.textContent }}</p>
+        }
     </div>
     @if (this.globalService.user()?.userId === this.comment.userId) {
         <button (click)="deleteComment()" class="ml-auto cursor-pointer hover:brightness-70">

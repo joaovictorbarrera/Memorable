@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, signal } from '@angular/core';
 import { CommentDto } from '../../../../shared/models/comment.dto';
 import { ProfileIcon } from "../../../../shared/components/profile-icon/profile-icon";
 import { formattedTime } from '../../../../shared/utilities/time';
@@ -7,15 +7,17 @@ import { MatIcon } from '@angular/material/icon';
 import { CommentService } from '../../../../shared/services/comment.service';
 import { PostStore } from '../../../../shared/stores/post.store';
 import { RouterModule } from '@angular/router';
+import { SlicePipe } from '@angular/common';
 @Component({
   selector: 'app-comment',
-  imports: [ProfileIcon, MatIcon, RouterModule],
+  imports: [ProfileIcon, MatIcon, RouterModule, SlicePipe],
   templateUrl: './comment.html',
   styleUrl: './comment.scss',
 })
 export class Comment implements OnInit {
   @Input() comment!: CommentDto;
   timeAgo: string = '';
+  seeMore = signal(false)
 
   constructor(
     public globalService: GlobalService,
@@ -25,6 +27,13 @@ export class Comment implements OnInit {
 
   ngOnInit(): void {
     this.timeAgo = formattedTime(this.comment.createdAt);
+    if (this.comment.textContent && this.comment.textContent.length > 100) {
+      this.seeMore.set(true)
+    }
+  }
+
+  openSeeMore(): void {
+    this.seeMore.set(false)
   }
 
   deleteComment(): void {
