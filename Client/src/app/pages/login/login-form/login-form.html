@@ -1,0 +1,19 @@
+<header class="mt-4">
+    <h1 class="text-2xl font-bold text-center">Login</h1>
+    <p class="text-center text-gray-500 mt-2 mb-2">Please log in to continue.</p>
+</header>
+<form (submit)="login($event)">
+    <div class="flex flex-col gap-4 mt-5">
+        <input type="text" placeholder="Username"
+        class="px-3 border-2 border-bg-tertiary py-2 rounded-lg outline-none
+        focus:border-none focus:ring-2 focus:ring-accent-primary/80">
+
+        <input type="password" placeholder="Password"
+        class="px-3 border-2 border-bg-tertiary py-2 rounded-lg outline-none
+        focus:border-none focus:ring-2 focus:ring-accent-primary/80">
+
+        <button type="submit" class="bg-accent-primary text-white py-2 rounded-lg hover:bg-accent-primary/90 transition">Log In</button>
+    </div>
+</form>
+
+<p class="text-center text-gray-500 mt-6">Don't have an account? <button (click)="this.needRegistering.emit()" class="text-accent-primary hover:underline">Sign up</button>.</p>
