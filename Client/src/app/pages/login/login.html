@@ -1,0 +1,101 @@
+<main class="h-full w-full flex justify-center">
+    <div class="w-full flex justify-center items-center h-full py-10">
+        <app-card class="p-6 py-8 max-w-lg">
+            <!-- Login Form -->
+            @if (this.haveAccount()) {
+                <header class="mb-8 mt-4">
+                    <h1 class="text-2xl font-bold text-center">Login</h1>
+                    <p class="text-center text-gray-500 mt-2 mb-2">Please log in to continue.</p>
+                </header>
+                <form (submit)="login($event)">
+                    <div class="flex flex-col gap-4 mt-5">
+                        <input type="text" placeholder="Username"
+                        class="px-3 border-2 border-bg-tertiary py-2 rounded-lg outline-none
+                        focus:border-none focus:ring-2 focus:ring-accent-primary/80">
+
+                        <input type="password" placeholder="Password"
+                        class="px-3 border-2 border-bg-tertiary py-2 rounded-lg outline-none
+                        focus:border-none focus:ring-2 focus:ring-accent-primary/80">
+
+                        <button type="submit" class="bg-accent-primary text-white py-2 rounded-lg hover:bg-accent-primary/90 transition">Log In</button>
+                    </div>
+                </form>
+            }
+            <!-- Register Form -->
+            @else {
+                <header class="mb-4 mt-4">
+                    <h1 class="text-2xl font-bold text-center">Register</h1>
+
+                    <!-- Successfully Registered -->
+                    @if (this.success()) {
+                        <p class="text-center text-green-500 my-2">Successfully registered! <button class="text-text-offwhite hover:text-text-offwhite/80" (click)="toggleHaveAccount()">Sign in</button></p>
+                    }
+                    @else{
+                        <p class="text-center text-gray-500 my-2">Please register to continue.</p>
+                    }
+                </header>
+
+                 <!-- Error Messages -->
+                @if (this.errorList().length) {
+                    @for (err of this.errorList(); track err) {
+                        <p class="text-center text-red-500 text-sm">{{ err }}</p>
+                    }
+                }
+
+
+
+                <form (submit)="register($event)">
+                    <div class="flex flex-col gap-4 mt-5">
+                        <input name="email" type="email" placeholder="Email"
+                        class="px-3 border-2 border-bg-tertiary py-2 rounded-lg outline-none
+                        focus:border-none focus:ring-2 focus:ring-accent-primary/80" >
+
+                        <input name="username" type="text" placeholder="Username"
+                        class="px-3 border-2 border-bg-tertiary py-2 rounded-lg outline-none
+                        focus:border-none focus:ring-2 focus:ring-accent-primary/80" >
+
+                        <input name="password" type="password" placeholder="Password"
+                        class="px-3 border-2 border-bg-tertiary py-2 rounded-lg outline-none
+                        focus:border-none focus:ring-2 focus:ring-accent-primary/80" >
+
+                        <input name="firstName" type="text" placeholder="First Name"
+                        class="px-3 border-2 border-bg-tertiary py-2 rounded-lg outline-none
+                        focus:border-none focus:ring-2 focus:ring-accent-primary/80" >
+
+                        <input name="lastName" type="text" placeholder="Last Name"
+                        class="px-3 border-2 border-bg-tertiary py-2 rounded-lg
+                        outline-none focus:border-none focus:ring-2 focus:ring-accent-primary/80" >
+
+                        <!-- Profile Image Selector -->
+                        <div class="flex flex-col gap-2">
+                            <label for="profileImageInput" class="block text-sm mb-1">Upload Profile Picture:</label>
+                            <div class="flex items-center gap-3">
+                                <input id="profileImageInput" name="profileImage" type="file" accept="image/*" class="hidden" (change)="onProfileImageChange($event)">
+                                <label for="profileImageInput" class="px-3 border-2 border-bg-tertiary py-2 rounded-lg outline-none focus:border-none focus:ring-2 focus:ring-accent-primary/80 flex items-center gap-2 bg-bg-secondary cursor-pointer text-text-primary">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-600" viewBox="0 0 20 20" fill="currentColor"><path d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V7.414A2 2 0 0017.414 6L13 1.586A2 2 0 0011.586 1H4z"/></svg>
+                                    <span class="text-sm text-nowrap">Choose image</span>
+                                </label>
+
+                                @if (this.profileFile()?.name) {
+                                    <span class="text-sm text-text-primary truncate max-w-xs flex-1 min-w-0">{{ this.profileFile()?.name | slice:0-30 }}</span>
+                                    <button type="button" (click)="clearProfileImage()" class="text-sm text-accent-primary hover:underline">Remove</button>
+                                }
+
+                                @if (this.profilePreviewUrl()) {
+                                    <img src="{{ this.profilePreviewUrl() }}" alt="preview" class="w-12 h-12 rounded-full object-cover border shrink-0" />
+                                }
+                            </div>
+                        </div>
+
+                        <button type="submit" class="bg-accent-primary text-white py-2 rounded-lg hover:bg-accent-primary/90 transition">Register</button>
+                    </div>
+                </form>
+            }
+            @if (this.haveAccount()) {
+                <p class="text-center text-gray-500 mt-6">Don't have an account? <button (click)="toggleHaveAccount()" class="text-accent-primary hover:underline">Sign up</button>.</p>
+             } @else {
+                <p class="text-center text-gray-500 mt-6">Already have an account? <button (click)="toggleHaveAccount()" class="text-accent-primary hover:underline">Sign in</button>.</p>
+             }
+        </app-card>
+    </div>
+</main>

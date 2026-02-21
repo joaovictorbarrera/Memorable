@@ -9,6 +9,7 @@ import { FormsModule } from '@angular/forms';
 import { UserService } from '../../../shared/services/user.service';
 import { debounceTime, distinctUntilChanged, of, switchMap, tap } from 'rxjs';
 import { OnInit } from '@angular/core';
+import { AuthService } from '../../../shared/services/auth.service';
 
 @Component({
   selector: 'app-header',
@@ -23,25 +24,32 @@ export class Header implements OnInit {
   loading = signal(false);
   randomUserButtonDisabled = signal(false);
 
-  constructor(private userService: UserService, public globalService: GlobalService) {
+  constructor(private userService: UserService, public globalService: GlobalService, private authService: AuthService) {
     this.loading.set(true);
+    this.setupObservables();
+  }
+
+  setupObservables() {
     toObservable(this.query)
-      .pipe(
-        tap(() => this.loading.set(true)),
-        debounceTime(500),
-        switchMap(q => {
-          if (!q.trim()) return of([]);
-          return this.userService.getUserByUsernameQuery(q);
-        })
-      )
-      .subscribe(users => {
-        this.suggestions.set(users);
-        this.loading.set(false);
+        .pipe(
+          tap(() => this.loading.set(true)),
+          debounceTime(500),
+          switchMap(q => {
+            if (!q.trim()) return of([]);
+            return this.userService.getUserByUsernameQuery(q);
+          })
+        )
+        .subscribe(users => {
+          this.suggestions.set(users);
+          this.loading.set(false);
       });
   }
 
   ngOnInit() {
-    // Determine whether we should disable the random user button.
+    this.tryDisableRandomUserButton();
+  }
+
+  tryDisableRandomUserButton(): void {
     // If request fails, then disable the button
     this.userService.getStranger().subscribe({
       next: (user) => {
@@ -77,5 +85,9 @@ export class Header implements OnInit {
         window.alert("Error fetching random user: " + err.message);
       }
     })
+  }
+
+  logout() {
+    this.authService.logout()
   }
 }

@@ -104,6 +104,11 @@
 
                 <!-- Logged In User Profile Icon -->
                 <app-profile-icon [imageUrl]="globalService.user()?.profileImageUrl" [username]="globalService.user()?.username"></app-profile-icon>
+
+                <!-- Logout Button -->
+                <button (click)="logout()" class="text-red-700 hover:text-red-800 mt-2">
+                    <mat-icon fontIcon="logout"></mat-icon>
+                </button>
             </div>
         </div>
     </div>

@@ -1,2 +1,7 @@
-<app-header></app-header>
-<router-outlet />
+@if (globalService.user()) {
+    <app-header></app-header>
+    <router-outlet />
+}
+@else {
+    <app-login></app-login>
+}
