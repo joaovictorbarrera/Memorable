@@ -1,5 +1,16 @@
 <div class="flex gap-2 items-center mt-4">
     <app-profile-icon class="xs:block hidden" [imageUrl]="this.globalService.user()?.profileImageUrl" [username]="this.globalService.user()?.username"></app-profile-icon>
-    <input [(ngModel)]="this.commentContent" type="text" placeholder="Add a comment..." class="w-full p-2 bg-bg-quaternary rounded-lg border-bg-tertiary text-text-offwhite placeholder:text-stone-500 outline-none focus:ring-3 focus:ring-accent-primary/80">
+
+    <div class="flex flex-col text-sm w-full">
+        <textarea [(ngModel)]="this.commentContent" type="text" placeholder="Add a comment..."
+            class="resize-y w-full px-2 bg-bg-quaternary rounded-lg border-bg-tertiary min-h-10 max-h-40
+            text-text-offwhite placeholder:text-stone-500 outline-none focus:ring-3 focus:ring-accent-primary/80 overflow-y-clip" >
+        </textarea>
+        @if (error()) {
+            <span class="text-red-500 text-xs mt-1">{{ error() }}</span>
+        }
+    </div>
+
     <app-post-button (click)="this.createComment()" [disabled]="this.commentContent().trim() === ''"></app-post-button>
 </div>
+

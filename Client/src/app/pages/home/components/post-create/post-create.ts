@@ -9,10 +9,11 @@ import { GlobalService } from '../../../../core/state/global';
 import { finalize } from 'rxjs';
 import { PostDto } from '../../../../shared/models/post.dto';
 import { PostStore } from '../../../../shared/stores/post.store';
+import { NgClass } from '@angular/common';
 
 @Component({
   selector: 'app-post-create',
-  imports: [Card, MatIcon, ProfileIcon, PostButton, FormsModule],
+  imports: [Card, MatIcon, ProfileIcon, PostButton, FormsModule, NgClass],
   templateUrl: './post-create.html',
   styleUrl: './post-create.scss',
 })
@@ -26,6 +27,7 @@ export class PostCreate {
   shouldDisablePosting = computed(() =>
     (!this.textContent().trim() && !this.selectedImage()) || this.loading()
   )
+  error = signal<string | null>(null);
 
   @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
 
@@ -38,6 +40,11 @@ export class PostCreate {
   post(): void {
     if (this.shouldDisablePosting() || !this.textContent().trim() && !this.selectedImage()) {
       return; // Do not post empty content
+    }
+
+    if (this.textContent().length > 500) {
+      this.error.set("Post content cannot exceed 500 characters.");
+      return;
     }
 
     const formData = new FormData();

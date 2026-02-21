@@ -20,6 +20,7 @@ export class CommentCreate implements OnInit {
   commentContent = signal<string>("");
   loading = signal<boolean>(false);
   post!: Signal<PostDto | undefined>
+  error = signal<string | null>(null);
 
   constructor(
     private commentService: CommentService,
@@ -33,6 +34,12 @@ export class CommentCreate implements OnInit {
 
   createComment() {
     if (this.commentContent().trim() === '') return
+
+    if (this.commentContent().length > 300) {
+      this.error.set("Comment content cannot exceed 200 characters.");
+      return;
+    }
+
     this.loading.set(true)
 
     this.commentService.createComment(this.commentContent(), this.postId)
