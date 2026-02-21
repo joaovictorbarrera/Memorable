@@ -33,6 +33,11 @@ namespace Server.Controllers
                     return BadRequest("Post content is required");
                 }
 
+                if (body.TextContent?.Length > 500)
+                {
+                    return BadRequest("Text content exceeds maximum length of 500 characters");
+                }
+
                 string? imageUrl = null;
 
                 if (body.Image != null)

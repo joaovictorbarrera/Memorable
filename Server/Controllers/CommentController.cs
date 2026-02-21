@@ -28,6 +28,9 @@ namespace Server.Controllers
             if (string.IsNullOrWhiteSpace(body.TextContent))
                 return BadRequest("Cannot post empty comment");
 
+            if (body.TextContent.Length > 500)
+                return BadRequest("Comment cannot exceed 500 characters");
+
             Guid userId = HttpContext.GetUserId();
 
             Comment comment = new()
