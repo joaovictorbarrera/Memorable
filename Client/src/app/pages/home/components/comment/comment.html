@@ -1,13 +1,13 @@
-<div class="flex gap-2 items-center">
+<div class="flex gap-2 items-center text-sm">
     <app-profile-icon [imageUrl]="comment.userProfileImageUrl" [username]="comment.username"></app-profile-icon>
-    <div class="flex-col flex gap-1">
+    <div class="flex-col flex gap-1 min-w-0">
         <div class="flex gap-2 items-center">
             <a [routerLink]="['/user', comment.username]" routerLinkActive="active">
-                <span class="text-[1rem]"> {{ comment.displayName }} </span>
+                <span class="text-text-primary">{{ comment.displayName }}</span>
             </a>
-            <span class="text-stone-500 text-sm">{{ timeAgo }}</span>
+            <p class="text-stone-500 text-sm">{{ timeAgo }}</p>
         </div>
-        <span class="text-[1rem]"> {{ comment.textContent }} </span>
+        <p class="text-text-offwhite wrap-break-word">{{ comment.textContent }}</p>
     </div>
     @if (this.globalService.user()?.userId === this.comment.userId) {
         <button (click)="deleteComment()" class="ml-auto cursor-pointer hover:brightness-70">

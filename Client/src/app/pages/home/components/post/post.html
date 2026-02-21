@@ -1,12 +1,12 @@
-<app-card class="text-lg">
+<app-card class="text-sm w-full">
     <!-- Post Header -->
-    <div class="flex gap-3 items-center">
+    <div class="flex gap-3 items-center text-sm">
         <app-profile-icon [imageUrl]="post()?.userProfileImageUrl" [username]="post()?.username"></app-profile-icon>
         <div class="flex flex-col">
             <a [routerLink]="['/user', post()?.username]" routerLinkActive="active">
                 <span>{{ post()?.displayName ?? ''}}</span>
             </a>
-            <p class="text-text-secondary text-sm mb-2">{{ timeAgo }}</p>
+            <p class="text-text-secondary text-xs mb-2">{{ timeAgo }}</p>
         </div>
 
         <!-- Show edit and delete button if the current user is the author of the post -->
@@ -61,18 +61,18 @@
 
     <!-- Thumbs Up Button -->
      <div class="flex gap-5">
-        <div class="flex gap-2 items-start pt-3 pb-2 ">
+        <div class="flex gap-1 items-start pt-3 pb-2 ">
             <button (click)="toggleLike()" class="cursor-pointer hover:brightness-90 rounded-full">
                 @if (post()?.isLikedByCurrentUser) {
-                    <mat-icon fontIcon="thumb_up" style="color: royalblue;" ></mat-icon>
+                    <mat-icon fontIcon="thumb_up" style="color: royalblue; font-size: 1.2rem;" ></mat-icon>
                 } @else {
-                    <mat-icon fontIcon="thumb_up" style="color: gray;" ></mat-icon>
+                    <mat-icon fontIcon="thumb_up" style="color: gray; font-size: 1.2rem;" ></mat-icon>
                 }
             </button>
             <p>{{ `${post()?.likeCount ?? 0} like${post()?.likeCount !== 1 ? 's' : ''}` }}</p>
         </div>
-        <div class="flex gap-2 items-center pt-3 pb-2 comments">
-            <mat-icon fontIcon="comment" style="color: gray; font-size: 1.4rem" ></mat-icon>
+        <div class="flex gap-1 pt-3 pb-2 comments">
+            <mat-icon fontIcon="comment" style="color: gray; font-size: 1.2rem" ></mat-icon>
 
             <p>{{ `${post()?.commentCount ?? 0} comment${post()?.commentCount !== 1 ? 's' : ''}` }}</p>
         </div>
