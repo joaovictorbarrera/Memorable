@@ -41,7 +41,7 @@
     </div>
 
     <!-- Text Content -->
-    <div class="px-4 text-lg pb-2">
+    <div class="px-4 text-[1rem] pb-2 text-text-offwhite">
         @if (editMode()) {
         <textarea [(ngModel)]="this.mutableTextContent" class="w-full bg-bg-quaternary rounded-lg border-bg-tertiary resize-none placeholder:text-stone-500 focus-visible:outline-0 focus-visible:ring-3 focus-visible:ring-accent-primary/80"></textarea>
         }
@@ -102,11 +102,17 @@
             </div>
             <div class="pt-3 pb-2 relative group">
                 <button class="hover:brightness-90 flex gap-1" (click)="copyShareToClipboard()">
-                    <mat-icon fontIcon="share" style="color: gray; font-size: 1.2rem"></mat-icon>
+                    <mat-icon
+                        fontIcon="share"
+                        class="share-icon"
+                        [class.share-success]="copied()"
+                        style="font-size: 1.2rem" >
+                    </mat-icon>
+
                     <p>Share</p>
                 </button>
 
-                <span class="tooltip" [class.show]="copied()">
+                <span class="tooltip bg-stone-800 text-text-offwhite" [class.show]="copied()">
                     Copied to Clipboard!
                 </span>
             </div>

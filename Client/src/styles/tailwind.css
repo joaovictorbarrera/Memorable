@@ -20,7 +20,7 @@
   --color-text-primary: #faf8f3;
   --color-text-secondary: #a1a1aa;
   --color-text-tertiary: #71717a;
-  --color-text-offwhite: oklch(98% 0.016 73.684);
+  --color-text-offwhite: #E7E5E4;
 
   /* Accent Colors */
   --color-accent-primary: oklab(0.47 0.124883 0.0951489);
