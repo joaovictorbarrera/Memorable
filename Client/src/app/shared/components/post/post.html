@@ -66,9 +66,9 @@
         </div>
     }
 
-    <!-- Thumbs Up Button -->
-     <div class="flex gap-5">
-        <div class="flex gap-1 items-start pt-3 pb-2 ">
+    <!-- Thumbs Up / Comment / Share Button -->
+     <div class="flex gap-4">
+        <div class="flex gap-1 items-start pt-3 pb-2 mr-1">
             <button (click)="toggleLike()" class="cursor-pointer hover:brightness-90 rounded-full">
                 @if (post()?.isLikedByCurrentUser) {
                     <mat-icon fontIcon="thumb_up" style="color: royalblue; font-size: 1.2rem;" ></mat-icon>
@@ -76,12 +76,24 @@
                     <mat-icon fontIcon="thumb_up" style="color: gray; font-size: 1.2rem;" ></mat-icon>
                 }
             </button>
-            <p>{{ `${post()?.likeCount ?? 0} like${post()?.likeCount !== 1 ? 's' : ''}` }}</p>
+            <p>{{ `${post()?.likeCount ?? 0} Like${post()?.likeCount !== 1 ? 's' : ''}` }}</p>
         </div>
-        <div class="flex gap-1 pt-3 pb-2 comments">
+        <div class="flex gap-1 items-start pt-3 pb-2">
             <mat-icon fontIcon="comment" style="color: gray; font-size: 1.2rem" ></mat-icon>
 
-            <p>{{ `${post()?.commentCount ?? 0} comment${post()?.commentCount !== 1 ? 's' : ''}` }}</p>
+            <p>{{ `${post()?.commentCount ?? 0} Comment${post()?.commentCount !== 1 ? 's' : ''}` }}</p>
+        </div>
+        <div class="pt-3 pb-2 relative group">
+            <button class="hover:brightness-90 flex gap-1" (click)="copyShareToClipboard()">
+                <mat-icon fontIcon="share" style="color: gray; font-size: 1.2rem"></mat-icon>
+                <p>Share</p>
+            </button>
+
+            <span class="absolute bottom-full mb-2 px-2 py-1 text-sm text-white bg-gray-800 rounded
+                        opacity-0 invisible transition-opacity duration-300
+                        group-focus-within:opacity-100 group-focus-within:visible">
+                Copied to Clipboard!
+            </span>
         </div>
     </div>
 

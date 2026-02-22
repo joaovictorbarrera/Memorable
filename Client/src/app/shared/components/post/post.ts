@@ -1,20 +1,20 @@
 import { Component, computed, EventEmitter, Input, OnInit, Output, Signal, signal } from '@angular/core';
-import { PostDto } from '../../../../shared/models/post.dto';
-import { Card } from '../../../../shared/components/card/card';
+import { PostDto } from '../../models/post.dto';
+import { Card } from '../card/card';
 import { CommonModule } from '@angular/common';
-import { ProfileIcon } from "../../../../shared/components/profile-icon/profile-icon";
+import { ProfileIcon } from "../profile-icon/profile-icon";
 import { MatIcon } from '@angular/material/icon';
 import { Comment } from '../comment/comment';
-import { formattedTime } from '../../../../shared/utilities/time';
-import { PostService } from '../../../../shared/services/post.service';
+import { formattedTime } from '../../utilities/time';
+import { PostService } from '../../services/post.service';
 import { CommentCreate } from '../comment-create/comment-create';
 import { FormsModule } from '@angular/forms';
-import { GlobalService } from '../../../../core/state/global';
-import { CommentService } from '../../../../shared/services/comment.service';
-import { PostStore } from '../../../../shared/stores/post.store';
-import { LikeService } from '../../../../shared/services/like.service';
+import { GlobalService } from '../../../core/state/global';
+import { CommentService } from '../../services/comment.service';
+import { PostStore } from '../../stores/post.store';
+import { LikeService } from '../../services/like.service';
 import { RouterModule } from "@angular/router";
-import { CommentDto } from '../../../../shared/models/comment.dto';
+import { CommentDto } from '../../models/comment.dto';
 
 @Component({
   selector: 'app-post',
@@ -148,5 +148,11 @@ export class Post implements OnInit {
         window.alert("Error deleting post: " + error.message);
       }
     })
+  }
+
+  copyShareToClipboard(): void {
+    if (!this.post() || !this.post()?.postId) return
+
+    navigator.clipboard.writeText(`${window.location.origin}/share/p/${this.post()?.postId}`)
   }
 }

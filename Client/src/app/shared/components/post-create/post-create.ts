@@ -1,14 +1,14 @@
 import { Component, computed, ElementRef, EventEmitter, Output, signal, ViewChild } from '@angular/core';
-import { Card } from '../../../../shared/components/card/card';
+import { Card } from '../card/card';
 import { MatIcon } from '@angular/material/icon';
-import { ProfileIcon } from '../../../../shared/components/profile-icon/profile-icon';
+import { ProfileIcon } from '../profile-icon/profile-icon';
 import { PostButton } from "../post-button/post-button";
 import { FormsModule } from '@angular/forms';
-import { PostService } from '../../../../shared/services/post.service';
-import { GlobalService } from '../../../../core/state/global';
+import { PostService } from '../../services/post.service';
+import { GlobalService } from '../../../core/state/global';
 import { finalize } from 'rxjs';
-import { PostDto } from '../../../../shared/models/post.dto';
-import { PostStore } from '../../../../shared/stores/post.store';
+import { PostDto } from '../../models/post.dto';
+import { PostStore } from '../../stores/post.store';
 import { NgClass } from '@angular/common';
 
 @Component({

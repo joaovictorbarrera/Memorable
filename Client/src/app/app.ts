@@ -18,6 +18,6 @@ export class App implements OnInit {
 
   ngOnInit() {
     // TODO: Should be added back when login is implemented
-    // this.authService.checkLogin();
+    this.authService.checkLogin();
   }
 }

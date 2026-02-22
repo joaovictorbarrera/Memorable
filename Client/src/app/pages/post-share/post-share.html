@@ -1,0 +1,12 @@
+<main class="w-full h-full flex justify-center">
+
+    <div class="w-full max-w-xl py-10">
+        @if (this.loading()) {
+            <p>Loading...</p>
+        }
+
+        @if (this.postId()) {
+            <app-post [postId]="this.postId() ?? ''"></app-post>
+        }
+    </div>
+</main>

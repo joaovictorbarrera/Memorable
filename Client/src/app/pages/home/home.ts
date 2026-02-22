@@ -1,8 +1,8 @@
 import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { PostCreate } from './components/post-create/post-create';
+import { PostCreate } from '../../shared/components/post-create/post-create';
 import { PostDto } from '../../shared/models/post.dto';
 import { PostService } from '../../shared/services/post.service';
-import { Post } from './components/post/post';
+import { Post } from '../../shared/components/post/post';
 import { CommonModule } from '@angular/common';
 import { PostStore } from '../../shared/stores/post.store';
 import { postPageSize } from '../../core/state/constants';

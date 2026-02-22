@@ -1,13 +1,13 @@
 import { Component, Input, OnInit, Signal, signal } from '@angular/core';
-import { ProfileIcon } from '../../../../shared/components/profile-icon/profile-icon';
+import { ProfileIcon } from '../profile-icon/profile-icon';
 import { PostButton } from '../post-button/post-button';
-import { PostDto } from '../../../../shared/models/post.dto';
-import { CommentDto } from '../../../../shared/models/comment.dto';
+import { PostDto } from '../../models/post.dto';
+import { CommentDto } from '../../models/comment.dto';
 import { FormsModule } from '@angular/forms';
-import { CommentService } from '../../../../shared/services/comment.service';
+import { CommentService } from '../../services/comment.service';
 import { finalize } from 'rxjs';
-import { PostStore } from '../../../../shared/stores/post.store';
-import { GlobalService } from '../../../../core/state/global';
+import { PostStore } from '../../stores/post.store';
+import { GlobalService } from '../../../core/state/global';
 
 @Component({
   selector: 'app-comment-create',

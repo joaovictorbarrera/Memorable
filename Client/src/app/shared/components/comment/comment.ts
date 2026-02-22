@@ -1,11 +1,11 @@
 import { Component, Input, OnInit, signal } from '@angular/core';
-import { CommentDto } from '../../../../shared/models/comment.dto';
-import { ProfileIcon } from "../../../../shared/components/profile-icon/profile-icon";
-import { formattedTime } from '../../../../shared/utilities/time';
-import { GlobalService } from '../../../../core/state/global';
+import { CommentDto } from '../../models/comment.dto';
+import { ProfileIcon } from "../profile-icon/profile-icon";
+import { formattedTime } from '../../utilities/time';
+import { GlobalService } from '../../../core/state/global';
 import { MatIcon } from '@angular/material/icon';
-import { CommentService } from '../../../../shared/services/comment.service';
-import { PostStore } from '../../../../shared/stores/post.store';
+import { CommentService } from '../../services/comment.service';
+import { PostStore } from '../../stores/post.store';
 import { RouterModule } from '@angular/router';
 import { SlicePipe } from '@angular/common';
 @Component({

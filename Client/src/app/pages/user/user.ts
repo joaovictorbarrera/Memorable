@@ -2,8 +2,8 @@ import { AfterViewInit, Component, computed, ElementRef, OnInit, signal, Signal,
 import { ActivatedRoute } from '@angular/router';
 import { PostService } from '../../shared/services/post.service';
 import { UserService } from '../../shared/services/user.service';
-import { Post } from "../home/components/post/post";
-import { PostCreate } from "../home/components/post-create/post-create";
+import { Post } from "../../shared/components/post/post";
+import { PostCreate } from "../../shared/components/post-create/post-create";
 import { PostStore } from '../../shared/stores/post.store';
 import { CommonModule } from '@angular/common';
 import { GlobalService } from '../../core/state/global';
