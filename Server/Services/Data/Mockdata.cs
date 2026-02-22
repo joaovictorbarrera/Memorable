@@ -121,6 +121,15 @@ namespace Server.Services
                     Username = "elizabeth.mohr",
                     UserEmail = "elizabeth@test.com",
                     Password = "Password123"
+                },
+                new User {
+                    FirstName = "Sarah",
+                    LastName = "Miller",
+                    DisplayName = "Sarah Miller",
+                    ProfileImageUrl = "https://images.unsplash.com/photo-1627161683077-e34782c24d81?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx3b21hbiUyMGhlYWRzaG90fGVufDF8fHx8MTc2ODgzMzYyMHww&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
+                    Username = "sarah.miller",
+                    UserEmail = "sarah@test.com",
+                    Password = "Password123"
                 }
 
             ];
@@ -237,8 +246,16 @@ namespace Server.Services
             {
                 UserId = _users[6].UserId,
                 TextContent = "Weekend hiking trip was unreal 🌄",
-                CreatedAt = DateTime.UtcNow.AddMinutes(-10),
+                CreatedAt = DateTime.UtcNow.AddHours(-10),
                 ImageUrl = "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee"
+            });
+
+            _posts.Add(new Post
+            {
+                UserId = _users[9].UserId,
+                TextContent = "Just finished an amazing hike! The views were absolutely breathtaking. Nature really does heal the soul. 🏔️✨",
+                CreatedAt = DateTime.UtcNow.AddMinutes(-2.1),
+                ImageUrl = "https://img.lightshot.app/pITUUTsFSyyp21xydRJynA.png"
             });
         }
 
@@ -428,6 +445,7 @@ namespace Server.Services
             var nova = _users[4];     // 0 activity user
             var elon = _users[5];
             var mira = _users[6];
+            var sarahM = _users[9];
 
             // 🔥 Popular user (Kerrigan) - many followers
             _follows.AddRange(new[]
@@ -445,7 +463,8 @@ namespace Server.Services
                 new Follow { FollowerId = john.UserId, FollowingId = artanis.UserId },
                 new Follow { FollowerId = john.UserId, FollowingId = raynor.UserId },
                 new Follow { FollowerId = john.UserId, FollowingId = elon.UserId },
-                new Follow { FollowerId = john.UserId, FollowingId = mira.UserId }
+                new Follow { FollowerId = john.UserId, FollowingId = mira.UserId },
+                new Follow { FollowerId = john.UserId, FollowingId = sarahM.UserId }
             });
 
             // 🤝 Mutual friendships

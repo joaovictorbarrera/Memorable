@@ -6,7 +6,11 @@
             <a [routerLink]="['/user', post()?.username]" routerLinkActive="active">
                 <span>{{ post()?.displayName ?? ''}}</span>
             </a>
-            <p class="text-text-secondary text-xs mb-2">{{ timeAgo }}</p>
+            <div class="mb-2 text-xs text-text-secondary">
+                <span>@{{post()?.username}}</span>
+                <span> · </span>
+                <span>{{ timeAgo }}</span>
+            </div>
         </div>
 
         <!-- Show edit and delete button if the current user is the author of the post -->
