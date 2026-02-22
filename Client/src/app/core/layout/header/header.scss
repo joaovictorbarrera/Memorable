@@ -2,8 +2,12 @@
     user-select: none;
 }
 
+nav > * {
+  padding-block: 0.25rem;
+  padding-inline: 0.25rem;
+  border-bottom: 3px solid transparent;  // reserve space
+}
+
 nav a.active {
-    padding-bottom: 0.25rem;
-    padding-inline: .25rem;
-    border-bottom: 3px solid var(--color-accent-primary);
+  border-bottom-color: var(--color-accent-primary);
 }
