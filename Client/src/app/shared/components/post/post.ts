@@ -1,4 +1,4 @@
-import { Component, computed, EventEmitter, Input, OnInit, Output, Signal, signal } from '@angular/core';
+import { Component, computed, ElementRef, EventEmitter, Input, OnInit, Output, Signal, signal, ViewChild } from '@angular/core';
 import { PostDto } from '../../models/post.dto';
 import { Card } from '../card/card';
 import { CommonModule } from '@angular/common';
@@ -26,6 +26,9 @@ export class Post implements OnInit {
   @Input() postId!: string;
   @Output() postDeleted = new EventEmitter<PostDto>();
 
+  @ViewChild(CommentCreate)
+  commentCreateComponent!: CommentCreate
+
   constructor(
     private globalService: GlobalService,
     private postService: PostService,
@@ -42,6 +45,8 @@ export class Post implements OnInit {
   timeAgo: string = '';
   editMode = signal(false);
   seeMore = signal(false);
+  copied = signal(false)
+  shouldShowCommentSection = signal(false)
 
   mutableTextContent: string = ""
   mutableImageUrl: string | undefined = undefined
@@ -56,7 +61,7 @@ export class Post implements OnInit {
     this.mutableImageUrl = post?.imageUrl
     this.mutableTextContent = post?.textContent ?? ""
 
-    if (post && post.textContent && post.textContent.length > 100 && post.imageUrl) {
+    if (post && post.textContent && post.textContent.length > 125 && post.imageUrl) {
       this.seeMore.set(true)
     }
     if (post && post?.initialComments) this.postStore.addManyComments(this.postId, post.initialComments)
@@ -152,7 +157,15 @@ export class Post implements OnInit {
 
   copyShareToClipboard(): void {
     if (!this.post() || !this.post()?.postId) return
+    this.copied.set(true)
+
+    setTimeout(() => this.copied.set(false), 2000)
 
     navigator.clipboard.writeText(`${window.location.origin}/share/p/${this.post()?.postId}`)
+  }
+
+  toggleCommentSection(): void {
+    this.shouldShowCommentSection.set(!this.shouldShowCommentSection())
+    if (this.shouldShowCommentSection()) setTimeout(() => this.commentCreateComponent.focusCommentCreate())
   }
 }

@@ -4,8 +4,7 @@
             <!-- Navigation -->
             <div class="sm:flex-row flex-col flex gap-10 items-center text-text-offwhite">
                 <h1
-                    class="text-4xl font-bold "
-                    style="font-family: 'Playfair Display', serif"
+                    class="text-4xl font-bold"
                 >
                     <a routerLink="/" routerLinkActive="active">memorable</a>
                 </h1>
@@ -31,7 +30,7 @@
                 </nav>
             </div>
 
-            <div class="lg:ml-auto flex gap-5 items-center" >
+            <div class="lg:ml-auto flex gap-5 items-center flex-col xxs:flex-row" >
 
                 <!-- Search Box -->
                 <div class="flex items-center relative w-64">
@@ -102,13 +101,15 @@
                     }
                 </div>
 
-                <!-- Logged In User Profile Icon -->
-                <app-profile-icon [imageUrl]="globalService.user()?.profileImageUrl" [username]="globalService.user()?.username"></app-profile-icon>
+                <div class="flex gap-5">
+                    <!-- Logged In User Profile Icon -->
+                    <app-profile-icon [imageUrl]="globalService.user()?.profileImageUrl" [username]="globalService.user()?.username"></app-profile-icon>
 
-                <!-- Logout Button -->
-                <button (click)="logout()" class="text-red-700 hover:text-red-800 mt-2">
-                    <mat-icon fontIcon="logout"></mat-icon>
-                </button>
+                    <!-- Logout Button -->
+                    <button (click)="logout()" class="text-red-700 hover:text-red-800 mt-2">
+                        <mat-icon fontIcon="logout"></mat-icon>
+                    </button>
+                </div>
             </div>
         </div>
     </div>

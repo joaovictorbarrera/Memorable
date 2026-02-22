@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, Signal, signal } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, Signal, signal, ViewChild } from '@angular/core';
 import { ProfileIcon } from '../profile-icon/profile-icon';
 import { PostButton } from '../post-button/post-button';
 import { PostDto } from '../../models/post.dto';
@@ -17,6 +17,8 @@ import { GlobalService } from '../../../core/state/global';
 })
 export class CommentCreate implements OnInit {
   @Input() postId!: string;
+  @ViewChild('commentCreateInput') commentCreate!: ElementRef<HTMLInputElement>;
+
   commentContent = signal<string>("");
   loading = signal<boolean>(false);
   post!: Signal<PostDto | undefined>
@@ -57,5 +59,10 @@ export class CommentCreate implements OnInit {
         window.alert("Error creating comment: " + err.message)
       }
     })
+  }
+
+  focusCommentCreate(): void {
+    console.log(this.commentCreate)
+    this.commentCreate.nativeElement.focus();
   }
 }

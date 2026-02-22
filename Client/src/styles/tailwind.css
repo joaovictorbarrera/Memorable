@@ -2,6 +2,7 @@
 
 @theme {
   --breakpoint-xs: 30rem;
+  --breakpoint-xxs: 24rem;
 
     /* Primary Colors */
   --color-primary: #ea580c;

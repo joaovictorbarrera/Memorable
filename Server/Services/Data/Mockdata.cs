@@ -237,7 +237,7 @@ namespace Server.Services
             _posts.Add(new Post
             {
                 UserId = _users[6].UserId,
-                TextContent = "Sketching UI ideas in my notebook ✏️",
+                TextContent = "Some seasons feel loud. Others feel like growth happening quietly underground. 🌱\r\n\r\nLately I’ve been choosing progress over perfection, consistency over motivation, and peace over proving a point. It’s wild how much changes when you stop rushing and start building.\r\n\r\nSmall steps. Clear mind. Keep going.",
                 CreatedAt = DateTime.UtcNow.AddMinutes(-15),
                 ImageUrl = null
             });

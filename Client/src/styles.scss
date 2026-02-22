@@ -47,8 +47,15 @@ body {
     background-color: var(--color-bg-primary);
 }
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+html, body {
+  height: 100%;
+
+  font-family: 'Playfair Display', serif !important;
+}
+body {
+  margin: 0;
+  // font-family: Roboto, "Helvetica Neue", sans-serif;
+}
 
 button {
     @apply cursor-pointer;
