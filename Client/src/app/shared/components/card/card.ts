@@ -5,7 +5,7 @@ import { Component } from '@angular/core';
   imports: [],
   templateUrl: './card.html',
   styleUrl: './card.scss',
-  host: { class: 'bg-bg-tertiary shadow-md p-6 w-full max-w-2xl block' }
+  host: { class: 'bg-bg-tertiary shadow-md p-6 w-full max-w-2xl block rounded-2xl' }
 })
 export class Card {
 
