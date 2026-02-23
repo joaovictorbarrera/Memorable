@@ -16,7 +16,7 @@ import { SlicePipe } from '@angular/common';
 })
 export class Comment implements OnInit {
   @Input() comment!: CommentDto;
-  timeAgo: string = '';
+  timeAgo = signal('');
   seeMore = signal(false)
 
   constructor(
@@ -26,7 +26,7 @@ export class Comment implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.timeAgo = formattedTime(this.comment.createdAt);
+    this.timeAgo.set(formattedTime(this.comment.createdAt));
     if (this.comment.textContent && this.comment.textContent.length > 100) {
       this.seeMore.set(true)
     }

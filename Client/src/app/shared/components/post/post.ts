@@ -42,7 +42,7 @@ export class Post implements OnInit {
   commentPageCount = signal<number>(1)
 
   isCurrentUserPost: Signal<boolean> = computed(() => this.post()?.userId === this.globalService.user()?.userId);
-  timeAgo: string = '';
+  timeAgo = signal("");
   editMode = signal(false);
   seeMore = signal(false);
   copied = signal(false)
@@ -57,7 +57,7 @@ export class Post implements OnInit {
 
     const post = this.post();
 
-    this.timeAgo = post ? formattedTime(post.createdAt) : '';
+    this.timeAgo.set(post ? formattedTime(post.createdAt) : '')
     this.mutableImageUrl = post?.imageUrl
     this.mutableTextContent = post?.textContent ?? ""
 
