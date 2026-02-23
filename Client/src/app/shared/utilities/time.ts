@@ -7,7 +7,7 @@ export function formattedTime(date: Date): string {
     const hours = Math.floor(minutes / 60);
     const days = Math.floor(hours / 24);
 
-    if (isNaN(diff) || diff < 0) {
+    if (isNaN(diff)) {
         return '';
     }
 

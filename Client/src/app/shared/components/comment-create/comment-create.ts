@@ -62,7 +62,6 @@ export class CommentCreate implements OnInit {
   }
 
   focusCommentCreate(): void {
-    console.log(this.commentCreate)
     this.commentCreate.nativeElement.focus();
   }
 }
