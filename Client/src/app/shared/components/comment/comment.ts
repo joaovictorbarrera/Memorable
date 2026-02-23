@@ -26,10 +26,6 @@ export class Comment implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    console.log(this.comment)
-    console.log(this.comment.createdAt)
-    console.log(formattedTime(this.comment.createdAt))
-
     this.timeAgo.set(formattedTime(this.comment.createdAt));
     if (this.comment.textContent && this.comment.textContent.length > 100) {
       this.seeMore.set(true)
