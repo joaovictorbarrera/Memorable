@@ -75,6 +75,7 @@ namespace Server.Services
 
             List<Post> posts = await _context.Posts
                 .Where(p => postIds.Contains(p.PostId))
+                .OrderBy(p => p.CreatedAt)
                 .ToListAsync();
 
             List<Guid> userIds = posts.Select(p => p.UserId).Distinct().ToList();
