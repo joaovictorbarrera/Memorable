@@ -1,65 +1,54 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Server.Dtos;
 using Server.Extensions;
 using Server.Models;
-using Server.Services;
-using Server.Dtos;
+using Server.Services.Data.Mockup;
+using Server.Services.Interfaces;
 
 namespace Server.Controllers
 {
     [Route("[controller]")]
     [ApiController]
-    public class LikeController : ControllerBase
+    public class LikeController(ILogger<LikeController> _logger, IInteractionService _interactionService) : ControllerBase
     {
-        private readonly ILogger<LikeController> _logger;
-
-        public LikeController(ILogger<LikeController> logger)
-        {
-            _logger = logger;
-        }
+        private readonly ILogger<LikeController> _logger = _logger;
+        private readonly IInteractionService _interactionService = _interactionService;
 
         [HttpPost("LikeCreate")]
-        public IActionResult CreateLike([FromBody] LikeCreateDto postLiked)
+        public async Task<IActionResult> CreateLike([FromBody] LikeCreateDto postLiked)
         {
             if (postLiked.PostId == Guid.Empty) return BadRequest("Invalid PostId");
 
-            Guid userId = HttpContext.GetUserId();
+            Guid authUserId = HttpContext.GetUserId();
 
-            // Check if like already exists
-            bool alreadyLiked = Mockdata._likes.Any(l =>
-                l.PostId == postLiked.PostId &&
-                l.UserId == userId
-            );
-
-            if (alreadyLiked)
-                return BadRequest("User has already liked this post");
-
-            Like like = new()
+            if (await _interactionService.IsLiking(authUserId, postLiked.PostId))
             {
-                PostId = postLiked.PostId,
-                UserId = userId
-            };
-
-            Mockdata._likes.Add(like);
+                return BadRequest("User has already liked this post");
+            }
+   
+            Like? like = await _interactionService.AddNewLike(authUserId, postLiked.PostId);
+            
+            if (like == null) return BadRequest("Like could not be created");
 
             return Ok(like);
         }
 
         [HttpDelete("LikeDelete")]
-        public IActionResult DeleteLike([FromQuery] Guid postId)
+        public async Task<IActionResult> DeleteLike([FromQuery] Guid postId)
         {
             if (postId == Guid.Empty) return BadRequest("Invalid PostId");
 
-            Guid userId = HttpContext.GetUserId();
+            Guid authUserId = HttpContext.GetUserId();
 
-            Like? like = Mockdata._likes.FirstOrDefault(l =>
-                l.PostId == postId &&
-                l.UserId == userId
-            );
+            if (!await _interactionService.IsLiking(authUserId, postId))
+            {
+                return BadRequest("User has not liked this post");
+            }
+
+            Like? like = await _interactionService.RemoveLike(authUserId, postId);
 
             if (like == null)
-                return NotFound("Like not found");
-
-            Mockdata._likes.Remove(like);
+                return NotFound("Like could not be deleted");
 
             return Ok(like);
         }

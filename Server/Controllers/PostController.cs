@@ -4,21 +4,18 @@ using Microsoft.Extensions.Hosting;
 using Server.Dtos;
 using Server.Extensions;
 using Server.Models;
-using Server.Services;
+using Server.Services.Data.Mockup;
 using Server.Services.ImageUpload;
-using Server.Services.Posts;
+using Server.Services.Interfaces;
 
 namespace Server.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class PostController : Controller
+    public class PostController(ILogger<PostController> logger, IPostService _postService) : Controller
     {
-        private readonly ILogger<PostController> _logger;
-        public PostController(ILogger<PostController> logger)
-        {
-            _logger = logger;
-        }
+        private readonly ILogger<PostController> _logger = logger;
+        private readonly IPostService _postService = _postService;
 
         [HttpPost("PostCreate")]
         [Consumes("multipart/form-data")]
@@ -26,143 +23,120 @@ namespace Server.Controllers
             [FromForm] PostCreateDto body,
             [FromServices] IImageUploadService imgBb)
         {
-            try
+            
+            if (body.Image == null && string.IsNullOrWhiteSpace(body.TextContent))
             {
-                if (body.Image == null && string.IsNullOrWhiteSpace(body.TextContent))
-                {
-                    return BadRequest("Post content is required");
-                }
-
-                if (body.TextContent?.Length > 500)
-                {
-                    return BadRequest("Text content exceeds maximum length of 500 characters");
-                }
-
-                string? imageUrl = null;
-
-                if (body.Image != null)
-                {
-                    imageUrl = await imgBb.UploadAsync(body.Image);
-                }
-
-                Guid userId = HttpContext.GetUserId();
-
-                Post post = new()
-                {
-                    UserId = userId,
-                    TextContent = body.TextContent,
-                    CreatedAt = DateTime.UtcNow,
-                    ImageUrl = imageUrl
-                };
-
-                Mockdata._posts.Add(post);
-
-                PostDto postDto = Service.GetPostDto(post.PostId);
-
-                return Ok(postDto);
+                return BadRequest("Post content is required");
             }
-            catch (Exception ex)
+
+            if (body.TextContent?.Length > 500)
             {
-                _logger.LogError(ex, "Error creating post");
-                return StatusCode(500, ex.Message);
+                return BadRequest("Text content exceeds maximum length of 500 characters");
             }
+
+            string? imageUrl = null;
+
+            if (body.Image != null)
+            {
+                imageUrl = await imgBb.UploadAsync(body.Image);
+            }
+
+            Guid authUserId = HttpContext.GetUserId();
+
+            Post? post = await _postService.CreatePost(body, authUserId, imageUrl);
+
+            if (post == null) return BadRequest("Post could not be created");
+
+            PostDto? postDto = await _postService.GetPostDtoById(post.PostId, authUserId);
+
+            if (postDto == null) return BadRequest("Could not get new post details");
+
+            return Ok(postDto);
         }
 
         [HttpGet("PostGetFeed")]
-        public IActionResult GetFeed([FromQuery] int pageSize, [FromQuery] int pageNumber)
+        public async Task<IActionResult> GetFeed([FromQuery] int pageSize, [FromQuery] int pageNumber)
         {
             if (pageSize <= 0 || pageNumber <= 0)
                 return BadRequest("Invalid pagination parameters");
 
-            Guid userId = HttpContext.GetUserId();
+            Guid authUserId = HttpContext.GetUserId();
 
-            List<Guid> usersFollowing = UserHelper.GetFollowingList(userId);
+            List<PostDto> feed = await _postService.GetFeed(pageSize, pageNumber, authUserId);
 
-            List<Post> pagedPosts = Mockdata._posts
-                .FindAll(p => usersFollowing.Contains(p.UserId) || p.UserId == userId)
-                .OrderByDescending(p => p.CreatedAt)
-                .Skip((pageNumber - 1) * pageSize)
-                .Take(pageSize)
-                .ToList();
-
-            List<PostDto> postDtos = pagedPosts
-                .Select(p => Service.GetPostDto(p.PostId))
-                .ToList();
-
-            return Ok(postDtos);
+            return Ok(feed);
         }
 
         [HttpGet("PostGetById")]
-        public IActionResult GetById([FromQuery] Guid postId)
+        public async Task<IActionResult> GetById([FromQuery] Guid postId)
         {
             if (postId == Guid.Empty) return BadRequest("Invalid PostId");
 
-            Post? post = Mockdata._posts.FirstOrDefault(p => p.PostId == postId);
-            if (post == null)
-            {
-                return NotFound("Post not found");
-            }
+            Guid authUserId = HttpContext.GetUserId();
 
-            PostDto postDto = Service.GetPostDto(post.PostId);
+            PostDto? postDto = await _postService.GetPostDtoById(postId, authUserId);
+
+            if (postDto == null) return BadRequest("Post Not Found");
 
             return Ok(postDto);
         }
 
         [HttpDelete("PostDelete")]
-        public IActionResult Delete([FromQuery] Guid postId)
+        public async Task<IActionResult> Delete([FromQuery] Guid postId)
         {
             if (postId == Guid.Empty) return BadRequest("Invalid PostId");
 
-            Post? post = Mockdata._posts.FirstOrDefault(p => p.PostId == postId);
-            if (post == null)
+            if (!await _postService.PostExists(postId))
             {
                 return NotFound("Post not found");
             }
 
-            Guid userId = HttpContext.GetUserId();
+            Guid authUserId = HttpContext.GetUserId();
 
-            if (post.UserId != userId)
+            if (!await _postService.PostBelongsToUser(postId, authUserId))
             {
-                return Unauthorized("You can only delete your own posts");
+                return Forbid("You can only delete your own posts");
             }
 
-            Mockdata._posts.Remove(post);
-            Mockdata._comments.RemoveAll(c => c.PostId == postId);
-            Mockdata._likes.RemoveAll(l => l.PostId == postId);
+            Post? postRemoved = await _postService.RemovePost(postId);
+            if (postRemoved == null) return BadRequest("Post could not be removed");
 
-            return Ok(post);
+            return Ok(postRemoved);
         }
 
         [HttpPut("PostUpdate")]
-        public IActionResult Update([FromBody] PostDto updatedPost)
+        public async Task<IActionResult> Update([FromBody] PostDto updatedPostDetails)
         {
-            if (updatedPost == null)
+            if (updatedPostDetails == null)
             {
                 return BadRequest("Invalid Input. Try again");
             }
-            Post? existingPost = Mockdata._posts.FirstOrDefault(p => p.PostId == updatedPost.PostId);
-            if (existingPost == null)
+
+            if (!await _postService.PostExists(updatedPostDetails.PostId))
             {
                 return NotFound("Post not found");
             }
 
-            Guid userId = HttpContext.GetUserId();
+            Guid authUserId = HttpContext.GetUserId();
 
-            if (existingPost.UserId != userId)
+            if (!await _postService.PostBelongsToUser(updatedPostDetails.PostId, authUserId))
             {
-                return Unauthorized("You can only update your own posts");
+                return Forbid("You can only update your own posts");
             }
 
-            existingPost.TextContent = updatedPost.TextContent;
-            existingPost.ImageUrl = updatedPost.ImageUrl;
+            Post? updatedPost = await _postService.UpdatePost(updatedPostDetails);
 
-            PostDto postDto = Service.GetPostDto(existingPost.PostId);
+            if (updatedPost == null) return BadRequest("Post could not be updated");
 
-            return Ok(postDto);
+            PostDto? updatedPostDto = await _postService.GetPostDtoById(updatedPost.PostId, authUserId);
+
+            if (updatedPostDto == null) return BadRequest("Could not get post details");
+
+            return Ok(updatedPostDto);
         }
 
         [HttpGet("PostGetForProfile")]
-        public IActionResult GetForProfile(
+        public async Task<IActionResult> GetForProfile(
             [FromQuery] Guid userId,
             [FromQuery] int pageSize,
             [FromQuery] int pageNumber)
@@ -173,16 +147,7 @@ namespace Server.Controllers
             if (pageSize <= 0 || pageNumber <= 0)
                 return BadRequest("Invalid pagination parameters");
 
-            List<Post> pagedPosts = Mockdata._posts
-                .Where(p => p.UserId == userId)
-                .OrderByDescending(p => p.CreatedAt)
-                .Skip((pageNumber - 1) * pageSize)
-                .Take(pageSize)
-                .ToList();
-
-            List<PostDto> postDtos = pagedPosts
-                .Select(p => Service.GetPostDto(p.PostId))
-                .ToList();
+            List<PostDto> postDtos = await _postService.GetProfilePosts(pageSize, pageNumber, userId);
 
             return Ok(postDtos);
         }

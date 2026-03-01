@@ -2,95 +2,71 @@
 using Server.Dtos;
 using Server.Extensions;
 using Server.Models;
-using Server.Services;
-using Server.Services.Posts;
+using Server.Services.Data.Mockup;
+using Server.Services.Interfaces;
 using System.Security.Cryptography;
 
 namespace Server.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class UserController : Controller
+    public class UserController(ILogger<UserController> _logger, IUserService _userService) : Controller
     {
-        private readonly ILogger<UserController> _logger;
-        public UserController(ILogger<UserController> logger)
-        {
-            _logger = logger;
-        }
+        private readonly ILogger<UserController> _logger = _logger;
+        private readonly IUserService _userService = _userService;
 
         [HttpGet("UserGetById")]
-        public IActionResult GetById([FromQuery] Guid userId)
+        public async Task<IActionResult> GetById([FromQuery] Guid userId)
         {
-            User? user = Mockdata._users.FirstOrDefault(p => p.UserId.Equals(userId));
-            if (user == null)
+            if (!await _userService.UserExists(userId))
             {
                 return NotFound("User not found");
             }
 
-            Guid currentUserId = HttpContext.GetUserId();
+            Guid authUserId = HttpContext.GetUserId();
 
-            UserDto userDto = Service.GetUserDto(userId, currentUserId);
+            UserDto? userDto = await _userService.GetUserDto(userId, authUserId);
+
+            if (userDto == null) return BadRequest("Could not get user details");
 
             return Ok(userDto);
         }
 
         [HttpGet("UserGetByUsername")]
-        public IActionResult GetByUsername([FromQuery] String username)
+        public async Task<IActionResult> GetByUsername([FromQuery] String username)
         {
-            User? user = Mockdata._users.FirstOrDefault(p => p.Username.Equals(username));
+            User? user = await _userService.GetUserByUsername(username);
             if (user == null)
             {
                 return NotFound("User not found");
             }
 
-            Guid currentUserId = HttpContext.GetUserId();
+            Guid authUserId = HttpContext.GetUserId();
 
-            UserDto userDto = Service.GetUserDto(user.UserId, currentUserId);
+            UserDto? userDto = await _userService.GetUserDto(user.UserId, authUserId);
+
+            if (userDto == null) return BadRequest("Could not get user details");
 
             return Ok(userDto);
         }
 
         [HttpGet("UserGetByUsernameQuery")]
-        public IActionResult GetByUsernameQuery([FromQuery] String query)
+        public async Task<IActionResult> GetByUsernameQuery([FromQuery] String query)
         {
-            List<User> userSuggestions = Mockdata._users
-                .OrderBy(p => p.Username.Length)
-                .Where(p => p.Username.ToLower().Contains(query.ToLower()))
-                .Take(5)
-                .ToList();
-
-            Guid currentUserId = HttpContext.GetUserId();
-
-            List<UserDto> userDtos = userSuggestions
-                .Select(u => Service.GetUserDto(u.UserId, currentUserId))
-                .ToList();
+            List<UserDto> userDtos = await _userService.GetByUsernameQuery(query);
 
             return Ok(userDtos);
         }
 
         [HttpGet("UserGetStranger")]
-        public IActionResult GetRandom()
+        public async Task<IActionResult> GetRandom()
         {
-            if (Mockdata._users == null || !Mockdata._users.Any())
-                return NotFound("No users available.");
+            Guid authUserId = HttpContext.GetUserId();
 
-            Guid currentUserId = HttpContext.GetUserId();
+            UserDto? strangerDto = await _userService.GetStranger(authUserId);
+            if (strangerDto == null) return NotFound("None available");
 
-            List<Guid> following = UserHelper.GetFollowingList(currentUserId);
-            List<User> notFollowedUsers = Mockdata._users
-                                            .FindAll(u => u.UserId != currentUserId &&
-                                                        !following.Contains(u.UserId));
-
-            if (notFollowedUsers.Count < 1) return Ok(null);
-
-            var random = new Random();
-            int index = random.Next(notFollowedUsers.Count);
-
-            Guid randomUserId = notFollowedUsers[index].UserId;
-
-            UserDto randomUserDto = Service.GetUserDto(randomUserId, currentUserId);
-
-            return Ok(randomUserDto);
+            return Ok(strangerDto);
         }
     }
 }

@@ -18,7 +18,7 @@ namespace Server.Controllers
         {
             return Ok(new
             {
-                apiVersion = "1.0"
+                apiVersion = "1.1"
             });
         }
     }

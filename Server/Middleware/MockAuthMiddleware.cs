@@ -1,7 +1,7 @@
 ﻿using Server.Authorization;
-using Server.Services;
 using Server.Models;
 using System.Security.Claims;
+using Server.Services.Interfaces;
 
 public class MockAuthMiddleware
 {
@@ -23,12 +23,22 @@ public class MockAuthMiddleware
             return;
         }
 
-        Guid mockUserId = Mockdata._currentUserId;
-        User mockUser = Mockdata._users.FirstOrDefault(u => u.UserId == mockUserId) ?? Mockdata._users[0];
+        // Resolve IUserService from the request scope
+        var userService = context.RequestServices.GetRequiredService<IUserService>();
+
+        // Fetch user from DB by username
+        User? mockUser = await userService.GetUserByUsername("john.barrera");
+
+        if (mockUser == null)
+        {
+            context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+            await context.Response.WriteAsync("No users available for mock auth.");
+            return;
+        }
 
         var claims = new List<Claim>
         {
-            new Claim(ClaimTypes.NameIdentifier, mockUserId.ToString()),
+            new Claim(ClaimTypes.NameIdentifier, mockUser.UserId.ToString()),
             new Claim(ClaimTypes.Name, mockUser.Username ?? "MockUser"),
             new Claim(ClaimTypes.Role, "User")
         };

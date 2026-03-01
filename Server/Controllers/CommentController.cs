@@ -3,24 +3,26 @@ using Microsoft.AspNetCore.Mvc;
 using Server.Dtos;
 using Server.Extensions;
 using Server.Models;
-using Server.Services;
-using Server.Services.Posts;
+using Server.Services.Data.Mockup;
+using Server.Services.Interfaces;
 
 namespace Server.Controllers
 {
     [Route("[controller]")]
     [ApiController]
-    public class CommentController : ControllerBase
+    public class CommentController(
+        ILogger<CommentController> _logger, 
+        IPostService _postService,
+        IInteractionService _interactionService
+        ) : ControllerBase
     {
-        private readonly ILogger<CommentController> _logger;
-        public CommentController(ILogger<CommentController> logger)
-        {
-            _logger = logger;
-        }
+        private readonly ILogger<CommentController> _logger = _logger;
+        private readonly IPostService _postService = _postService;
+        private readonly IInteractionService _interactionService = _interactionService;
 
 
         [HttpPost("CommentCreate")]
-        public IActionResult CreateComment([FromBody] CommentCreateDto body)
+        public async Task<IActionResult> CreateComment([FromBody] CommentCreateDto body)
         {
             if (body == null)
                 return BadRequest("Invalid request body");
@@ -31,47 +33,46 @@ namespace Server.Controllers
             if (body.TextContent.Length > 500)
                 return BadRequest("Comment cannot exceed 500 characters");
 
-            Guid userId = HttpContext.GetUserId();
+            Guid authUserId = HttpContext.GetUserId();
 
-            Comment comment = new()
-            {
-                UserId = userId,
-                PostId = body.PostId,
-                TextContent = body.TextContent,
-                CreatedAt = DateTime.UtcNow
-            };
+            Comment? comment = await _interactionService.AddNewComment(body, authUserId);
 
-            Mockdata._comments.Add(comment);
+            if (comment == null) return BadRequest("Comment could not be added");
 
-            CommentDto commentDto = Service.GetCommentDto(comment.CommentId);
+            CommentDto? commentDto = await _interactionService.GetCommentDtoById(comment.CommentId);
+
+            if (commentDto == null) return BadRequest("Could not get new comment details");
 
             return Ok(commentDto);
         }
 
         [HttpDelete("CommentDelete")]
-        public IActionResult DeleteComment([FromQuery] Guid commentId)
+        public async Task<IActionResult> DeleteComment([FromQuery] Guid commentId)
         {
             if (commentId == Guid.Empty) return BadRequest("Invalid CommentId");
 
-            Comment? comment = Mockdata._comments.FirstOrDefault(c => c.CommentId == commentId);
+            Guid authUserId = HttpContext.GetUserId();
 
-            if (comment == null) return NotFound("Comment Not Found");
-
-            Guid userId = HttpContext.GetUserId();
-
-            if (comment.UserId != userId)
+            if (!await _interactionService.CommentExists(commentId))
             {
-                return Unauthorized("You can only delete your own comments");
+                return NotFound("Comment Not Found");
             }
 
-            Mockdata._comments.Remove(comment);
+            if (!await _interactionService.CommentBelongsToUser(commentId, authUserId))
+            {
+                return Forbid("You can only delete your own comments");
+            }
+
+            Comment? comment = await _interactionService.DeleteComment(commentId);
+
+            if (comment == null) return BadRequest("Comment could not be deleted");
 
             return Ok(comment);
         }
 
 
         [HttpGet("CommentGetByPostId")]
-        public IActionResult GetByPostId(
+        public async Task<IActionResult> GetByPostId(
         [FromQuery] Guid postId,
         [FromQuery] int skip,
         [FromQuery] int pageNumber,
@@ -83,11 +84,10 @@ namespace Server.Controllers
             if (pageNumber <= 0 || pageSize <= 0)
                 return BadRequest("Invalid pagination parameters");
 
-            bool postExists = Mockdata._posts.Any(p => p.PostId == postId);
-            if (!postExists)
+            if (!await _postService.PostExists(postId))
                 return NotFound("Post not found");
 
-            List<CommentDto> commentDtos = Service.GetPostComments(postId, skip, pageSize, pageNumber);
+            List<CommentDto> commentDtos = await _postService.GetPostComments(postId, skip, pageSize, pageNumber);
 
             return Ok(commentDtos);
         }

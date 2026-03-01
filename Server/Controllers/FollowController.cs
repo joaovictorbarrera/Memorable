@@ -1,65 +1,48 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Server.Dtos;
 using Server.Extensions;
 using Server.Models;
-using Server.Services;
-using Server.Dtos;
+using Server.Services.Data.Mockup;
+using Server.Services.Interfaces;
 
 namespace Server.Controllers
 {
     [Route("[controller]")]
     [ApiController]
-    public class FollowController : ControllerBase
+    public class FollowController(ILogger<FollowController> _logger, IUserService _userService) : ControllerBase
     {
-        private readonly ILogger<FollowController> _logger;
-
-        public FollowController(ILogger<FollowController> logger)
-        {
-            _logger = logger;
-        }
+        private readonly ILogger<FollowController> _logger = _logger;
+        private readonly IUserService _userService = _userService;
 
         [HttpPost("FollowCreate")]
-        public IActionResult Follow([FromQuery] Guid userId)
+        public async Task<IActionResult> Follow([FromQuery] Guid userId)
         {
             if (userId == Guid.Empty) return BadRequest("Invalid UserId");
 
-            Guid currentUserId = HttpContext.GetUserId();
+            Guid authUserId = HttpContext.GetUserId();
 
-            // Check if follow already exists
-            bool alreadyFollows = Mockdata._follows.Any(l =>
-                l.FollowerId == currentUserId &&
-                l.FollowingId == userId
-            );
+            if (await _userService.IsFollowing(authUserId, userId)) return BadRequest("User is already followed by logged-in user");
 
-            if (alreadyFollows) return BadRequest("User is already followed by logged-in user");
+            Follow? follow = await _userService.FollowUser(authUserId, userId);
 
-            Follow follow = new()
-            {
-                FollowerId = currentUserId,
-                FollowingId = userId
-            };
-
-            Mockdata._follows.Add(follow);
+            if (follow == null) return BadRequest("User could not be followed");
 
             return Ok(follow);
         }
 
         [HttpDelete("FollowDelete")]
-        public IActionResult Unfollow([FromQuery] Guid userId)
+        public async Task<IActionResult> Unfollow([FromQuery] Guid userId)
         {
             if (userId == Guid.Empty) return BadRequest("Invalid UserId");
 
-            Guid currentUserId = HttpContext.GetUserId();
+            Guid authUserId = HttpContext.GetUserId();
 
-            // Check if follow exists
-            Follow? follow = Mockdata._follows.FirstOrDefault(l =>
-                l.FollowerId == currentUserId &&
-                l.FollowingId == userId
-            );
+            if (!await _userService.IsFollowing(authUserId, userId)) return BadRequest("You already don't follow this user");
+
+            Follow? follow = await _userService.UnfollowUser(authUserId, userId);
 
             if (follow == null)
-                return NotFound("You are not following this user");
-
-            Mockdata._follows.Remove(follow);
+                return NotFound("User could not be unfollowed");
 
             return Ok(follow);
         }

@@ -1,6 +1,6 @@
 ﻿using Server.Models;
 
-namespace Server.Services
+namespace Server.Services.MockupData
 {
     public class Mockdata
     {
@@ -14,16 +14,15 @@ namespace Server.Services
 
         public static List<Follow> _follows { get; set; } = [];
 
-        public static Guid _currentUserId { get; set; } = Guid.NewGuid();
+        public static Guid _authUserId { get; set; } = Guid.NewGuid();
 
         static Mockdata()
         {
             // Simulate logged-in user
             const int LOGGED_IN_USER = 1;
 
-            //_currentUserId = new Guid("f8b78691-d0eb-4e11-85eb-a81f4b028356");
             SeedUsers();
-            _currentUserId = _users[LOGGED_IN_USER - 1].UserId;
+            _authUserId = _users[LOGGED_IN_USER - 1].UserId;
 
             SeedPosts();
             SeedComments();
@@ -40,7 +39,7 @@ namespace Server.Services
                     DisplayName = "John Barrera",
                     ProfileImageUrl = "https://www.pigstarcraft.com/wp-content/uploads/2020/11/logo_pig_400.jpg",
                     Username = "john.barrera",
-                    UserEmail = "test@test.com",
+                    UserEmail = "john.barrera@test.com",
                     Password = "Password123"
                 },
                 new User {
@@ -49,7 +48,7 @@ namespace Server.Services
                     DisplayName = "Artanis Tal'Daarim",
                     ProfileImageUrl = "https://www.giantbomb.com/a/uploads/scale_super/3/33745/1681250-artanis.jpg",
                     Username = "artanis.taldaarim",
-                    UserEmail = "test@test.com",
+                    UserEmail = "artanis@test.com",
                     Password = "Password123"
                 },
                 new User {
@@ -58,7 +57,7 @@ namespace Server.Services
                     DisplayName = "Jim Raynor",
                     ProfileImageUrl = "https://alchetron.com/cdn/jim-raynor-386f452a-8282-4f87-a6d7-f9c4a9a7f46-resize-750.jpeg",
                     Username = "jim.raynorrr",
-                    UserEmail = "test@test.com",
+                    UserEmail = "jim@test.com",
                     Password = "Password123"
                 },
                 new User {
@@ -67,7 +66,7 @@ namespace Server.Services
                     DisplayName = "Sarah Kerrigan",
                     ProfileImageUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRefLAeMA3-ij1r9nf6b4aeRHkS6V1uOV7t8Q&s",
                     Username = "sarah.kerrigan",
-                    UserEmail = "test@test.com",
+                    UserEmail = "sarahk@test.com",
                     Password = "Password123"
                 },
                 // User with 0 activity
