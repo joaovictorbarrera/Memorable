@@ -12,7 +12,7 @@ using Server.Data;
 namespace Server.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260301190331_InitialCreate")]
+    [Migration("20260301213705_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -129,10 +129,6 @@ namespace Server.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Password")
                         .IsRequired()
                         .HasColumnType("text");
 

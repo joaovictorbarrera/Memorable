@@ -39,8 +39,7 @@ namespace Server.Services.MockupData
                     DisplayName = "John Barrera",
                     ProfileImageUrl = "https://www.pigstarcraft.com/wp-content/uploads/2020/11/logo_pig_400.jpg",
                     Username = "john.barrera",
-                    UserEmail = "john.barrera@test.com",
-                    Password = "Password123"
+                    UserEmail = "john.barrera@test.com"
                 },
                 new User {
                     FirstName = "Artanis",
@@ -48,8 +47,7 @@ namespace Server.Services.MockupData
                     DisplayName = "Artanis Tal'Daarim",
                     ProfileImageUrl = "https://www.giantbomb.com/a/uploads/scale_super/3/33745/1681250-artanis.jpg",
                     Username = "artanis.taldaarim",
-                    UserEmail = "artanis@test.com",
-                    Password = "Password123"
+                    UserEmail = "artanis@test.com"
                 },
                 new User {
                     FirstName = "Jim",
@@ -57,8 +55,7 @@ namespace Server.Services.MockupData
                     DisplayName = "Jim Raynor",
                     ProfileImageUrl = "https://alchetron.com/cdn/jim-raynor-386f452a-8282-4f87-a6d7-f9c4a9a7f46-resize-750.jpeg",
                     Username = "jim.raynorrr",
-                    UserEmail = "jim@test.com",
-                    Password = "Password123"
+                    UserEmail = "jim@test.com"
                 },
                 new User {
                     FirstName = "Sarah",
@@ -66,8 +63,7 @@ namespace Server.Services.MockupData
                     DisplayName = "Sarah Kerrigan",
                     ProfileImageUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRefLAeMA3-ij1r9nf6b4aeRHkS6V1uOV7t8Q&s",
                     Username = "sarah.kerrigan",
-                    UserEmail = "sarahk@test.com",
-                    Password = "Password123"
+                    UserEmail = "sarahk@test.com"
                 },
                 // User with 0 activity
                 new User {
@@ -76,8 +72,7 @@ namespace Server.Services.MockupData
                     DisplayName = "Nova Silent",
                     ProfileImageUrl = "https://randomuser.me/api/portraits/women/44.jpg",
                     Username = "nova.silent",
-                    UserEmail = "nova@test.com",
-                    Password = "Password123"
+                    UserEmail = "nova@test.com"
                 },
 
                 new User {
@@ -86,8 +81,7 @@ namespace Server.Services.MockupData
                     DisplayName = "Elon Synth",
                     ProfileImageUrl = "https://randomuser.me/api/portraits/men/32.jpg",
                     Username = "elon.synth",
-                    UserEmail = "elon@test.com",
-                    Password = "Password123"
+                    UserEmail = "elon@test.com"
                 },
 
                 new User {
@@ -96,8 +90,7 @@ namespace Server.Services.MockupData
                     DisplayName = "Mira Vale",
                     ProfileImageUrl = "https://randomuser.me/api/portraits/women/68.jpg",
                     Username = "mira.vale",
-                    UserEmail = "mira@test.com",
-                    Password = "Password123"
+                    UserEmail = "mira@test.com"
                 },
 
                 // User with 0 activity
@@ -107,8 +100,7 @@ namespace Server.Services.MockupData
                     DisplayName = "Laura Keepy",
                     ProfileImageUrl = "https://randomuser.me/api/portraits/women/45.jpg",
                     Username = "laura.keepy",
-                    UserEmail = "laura@test.com",
-                    Password = "Password123"
+                    UserEmail = "laura@test.com"
                 },
 
                 // User with 0 activity
@@ -118,8 +110,7 @@ namespace Server.Services.MockupData
                     DisplayName = "Elizabeth Mohr",
                     ProfileImageUrl = "https://randomuser.me/api/portraits/women/46.jpg",
                     Username = "elizabeth.mohr",
-                    UserEmail = "elizabeth@test.com",
-                    Password = "Password123"
+                    UserEmail = "elizabeth@test.com"
                 },
                 new User {
                     FirstName = "Sarah",
@@ -127,8 +118,7 @@ namespace Server.Services.MockupData
                     DisplayName = "Sarah Miller",
                     ProfileImageUrl = "https://images.unsplash.com/photo-1627161683077-e34782c24d81?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx3b21hbiUyMGhlYWRzaG90fGVufDF8fHx8MTc2ODgzMzYyMHww&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
                     Username = "sarah.miller",
-                    UserEmail = "sarah@test.com",
-                    Password = "Password123"
+                    UserEmail = "sarah@test.com"
                 }
 
             ];

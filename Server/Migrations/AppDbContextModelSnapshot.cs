@@ -129,10 +129,6 @@ namespace Server.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("Password")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.Property<string>("ProfileImageUrl")
                         .IsRequired()
                         .HasColumnType("text");

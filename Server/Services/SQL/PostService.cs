@@ -75,7 +75,7 @@ namespace Server.Services
 
             List<Post> posts = await _context.Posts
                 .Where(p => postIds.Contains(p.PostId))
-                .OrderBy(p => p.CreatedAt)
+                .OrderByDescending(p => p.CreatedAt)
                 .ToListAsync();
 
             List<Guid> userIds = posts.Select(p => p.UserId).Distinct().ToList();
@@ -137,7 +137,7 @@ namespace Server.Services
         {
             List<Guid> commentIds = await _context.Comments
                 .Where(c => c.PostId == postId)
-                .OrderBy(c => c.CreatedAt)
+                .OrderByDescending(c => c.CreatedAt)
                 .Skip(skipFirst)
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize)

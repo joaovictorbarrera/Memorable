@@ -8,8 +8,6 @@
         public required string ProfileImageUrl { get; set; }
         public required string Username { get; set; }
         public required string UserEmail { get; set; }
-        public required string Password { get; set; }
-
         public required string DisplayName { get; set; }
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
