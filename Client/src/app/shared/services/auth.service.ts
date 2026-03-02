@@ -7,7 +7,8 @@ import { GlobalService } from '../../core/state/global';
 export class AuthService {
   private readonly apiUrl = `${environment.apiUrl}/Auth`
 
-  private loading = signal(false);
+  private _loading = signal(false);
+  readonly loading = this._loading.asReadonly();
 
   constructor(private http: HttpClient, public globalService: GlobalService) {}
 
@@ -15,14 +16,14 @@ export class AuthService {
     // Prevent duplicate API calls
     if (this.loading()) return;
 
-    this.loading.set(true);
+    this._loading.set(true);
 
     return this.http
       .get<UserDto>(`${this.apiUrl}/AuthUserGet`)
       .subscribe({
         next: (user) => this.OnUserLoaded(user),
         error: (err) => this.OnFailedToLoadUser(err),
-        complete: () => this.loading.set(false)
+        complete: () => this._loading.set(false)
       });
   }
 

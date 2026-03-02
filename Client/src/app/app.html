@@ -3,5 +3,14 @@
     <router-outlet />
 }
 @else {
-    <app-login></app-login>
+    @if (!this.authService.loading())
+    {
+        <app-login></app-login>
+    }
+    @else
+    {
+        <div class="h-full w-full flex justify-center items-center">
+            <app-spinning-wheel></app-spinning-wheel>
+        </div>
+    }
 }

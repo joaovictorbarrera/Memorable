@@ -10,10 +10,11 @@ import { finalize } from 'rxjs';
 import { PostDto } from '../../models/post.dto';
 import { PostStore } from '../../stores/post.store';
 import { NgClass } from '@angular/common';
+import { SpinningWheel } from "../spinning-wheel/spinning-wheel";
 
 @Component({
   selector: 'app-post-create',
-  imports: [Card, MatIcon, ProfileIcon, PostButton, FormsModule, NgClass],
+  imports: [Card, MatIcon, ProfileIcon, PostButton, FormsModule, NgClass, SpinningWheel],
   templateUrl: './post-create.html',
   styleUrl: './post-create.scss',
 })

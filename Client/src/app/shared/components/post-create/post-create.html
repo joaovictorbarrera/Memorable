@@ -44,7 +44,7 @@
 
             <div class="flex ml-auto items-center gap-2">
                 @if (loading()) {
-                    <mat-icon class="animate-spin-slow" style="color: dimgrey" fontIcon="autorenew"></mat-icon>
+                    <app-spinning-wheel></app-spinning-wheel>
                 }
                 <app-post-button [disabled]="this.shouldDisablePosting()" (click)="post()"></app-post-button>
             </div>
