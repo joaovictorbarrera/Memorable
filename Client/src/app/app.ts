@@ -4,11 +4,11 @@ import { Header } from "./core/layout/header/header";
 import { AuthService } from './shared/services/auth.service';
 import { GlobalService } from './core/state/global';
 import { Login } from "./pages/login/login";
-import { SpinningWheel } from "./shared/components/spinning-wheel/spinning-wheel";
+import { LoadingAuth } from "./pages/loading-auth/loading-auth";
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, Header, Login, SpinningWheel],
+  imports: [RouterOutlet, Header, Login, LoadingAuth],
   templateUrl: './app.html',
   styleUrl: './app.scss'
 })
