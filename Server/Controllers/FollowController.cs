@@ -21,7 +21,7 @@ namespace Server.Controllers
 
             Guid authUserId = HttpContext.GetUserId();
 
-            if (await _userService.IsFollowing(authUserId, userId)) return BadRequest("User is already followed by logged-in user");
+            if (await _userService.IsFollowing(userId, authUserId)) return BadRequest("User is already followed by logged-in user");
 
             Follow? follow = await _userService.FollowUser(authUserId, userId);
 
@@ -37,7 +37,7 @@ namespace Server.Controllers
 
             Guid authUserId = HttpContext.GetUserId();
 
-            if (!await _userService.IsFollowing(authUserId, userId)) return BadRequest("You already don't follow this user");
+            if (!await _userService.IsFollowing(userId, authUserId)) return BadRequest("You already not following this user");
 
             Follow? follow = await _userService.UnfollowUser(authUserId, userId);
 
