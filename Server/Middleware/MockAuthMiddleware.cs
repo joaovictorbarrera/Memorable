@@ -3,14 +3,9 @@ using Server.Models;
 using System.Security.Claims;
 using Server.Services.Interfaces;
 
-public class MockAuthMiddleware
+public class MockAuthMiddleware(RequestDelegate next)
 {
-    private readonly RequestDelegate _next;
-
-    public MockAuthMiddleware(RequestDelegate next)
-    {
-        _next = next;
-    }
+    private readonly RequestDelegate _next = next;
 
     public async Task InvokeAsync(HttpContext context)
     {
@@ -27,7 +22,7 @@ public class MockAuthMiddleware
         var userService = context.RequestServices.GetRequiredService<IUserService>();
 
         // Fetch user from DB by username
-        User? mockUser = await userService.GetUserByUsername("john.barrera");
+        ApplicationUser? mockUser = await userService.GetUserByUsername("john.barrera");
 
         if (mockUser == null)
         {
@@ -38,8 +33,8 @@ public class MockAuthMiddleware
 
         var claims = new List<Claim>
         {
-            new Claim(ClaimTypes.NameIdentifier, mockUser.UserId.ToString()),
-            new Claim(ClaimTypes.Name, mockUser.Username ?? "MockUser"),
+            new Claim(ClaimTypes.NameIdentifier, mockUser.Id.ToString()),
+            new Claim(ClaimTypes.Name, mockUser.UserName ?? "MockUser"),
             new Claim(ClaimTypes.Role, "User")
         };
 

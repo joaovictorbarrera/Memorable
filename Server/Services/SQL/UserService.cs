@@ -49,26 +49,26 @@ namespace Server.Services
 
         public async Task<UserDto?> GetUserDto(Guid userId, Guid? authUserId)
         {
-            User? user = await _context.Users.FirstOrDefaultAsync(u => u.UserId == userId);
+            ApplicationUser? user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
             if (user == null) return null;
 
             string displayName = $"{user.FirstName} {user.LastName}";
 
             UserDto userDto = new UserDto
             {
-                UserId = user.UserId,
+                UserId = user.Id,
                 DisplayName = displayName,
                 FirstName = user.FirstName,
                 LastName = user.LastName,
                 ProfileImageUrl = user.ProfileImageUrl,
-                Username = user.Username,
-                UserEmail = user.UserEmail,
+                Username = user.UserName ?? "Unknown",
+                UserEmail = user.Email ?? "Unknown",
                 CreatedAt = user.CreatedAt,
-                PostCount = await GetPostCount(user.UserId),
-                FollowerCount = await GetFollowerCount(user.UserId),
-                FollowingCount = await GetFollowingCount(user.UserId),
+                PostCount = await GetPostCount(user.Id),
+                FollowerCount = await GetFollowerCount(user.Id),
+                FollowingCount = await GetFollowingCount(user.Id),
                 IsFollowedByCurrentUser = authUserId.HasValue
-                    ? await IsFollowing(user.UserId, authUserId.Value)
+                    ? await IsFollowing(user.Id, authUserId.Value)
                     : false
             };
 
@@ -104,27 +104,27 @@ namespace Server.Services
 
         public async Task<bool> UserExists(Guid userId)
         {
-            return await _context.Users.AnyAsync(u => u.UserId == userId);
+            return await _context.Users.AnyAsync(u => u.Id == userId);
         }
 
-        public async Task<User?> GetUserByUsername(string username)
+        public async Task<ApplicationUser?> GetUserByUsername(string username)
         {
-            return await _context.Users.FirstOrDefaultAsync(u => u.Username == username);
+            return await _context.Users.FirstOrDefaultAsync(u => u.UserName == username);
         }
 
         public async Task<List<UserDto>> GetByUsernameQuery(string query)
         {
-            List<User> users = await _context.Users
-                .Where(u => u.Username.ToLower().Contains(query.ToLower()))
-                .OrderBy(u => u.Username.Length)
+            List<ApplicationUser> users = await _context.Users
+                .Where(u => u.UserName != null && query.Contains(u.UserName, StringComparison.CurrentCultureIgnoreCase))
+                .OrderBy(u => u.UserName != null ? u.UserName.Length : 0)
                 .Take(5)
                 .ToListAsync();
 
-            List<UserDto> result = new List<UserDto>();
+            List<UserDto> result = [];
 
-            foreach (User user in users)
+            foreach (ApplicationUser user in users)
             {
-                UserDto? dto = await GetUserDto(user.UserId, null);
+                UserDto? dto = await GetUserDto(user.Id, null);
                 if (dto != null) result.Add(dto);
             }
 
@@ -136,8 +136,8 @@ namespace Server.Services
             List<Guid> followingIds = await GetFollowingList(userId);
 
             List<Guid> candidates = await _context.Users
-                .Where(u => u.UserId != userId && !followingIds.Contains(u.UserId))
-                .Select(u => u.UserId)
+                .Where(u => u.Id != userId && !followingIds.Contains(u.Id))
+                .Select(u => u.Id)
                 .ToListAsync();
 
             if (candidates.Count == 0) return null;

@@ -21,13 +21,13 @@ namespace Server.Services
                 .Where(c => c.CommentId == commentId)
                 .Join(_context.Users,
                     c => c.UserId,
-                    u => u.UserId,
+                    u => u.Id,
                     (c, u) => new CommentDto
                     {
                         CommentId = c.CommentId,
                         PostId = c.PostId,
                         UserId = c.UserId,
-                        Username = u.Username,
+                        Username = u.UserName ?? "Unknown",
                         TextContent = c.TextContent,
                         CreatedAt = c.CreatedAt,
                         DisplayName = u.DisplayName,
@@ -48,13 +48,13 @@ namespace Server.Services
                 .Join(
                     _context.Users,
                     c => c.UserId,
-                    u => u.UserId,
+                    u => u.Id,
                     (c, u) => new CommentDto
                     {
                         CommentId = c.CommentId,
                         PostId = c.PostId,
                         UserId = c.UserId,
-                        Username = u.Username,
+                        Username = u.UserName ?? "Unknown",
                         TextContent = c.TextContent,
                         CreatedAt = c.CreatedAt,
                         DisplayName = u.DisplayName,

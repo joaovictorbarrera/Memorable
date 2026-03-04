@@ -1,4 +1,5 @@
 ﻿using Server.Dtos;
+using Server.Helpers;
 using Server.Models;
 using Server.Services.Interfaces;
 
@@ -92,10 +93,12 @@ namespace Server.Services.MockupData
             return await Task.FromResult(Mockdata._users.Any(u => u.UserId.Equals(userId)));
         }
 
-        public async Task<User?> GetUserByUsername(string username)
+        public async Task<ApplicationUser?> GetUserByUsername(string username)
         {
             User? user = Mockdata._users.FirstOrDefault(u => u.Username.Equals(username));
-            return await Task.FromResult(user);
+
+            if (user == null) return null;
+            return await Task.FromResult(UserHelper.LegacyUserToApplicationUser(user));
         }
 
         public async Task<List<UserDto>> GetByUsernameQuery(string query)
@@ -118,7 +121,7 @@ namespace Server.Services.MockupData
 
         public async Task<UserDto?> GetStranger(Guid userId)
         {
-            HashSet<Guid> followingSet = new HashSet<Guid>(await GetFollowingList(userId));
+            HashSet<Guid> followingSet = [.. await GetFollowingList(userId)];
 
             List<Guid> candidates = Mockdata._users
                 .Where(u => u.UserId != userId && !followingSet.Contains(u.UserId))

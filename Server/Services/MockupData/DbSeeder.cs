@@ -1,5 +1,7 @@
 ﻿using Server.Data;
 using Microsoft.EntityFrameworkCore;
+using Server.Models;
+using Server.Helpers;
 
 namespace Server.Services.MockupData
 {
@@ -10,9 +12,11 @@ namespace Server.Services.MockupData
             // Users
             foreach (var user in Mockdata._users)
             {
-                if (!await context.Users.AnyAsync(u => u.UserId == user.UserId || u.UserEmail == user.UserEmail))
+                if (!await context.Users.AnyAsync(u => u.Id == user.UserId || u.Email == user.UserEmail))
                 {
-                    context.Users.Add(user);
+                    var applicationUser = UserHelper.LegacyUserToApplicationUser(user);
+
+                    context.Users.Add(applicationUser);
                 }
             }
 

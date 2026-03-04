@@ -1,16 +1,19 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Server.Models;
 
 namespace Server.Data
 {
-    public class AppDbContext : DbContext
+    public class AppDbContext
+    : IdentityDbContext<ApplicationUser, IdentityRole<Guid>, Guid>
     {
         public AppDbContext(DbContextOptions<AppDbContext> options)
             : base(options)
         {
         }
 
-        public DbSet<User> Users => Set<User>();
+        public DbSet<ApplicationUser> ApplicationUser => Set<ApplicationUser>();
         public DbSet<Post> Posts => Set<Post>();
         public DbSet<Comment> Comments => Set<Comment>();
         public DbSet<Like> Likes => Set<Like>();
@@ -23,15 +26,15 @@ namespace Server.Data
             // =========================
             // USER
             // =========================
-            modelBuilder.Entity<User>()
-                .HasKey(u => u.UserId);
+            modelBuilder.Entity<ApplicationUser>()
+                .HasKey(u => u.Id);
 
-            modelBuilder.Entity<User>()
-                .HasIndex(u => u.Username)
+            modelBuilder.Entity<ApplicationUser>()
+                .HasIndex(u => u.UserName)
                 .IsUnique();
 
-            modelBuilder.Entity<User>()
-                .HasIndex(u => u.UserEmail)
+            modelBuilder.Entity<ApplicationUser>()
+                .HasIndex(u => u.Email)
                 .IsUnique();
 
             // =========================
@@ -41,7 +44,7 @@ namespace Server.Data
                 .HasKey(p => p.PostId);
 
             modelBuilder.Entity<Post>()
-                .HasOne<User>()
+                .HasOne<ApplicationUser>()
                 .WithMany()
                 .HasForeignKey(p => p.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
@@ -59,7 +62,7 @@ namespace Server.Data
                 .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Comment>()
-                .HasOne<User>()
+                .HasOne<ApplicationUser>()
                 .WithMany()
                 .HasForeignKey(c => c.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
@@ -77,7 +80,7 @@ namespace Server.Data
                 .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Like>()
-                .HasOne<User>()
+                .HasOne<ApplicationUser>()
                 .WithMany()
                 .HasForeignKey(l => l.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
@@ -89,13 +92,13 @@ namespace Server.Data
                 .HasKey(f => new { f.FollowingId, f.FollowerId });
 
             modelBuilder.Entity<Follow>()
-                .HasOne<User>()
+                .HasOne<ApplicationUser>()
                 .WithMany()
                 .HasForeignKey(f => f.FollowerId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Follow>()
-                .HasOne<User>()
+                .HasOne<ApplicationUser>()
                 .WithMany()
                 .HasForeignKey(f => f.FollowingId)
                 .OnDelete(DeleteBehavior.Restrict);

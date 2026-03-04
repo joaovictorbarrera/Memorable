@@ -14,7 +14,7 @@ namespace Server.Services.Interfaces
         Task<Follow?> FollowUser(Guid authUserId, Guid userId);
         Task<Follow?> UnfollowUser(Guid authUserId, Guid userId);
         Task<bool> UserExists(Guid userId);
-        Task<User?> GetUserByUsername(string username);
+        Task<ApplicationUser?> GetUserByUsername(string username);
         Task<List<UserDto>> GetByUsernameQuery(string query);
         Task<UserDto?> GetStranger(Guid userId);
     }

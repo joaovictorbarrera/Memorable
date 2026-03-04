@@ -28,11 +28,11 @@ namespace Server.Services
 
         public async Task<PostDto?> GetPostDtoById(Guid postId, Guid currentUserId)
         {
-            Tuple<Post, User>? postTuple = await _context.Posts
+            Tuple<Post, ApplicationUser>? postTuple = await _context.Posts
                 .Where(p => p.PostId == postId)
                 .Join(_context.Users,
                     p => p.UserId,
-                    u => u.UserId,
+                    u => u.Id,
                     (p, u) => Tuple.Create(p, u))
                 .FirstOrDefaultAsync();
 
@@ -58,7 +58,7 @@ namespace Server.Services
                 ImageUrl = postTuple.Item1.ImageUrl,
                 DisplayName = postTuple.Item2.DisplayName,
                 UserProfileImageUrl = postTuple.Item2.ProfileImageUrl,
-                Username = postTuple.Item2.Username,
+                Username = postTuple.Item2.UserName ?? "Unknown",
                 LikeCount = likeCount,
                 IsLikedByCurrentUser = isLiked,
                 InitialComments = initialComments,
@@ -80,8 +80,8 @@ namespace Server.Services
 
             List<Guid> userIds = posts.Select(p => p.UserId).Distinct().ToList();
 
-            List<User> users = await _context.Users
-                .Where(u => userIds.Contains(u.UserId))
+            List<ApplicationUser> users = await _context.Users
+                .Where(u => userIds.Contains(u.Id))
                 .ToListAsync();
 
             List<Like> likes = await _context.Likes
@@ -99,7 +99,7 @@ namespace Server.Services
 
             foreach (var post in posts)
             {
-                var user = users.FirstOrDefault(u => u.UserId == post.UserId);
+                var user = users.FirstOrDefault(u => u.Id == post.UserId);
                 var postLikes = likes.Where(l => l.PostId == post.PostId).ToList();
 
                 var initialComments = await GetPostComments(post.PostId, 0, 5, 1);
@@ -112,7 +112,7 @@ namespace Server.Services
                     ImageUrl = post.ImageUrl,
                     CreatedAt = post.CreatedAt,
 
-                    Username = user?.Username ?? "Unknown",
+                    Username = user?.UserName ?? "Unknown",
                     DisplayName = user?.DisplayName ?? "Unknown",
                     UserProfileImageUrl = user?.ProfileImageUrl ?? "",
 

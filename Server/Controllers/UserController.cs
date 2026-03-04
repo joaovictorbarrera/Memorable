@@ -35,7 +35,7 @@ namespace Server.Controllers
         [HttpGet("UserGetByUsername")]
         public async Task<IActionResult> GetByUsername([FromQuery] String username)
         {
-            User? user = await _userService.GetUserByUsername(username);
+            ApplicationUser? user = await _userService.GetUserByUsername(username);
             if (user == null)
             {
                 return NotFound("User not found");
@@ -43,7 +43,7 @@ namespace Server.Controllers
 
             Guid authUserId = HttpContext.GetUserId();
 
-            UserDto? userDto = await _userService.GetUserDto(user.UserId, authUserId);
+            UserDto? userDto = await _userService.GetUserDto(user.Id, authUserId);
 
             if (userDto == null) return BadRequest("Could not get user details");
 
