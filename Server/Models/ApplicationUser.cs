@@ -4,10 +4,10 @@ namespace Server.Models;
 
 public class ApplicationUser : IdentityUser<Guid>
 {
-    public string FirstName { get; set; } = default!;
-    public string LastName { get; set; } = default!;
-    public string DisplayName { get; set; } = default!;
-    public string ProfileImageUrl { get; set; } = default!;
+    public required string FirstName { get; set; }
+    public required string LastName { get; set; }
+    public required string DisplayName { get; set; }
+    public required string ProfileImageUrl { get; set; }
 
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 }

@@ -1,22 +1,27 @@
-﻿using Server.Data;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Server.Models;
+using Server.Data;
 using Server.Helpers;
+using Server.Models;
 
 namespace Server.Services.MockupData
 {
     public static class DbSeeder
     {
-        public static async Task SeedAsync(AppDbContext context)
+        public static async Task SeedAsync(AppDbContext context, UserManager<ApplicationUser> _userManager)
         {
             // Users
             foreach (var user in Mockdata._users)
             {
-                if (!await context.Users.AnyAsync(u => u.Id == user.UserId || u.Email == user.UserEmail))
+                if (await _userManager.FindByIdAsync(user.UserId.ToString()) == null &&
+                    await _userManager.FindByEmailAsync(user.UserEmail) == null)
                 {
                     var applicationUser = UserHelper.LegacyUserToApplicationUser(user);
 
-                    context.Users.Add(applicationUser);
+                    if (string.IsNullOrEmpty(applicationUser.SecurityStamp))
+                        applicationUser.SecurityStamp = Guid.NewGuid().ToString();
+
+                    await _userManager.CreateAsync(applicationUser);
                 }
             }
 

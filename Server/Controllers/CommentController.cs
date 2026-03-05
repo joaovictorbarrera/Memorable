@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Server.Dtos;
 using Server.Extensions;
@@ -8,6 +9,7 @@ using Server.Services.Interfaces;
 
 namespace Server.Controllers
 {
+    [Authorize]
     [Route("[controller]")]
     [ApiController]
     public class CommentController(

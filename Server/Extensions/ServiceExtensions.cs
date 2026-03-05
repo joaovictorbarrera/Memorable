@@ -10,9 +10,10 @@ public static class ServiceExtensions
         services.AddHttpClient<IImageUploadService, ImgBbImageUploadService>();
         services.Configure<ImgBbOptions>(services.BuildServiceProvider().GetRequiredService<IConfiguration>().GetSection("ImgBB"));
 
-        services.AddScoped<IPostService, PostService>();
-        services.AddScoped<IUserService, UserService>();
-        services.AddScoped<IInteractionService, InteractionService>();
+        services.AddScoped<IPostService, PostService>()
+                .AddScoped<IUserService, UserService>()
+                .AddScoped<IInteractionService, InteractionService>()
+                .AddScoped<TokenService>();
 
         return services;
     }

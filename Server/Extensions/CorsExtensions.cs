@@ -8,6 +8,7 @@
             {
                 if (env.IsDevelopment())
                 {
+                    Console.WriteLine("Cors for All");
                     policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
                 }
                 else

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Hosting;
 using Server.Dtos;
@@ -10,6 +11,7 @@ using Server.Services.Interfaces;
 
 namespace Server.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("[controller]")]
     public class PostController(ILogger<PostController> logger, IPostService _postService) : Controller

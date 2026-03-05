@@ -10,7 +10,7 @@ namespace Server.Helpers
             {
                 UserName = user.Username,
                 Email = user.UserEmail,
-                PasswordHash = Guid.NewGuid().ToString(),
+                PasswordHash = "AQAAAAIAAYagAAAAELEzgOKjvnmOvPcKcwm1qALfhsE61+akiJbAM6dFFeBfD9+DPtqo87ghKdOwYxDa1Q==",
                 DisplayName = user.DisplayName,
                 FirstName = user.FirstName,
                 LastName = user.LastName,

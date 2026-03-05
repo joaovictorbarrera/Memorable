@@ -3,6 +3,7 @@ using Server.Models;
 using System.Security.Claims;
 using Server.Services.Interfaces;
 
+// Deprecated
 public class MockAuthMiddleware(RequestDelegate next)
 {
     private readonly RequestDelegate _next = next;
