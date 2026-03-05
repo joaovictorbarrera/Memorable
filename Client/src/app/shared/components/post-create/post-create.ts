@@ -71,7 +71,7 @@ export class PostCreate {
         this.postCreated.emit(post);
       },
       error: (err) => {
-        console.error("Error creating post:"+ err.message);
+        console.log("Error creating post:"+ err.message);
       },
     });
   }

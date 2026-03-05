@@ -27,6 +27,9 @@ if (app.Environment.IsDevelopment())
 
 //app.UseMiddleware<MockAuthMiddleware>();
 app.UseCors();
+app.UseAuthentication();
+app.UseAuthorization();
+
 app.UseHttpsRedirection();
 app.MapControllers();
 

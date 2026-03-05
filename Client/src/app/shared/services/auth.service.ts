@@ -1,7 +1,8 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable, signal } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { GlobalService } from '../../core/state/global';
+import { tap } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -12,6 +13,21 @@ export class AuthService {
 
   constructor(private http: HttpClient, public globalService: GlobalService) {}
 
+  login(body: { username: string; password: string }) {
+    return this.http.post<{ token: string }>(`${this.apiUrl}/login`, body)
+      .pipe(
+        tap(res => {
+          localStorage.setItem('jwt_token', res.token);
+        })
+      );
+  }
+
+  logout() {
+    localStorage.removeItem('jwt_token');
+    this.globalService.user.set(null);
+    this._loading.set(false);
+  }
+
   checkLogin() {
     // Prevent duplicate API calls
     if (this.loading()) return;
@@ -21,9 +37,14 @@ export class AuthService {
     return this.http
       .get<UserDto>(`${this.apiUrl}/AuthUserGet`)
       .subscribe({
-        next: (user) => this.OnUserLoaded(user),
-        error: (err) => this.OnFailedToLoadUser(err),
-        complete: () => this._loading.set(false)
+        next: (user) => {
+          this.OnUserLoaded(user)
+          this._loading.set(false)
+        },
+        error: (err) => {
+          this.logout()
+          this._loading.set(false)
+        }
       });
   }
 
@@ -31,15 +52,5 @@ export class AuthService {
     if (user) {
       this.globalService.user.set(user);
     }
-  }
-
-  OnFailedToLoadUser(err: any) {
-    this.globalService.user.set(null);
-    // Redirect to login page or show an error message
-  }
-
-  logout() {
-    this.globalService.user.set(null);
-    // TODO: call backend logout endpoint to invalidate refresh token
   }
 }

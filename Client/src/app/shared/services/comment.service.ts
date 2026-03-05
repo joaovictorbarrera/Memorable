@@ -1,17 +1,18 @@
 import { HttpClient, HttpParams } from "@angular/common/http";
 import { computed, Injectable, signal } from "@angular/core";
 import { environment } from "../../../environments/environment";
-import { Observable } from "rxjs";
+import { EMPTY, Observable } from "rxjs";
 import { CommentDto } from "../models/comment.dto";
 import { PostDto } from "../models/post.dto";
 import { commentPageSize } from "../../core/state/constants";
+import { AuthService } from "./auth.service";
 
 @Injectable({
   providedIn: 'root'
 })
 export class CommentService {
   private readonly apiUrl = `${environment.apiUrl}/comment`;
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private authService: AuthService) {}
 
   /**
    * CREATE comment
@@ -30,13 +31,13 @@ export class CommentService {
    * DELETE comment
    */
   deletePost(commentId: string): Observable<any> {
-      const params = new HttpParams()
-      .set('commentId', commentId);
+    const params = new HttpParams()
+    .set('commentId', commentId);
 
-      return this.http.delete(
-      `${this.apiUrl}/CommentDelete`,
-      { params }
-      );
+    return this.http.delete(
+    `${this.apiUrl}/CommentDelete`,
+    { params }
+    );
   }
 
   getCommentsByPostId(post: PostDto, pageNumber: number, skip: number): Observable<CommentDto[]> {

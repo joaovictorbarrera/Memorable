@@ -58,7 +58,7 @@ export class User implements OnInit, AfterViewInit {
         this.loadUserPosts(user.userId);
       },
       error: (err) => {
-        console.error('Error fetching user:', err);
+        console.log('Error fetching user:', err);
         this.loadingUser.set(false);
       }
     });
@@ -108,7 +108,7 @@ export class User implements OnInit, AfterViewInit {
       },
       error: (error) => {
         this.loadingPosts.set(false);
-        console.error('Error fetching posts:', error);
+        console.log('Error fetching posts:', error);
       }
     });
   }

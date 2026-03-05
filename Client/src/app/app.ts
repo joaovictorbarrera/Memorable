@@ -18,7 +18,6 @@ export class App implements OnInit {
   constructor(public authService: AuthService, public globalService: GlobalService) {}
 
   ngOnInit() {
-    // TODO: Should be added back when login is implemented
     this.authService.checkLogin();
   }
 }
