@@ -60,7 +60,7 @@
             </div>
         </div>
 
-        <button type="submit" class="bg-accent-primary text-white py-2 rounded-lg hover:bg-accent-primary/90 transition">Register</button>
+        <button type="submit" [disabled]="this.success()" class="bg-accent-primary text-white py-2 rounded-lg hover:bg-accent-primary/90 transition disabled:bg-accent-primary/20 disabled:hover:bg-inherit disabled:pointer-events-none">Register</button>
     </div>
 </form>
 

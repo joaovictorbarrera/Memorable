@@ -14,16 +14,12 @@ namespace Server.Controllers
     [Authorize]
     [ApiController]
     [Route("[controller]")]
-    public class PostController(ILogger<PostController> logger, IPostService _postService) : Controller
+    public class PostController(IPostService _postService, IImageUploadService imgBb) : Controller
     {
-        private readonly ILogger<PostController> _logger = logger;
-        private readonly IPostService _postService = _postService;
 
         [HttpPost("PostCreate")]
         [Consumes("multipart/form-data")]
-        public async Task<IActionResult> Create(
-            [FromForm] PostCreateDto body,
-            [FromServices] IImageUploadService imgBb)
+        public async Task<IActionResult> Create([FromForm] PostCreateDto body)
         {
             
             if (body.Image == null && string.IsNullOrWhiteSpace(body.TextContent))

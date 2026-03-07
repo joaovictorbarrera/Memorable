@@ -22,15 +22,15 @@ export class LoginForm {
     const username = (form.querySelector('input[name="username"]') as HTMLInputElement).value;
     const password = (form.querySelector('input[name="password"]') as HTMLInputElement).value;
 
-    if (!username || !password) return
+    if (!username || !password) return;
 
-    const loginInfo = { username, password }
+    const formData = new FormData();
+    formData.append('username', username);
+    formData.append('password', password);
 
-    this.authService.login(loginInfo).subscribe({
+    this.authService.login(formData).subscribe({
       next: () => this.authService.checkLogin(),
       error: () => this.invalidLogin.set(true)
-    })
-
-
+    });
   }
 }

@@ -13,13 +13,17 @@ export class AuthService {
 
   constructor(private http: HttpClient, public globalService: GlobalService) {}
 
-  login(body: { username: string; password: string }) {
+  login(body: FormData) {
     return this.http.post<{ token: string }>(`${this.apiUrl}/login`, body)
       .pipe(
         tap(res => {
           localStorage.setItem('jwt_token', res.token);
         })
       );
+  }
+
+  register(body: FormData) {
+    return this.http.post(`${this.apiUrl}/register`, body);
   }
 
   logout() {

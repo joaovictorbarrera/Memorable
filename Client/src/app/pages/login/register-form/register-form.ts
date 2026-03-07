@@ -1,5 +1,6 @@
 import { SlicePipe } from '@angular/common';
 import { Component, EventEmitter, Output, signal } from '@angular/core';
+import { AuthService } from '../../../shared/services/auth.service';
 
 @Component({
   selector: 'app-register-form',
@@ -18,22 +19,23 @@ export class RegisterForm {
 
   emailRegex = /(?:[a-z0-9!#$%&'*+\x2f=?^_`\x7b-\x7d~\x2d]+(?:\.[a-z0-9!#$%&'*+\x2f=?^_`\x7b-\x7d~\x2d]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9\x2d]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9\x2d]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9\x2d]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/
 
+  constructor(private authService: AuthService) {}
 
   register(formEvent: Event) {
     formEvent.preventDefault();
 
     if (!this.inputValidation(formEvent)) return;
 
-    // Build form data and include profile image if present
     const form = formEvent.target as HTMLFormElement;
     const fd = new FormData(form);
-    const file = this.profileFile();
-    if (file) fd.set('profileImage', file, file.name);
 
-    // TODO: send fd to API to register user
-
-    this.errorList.set([])
-    this.success.set(true)
+    this.authService.register(fd).subscribe({
+      next: () => {
+        this.errorList.set([]);
+        this.success.set(true);
+      },
+      error: (err) => this.errorList.set([err.errors])
+    });
   }
 
   inputValidation(formEvent: Event) {
@@ -59,16 +61,16 @@ export class RegisterForm {
       errors.push('Password is required.');
     } else {
       if (passwordInput.value.length < 8) {
-        errors.push('Password must be at least 8 characters long');
+        errors.push('Password must be at least 8 characters long.');
       }
       if (!new RegExp(/[0-9]/g).test(passwordInput.value)) {
-        errors.push('Password must contain at least one number')
+        errors.push('Password must contain at least one number.')
       }
       if (!new RegExp(/[A-Z]/).test(passwordInput.value)) {
         errors.push('Password must contain at least one capital letter')
       }
       if (!new RegExp(/[!@#$%^*()_+\-=\[\]{}|\\,.?:-]/).test(passwordInput.value)) {
-        errors.push('Password must contain at least one special character')
+        errors.push('Password must contain at least one special character.')
       }
     }
 
@@ -76,14 +78,14 @@ export class RegisterForm {
     if (!firstNameInput || !firstNameInput.value) {
       errors.push('First name is required.');
     } else if (firstNameInput.value.length < 2) {
-      errors.push('Invalid First Name');
+      errors.push('Invalid First Name.');
     }
 
     const lastNameInput = form.querySelector("[name=lastName]") as HTMLInputElement | null;
     if (!lastNameInput || !lastNameInput.value) {
       errors.push('Last name is required.');
     } else if (lastNameInput.value.length < 2) {
-      errors.push('Invalid Last Name');
+      errors.push('Invalid Last Name.');
     }
 
     const profilePictureInput = form.querySelector("[name=profileImage]") as HTMLInputElement | null;

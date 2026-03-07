@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Server.Dtos;
 using Server.Models;
 using Server.Services;
+using Server.Services.ImageUpload;
 using Server.Services.Interfaces;
 
 namespace Server.Controllers
@@ -14,7 +15,8 @@ namespace Server.Controllers
         IUserService _userService, 
         UserManager<ApplicationUser> _userManager, 
         SignInManager<ApplicationUser> _signInManager,
-        TokenService _tokenService)
+        TokenService _tokenService,
+        IImageUploadService _imgBb)
         : Controller
     {
 
@@ -43,7 +45,7 @@ namespace Server.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login(LoginDto loginInfo)
+        public async Task<IActionResult> Login([FromForm] LoginDto loginInfo)
         {
             ApplicationUser? user = await _userManager.FindByEmailAsync(loginInfo.Username);
 
@@ -66,15 +68,18 @@ namespace Server.Controllers
         }
 
         [HttpPost("register")]
-        public async Task<IActionResult> Register(RegisterDto registerDto)
+        [Consumes("multipart/form-data")]
+        public async Task<IActionResult> Register([FromForm] RegisterDto registerDto)
         {
             ApplicationUser? existingEmail = await _userManager.FindByEmailAsync(registerDto.Email);
             if (existingEmail != null)
-                return BadRequest("Email is already taken.");
+                return BadRequest(new { errors = new[] { "Email is already taken." } });
 
             ApplicationUser? existingUsername = await _userManager.FindByNameAsync(registerDto.Username);
             if (existingUsername != null)
-                return BadRequest("Username is already taken.");
+                return BadRequest(new { errors = new[] { "Username is already taken." } });
+
+            string profileImageUrl = await _imgBb.UploadAsync(registerDto.ProfileImage);
 
             ApplicationUser user = new()
             {
@@ -82,7 +87,7 @@ namespace Server.Controllers
                 UserName = registerDto.Username,
                 FirstName = registerDto.FirstName,
                 LastName = registerDto.LastName,
-                ProfileImageUrl = registerDto.ProfileImageUrl,
+                ProfileImageUrl = profileImageUrl,
                 DisplayName = $"{registerDto.FirstName} {registerDto.LastName}"
             };
 
