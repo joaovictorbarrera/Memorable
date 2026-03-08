@@ -34,7 +34,9 @@ export class RegisterForm {
         this.errorList.set([]);
         this.success.set(true);
       },
-      error: (err) => this.errorList.set([err.errors])
+      error: (err) => {
+        this.errorList.set([err.error.errors])
+      }
     });
   }
 
