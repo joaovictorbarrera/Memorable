@@ -15,9 +15,22 @@ import { LoadingAuth } from "./pages/loading-auth/loading-auth";
 export class App implements OnInit {
   protected readonly title = signal('Memorable');
 
-  constructor(public authService: AuthService, public globalService: GlobalService) {}
+  passwordResetMode = signal(false)
+
+  constructor(
+    public authService: AuthService,
+    public globalService: GlobalService
+  ) {}
 
   ngOnInit() {
+    const url = new URL(window.location.href);
+    const resetToken = url.searchParams.get('resetToken');
+
+    if (resetToken) {
+      this.passwordResetMode.set(true);
+      return;
+    }
+
     this.authService.checkLogin();
   }
 }

@@ -45,6 +45,10 @@ export class AuthService {
     this._loading.set(false);
   }
 
+  resetPassword(body: FormData) {
+    return this.http.post(`${this.apiUrl}/reset-password`, body);
+  }
+
   checkLogin() {
     if (this.loading()) return;
 
@@ -97,7 +101,6 @@ export class AuthService {
   }
 
   private getTokenExpiration(token: string): number {
-    console.log(token)
     const payload = JSON.parse(atob(token.split('.')[1]));
     return payload.exp * 1000;
   }

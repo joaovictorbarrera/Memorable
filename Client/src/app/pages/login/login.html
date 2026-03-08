@@ -1,8 +1,12 @@
 <main class="h-full w-full flex justify-center">
     <div class="w-full flex justify-center items-center h-full xs:py-10">
         <app-card class="p-6 py-8 max-w-lg xs:h-auto h-full flex flex-col justify-center">
+            <!-- Reset Password Form -->
+            @if (this.passwordResetMode()) {
+                <app-password-reset (doneResetting)="disableResetMode()"></app-password-reset>
+            }
             <!-- Login Form -->
-            @if (this.haveAccount()) {
+            @else if (this.haveAccount()) {
                 <app-login-form (needRegistering)="toggleHaveAccount()"></app-login-form>
             }
             <!-- Register Form -->

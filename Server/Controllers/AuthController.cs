@@ -154,5 +154,52 @@ namespace Server.Controllers
                 refreshToken = newRefreshToken.Token
             });
         }
+
+        [HttpPost("forgot-password")]
+        public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordRequestDto dto)
+        {
+            var user = await _userManager.FindByEmailAsync(dto.Email);
+
+            // Do not reveal if email exists
+            if (user == null)
+                return Ok(new { message = "Password reset link generated." });
+
+            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+
+            var encodedToken = Uri.EscapeDataString(token);
+
+            var resetLink =
+                $"http://localhost:4200/reset-password?email={dto.Email}&resetToken={encodedToken}";
+
+            // TODO: Send Email
+            Console.WriteLine(resetLink);
+
+            return Ok(new { message = "Password reset link generated." });
+        }
+
+        [HttpPost("reset-password")]
+        public async Task<IActionResult> ResetPassword([FromForm] ResetPasswordRequestDto dto)
+        {
+            var user = await _userManager.FindByEmailAsync(dto.Email);
+
+            if (user == null)
+                return BadRequest("Invalid request");
+
+            var decodedToken = Uri.UnescapeDataString(dto.Token);
+
+            var result = await _userManager.ResetPasswordAsync(
+                user,
+                decodedToken,
+                dto.Password
+            );
+
+            if (!result.Succeeded)
+                return BadRequest(result.Errors);
+
+            user.RefreshTokens.ToList().ForEach(t => t.Revoked = DateTime.UtcNow);
+            await _userManager.UpdateAsync(user);
+
+            return Ok(new { message = "Password reset successful" });
+        }
     }
 }
