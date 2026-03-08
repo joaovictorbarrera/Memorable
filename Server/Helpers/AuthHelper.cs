@@ -17,18 +17,24 @@ namespace Server.Helpers
             if (String.IsNullOrEmpty(registerDto.Username)) result.Add("Username is required.");
             if (registerDto.Username.Length < 5 || registerDto.Username.Length > 20) result.Add("Username must be between 5 and 20 characters.");
 
-            if (String.IsNullOrEmpty(registerDto.Password)) result.Add("Password is required.");
+            if (string.IsNullOrEmpty(registerDto.Password))
+            {
+                result.Add("Password is required.");
+            }
             else
             {
-                if (!new Regex("/[0 - 9]/g").IsMatch(registerDto.Password))
+                if (!Regex.IsMatch(registerDto.Password, "[0-9]"))
                 {
                     result.Add("Password must contain at least one number.");
                 }
-                if (!new Regex("/[A - Z]/").IsMatch(registerDto.Password))
+
+                if (!Regex.IsMatch(registerDto.Password, "[A-Z]"))
                 {
                     result.Add("Password must contain at least one capital letter.");
                 }
-                if (!new Regex("/[!@#$%^*()_+\\-=\\[\\]{}|\\\\,.?:-]/").IsMatch(registerDto.Password)) {
+
+                if (!Regex.IsMatch(registerDto.Password, "[!@#$%^*()_+\\-=\\[\\]{}|\\\\,.?:-]"))
+                {
                     result.Add("Password must contain at least one special character.");
                 }
             }
