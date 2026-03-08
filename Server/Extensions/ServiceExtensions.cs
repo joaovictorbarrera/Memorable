@@ -13,7 +13,8 @@ public static class ServiceExtensions
         services.AddScoped<IPostService, PostService>()
                 .AddScoped<IUserService, UserService>()
                 .AddScoped<IInteractionService, InteractionService>()
-                .AddScoped<TokenService>();
+                .AddScoped<TokenService>()
+                .AddHostedService<RefreshTokenCleanupService>();
 
         return services;
     }

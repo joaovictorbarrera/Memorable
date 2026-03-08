@@ -10,31 +10,52 @@ export class AuthService {
 
   private _loading = signal(false);
   readonly loading = this._loading.asReadonly();
+  private refreshTimeout: any;
 
   constructor(private http: HttpClient, public globalService: GlobalService) {}
 
   login(body: FormData) {
-    return this.http.post<{ token: string }>(`${this.apiUrl}/login`, body)
+    return this.http
+      .post<{ accessToken: string; refreshToken: string }>(`${this.apiUrl}/login`, body)
       .pipe(
         tap(res => {
-          localStorage.setItem('jwt_token', res.token);
+          if (res.accessToken && res.refreshToken) {
+            localStorage.setItem('access_token', res.accessToken);
+            localStorage.setItem('refresh_token', res.refreshToken);
+
+            this.scheduleRefresh(res.accessToken);
+          }
         })
       );
-  }
+}
 
   register(body: FormData) {
     return this.http.post(`${this.apiUrl}/register`, body);
   }
 
   logout() {
-    localStorage.removeItem('jwt_token');
+    localStorage.removeItem('access_token');
+    localStorage.removeItem('refresh_token');
+
+    if (this.refreshTimeout) {
+      clearTimeout(this.refreshTimeout);
+    }
+
     this.globalService.user.set(null);
     this._loading.set(false);
   }
 
   checkLogin() {
-    // Prevent duplicate API calls
     if (this.loading()) return;
+
+    const token = localStorage.getItem('access_token');
+
+    if (!token) {
+      this.logout();
+      return;
+    }
+
+    this.scheduleRefresh(token);
 
     this._loading.set(true);
 
@@ -42,19 +63,56 @@ export class AuthService {
       .get<UserDto>(`${this.apiUrl}/AuthUserGet`)
       .subscribe({
         next: (user) => {
-          this.OnUserLoaded(user)
-          this._loading.set(false)
+          this.globalService.user.set(user);
+          this._loading.set(false);
         },
-        error: (err) => {
-          this.logout()
-          this._loading.set(false)
+        error: () => {
+          this.logout();
+          this._loading.set(false);
         }
       });
   }
 
-  OnUserLoaded(user: UserDto) {
-    if (user) {
-      this.globalService.user.set(user);
+  refreshToken() {
+    const refreshToken = localStorage.getItem('refresh_token');
+
+    if (!refreshToken) {
+      this.logout();
+      return;
     }
+
+    return this.http
+      .post<{ accessToken: string; refreshToken: string }>(
+        `${this.apiUrl}/refresh`,
+        { refreshToken }
+      )
+      .pipe(
+        tap(res => {
+          localStorage.setItem('access_token', res.accessToken);
+          localStorage.setItem('refresh_token', res.refreshToken);
+
+          this.scheduleRefresh(res.accessToken);
+        })
+      );
+  }
+
+  private getTokenExpiration(token: string): number {
+    console.log(token)
+    const payload = JSON.parse(atob(token.split('.')[1]));
+    return payload.exp * 1000;
+  }
+
+  private scheduleRefresh(token: string) {
+    const expires = this.getTokenExpiration(token);
+
+    const timeout = expires - Date.now() - 30000; // refresh 30s early
+
+    if (this.refreshTimeout) {
+      clearTimeout(this.refreshTimeout);
+    }
+
+    this.refreshTimeout = setTimeout(() => {
+      this.refreshToken()?.subscribe();
+    }, timeout);
   }
 }

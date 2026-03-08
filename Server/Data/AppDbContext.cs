@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Server.Models;
+using Server.Models.Server.Models;
 
 namespace Server.Data
 {
@@ -18,6 +19,7 @@ namespace Server.Data
         public DbSet<Comment> Comments => Set<Comment>();
         public DbSet<Like> Likes => Set<Like>();
         public DbSet<Follow> Follows => Set<Follow>();
+        public DbSet<RefreshToken> RefreshTokens { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -36,6 +38,15 @@ namespace Server.Data
             modelBuilder.Entity<ApplicationUser>()
                 .HasIndex(u => u.Email)
                 .IsUnique();
+
+            // =========================
+            // REFRESH TOKENS
+            // =========================
+            modelBuilder.Entity<RefreshToken>()
+                .HasOne(rt => rt.User)
+                .WithMany(u => u.RefreshTokens)
+                .HasForeignKey(rt => rt.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             // =========================
             // POST

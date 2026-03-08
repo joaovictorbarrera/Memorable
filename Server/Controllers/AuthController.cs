@@ -1,8 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Server.Dtos;
+using Server.Helpers;
 using Server.Models;
+using Server.Models.Server.Models;
 using Server.Services;
 using Server.Services.ImageUpload;
 using Server.Services.Interfaces;
@@ -12,8 +15,8 @@ namespace Server.Controllers
     [ApiController]
     [Route("[controller]")]
     public class AuthController(
-        IUserService _userService, 
-        UserManager<ApplicationUser> _userManager, 
+        IUserService _userService,
+        UserManager<ApplicationUser> _userManager,
         SignInManager<ApplicationUser> _signInManager,
         TokenService _tokenService,
         IImageUploadService _imgBb)
@@ -49,22 +52,33 @@ namespace Server.Controllers
         {
             ApplicationUser? user = await _userManager.FindByEmailAsync(loginInfo.Username);
 
-            if (user == null) user = await _userManager.FindByNameAsync(loginInfo.Username);
+            if (user == null)
+                user = await _userManager.FindByNameAsync(loginInfo.Username);
 
             if (user == null)
                 return Unauthorized();
 
             var result = await _signInManager
-                    .CheckPasswordSignInAsync(user, loginInfo.Password, false);
+                .CheckPasswordSignInAsync(user, loginInfo.Password, false);
 
             if (!result.Succeeded)
                 return Unauthorized();
 
             IList<string> roles = await _userManager.GetRolesAsync(user);
 
-            string token = _tokenService.CreateToken(user, roles);
+            string accessToken = _tokenService.CreateToken(user, roles);
 
-            return Ok(new { token });
+            var refreshToken = _tokenService.GenerateRefreshToken(Request.HttpContext.Connection.RemoteIpAddress?.ToString() ?? "unknown");
+
+            user.RefreshTokens.Add(refreshToken);
+
+            await _userManager.UpdateAsync(user);
+
+            return Ok(new
+            {
+                accessToken,
+                refreshToken = refreshToken.Token
+            });
         }
 
         [HttpPost("register")]
@@ -80,6 +94,9 @@ namespace Server.Controllers
                 return BadRequest(new { errors = new[] { "Username is already taken." } });
 
             string profileImageUrl = await _imgBb.UploadAsync(registerDto.ProfileImage);
+
+            List<string> validationErrors = AuthHelper.ValidateRegistration(registerDto);
+            if (validationErrors.Count != 0) return BadRequest(new { errors = validationErrors });
 
             ApplicationUser user = new()
             {
@@ -100,6 +117,42 @@ namespace Server.Controllers
             await _userManager.AddToRoleAsync(user, "User");
 
             return Ok();
+        }
+
+        [HttpPost("refresh")]
+        public async Task<IActionResult> Refresh([FromBody] RefreshTokenRequestDto request)
+        {
+            ApplicationUser? user = _tokenService.GetUserFromRefreshToken(request.RefreshToken);
+
+            if (user == null)
+                return Unauthorized();
+
+            RefreshToken refreshToken = user.RefreshTokens.Single(x => x.Token == request.RefreshToken);
+
+            if (!refreshToken.IsActive)
+                return Unauthorized();
+
+            RefreshToken newRefreshToken = _tokenService.GenerateRefreshToken(
+                Request.HttpContext.Connection.RemoteIpAddress?.ToString() ?? "unknown"
+            );
+
+            user.RefreshTokens.Add(newRefreshToken);
+
+            refreshToken.Revoked = DateTime.UtcNow;
+            refreshToken.RevokedByIp = HttpContext.Connection.RemoteIpAddress?.ToString();
+            refreshToken.ReplacedByToken = newRefreshToken.Token;
+
+            await _userManager.UpdateAsync(user);
+
+            IList<string> roles = await _userManager.GetRolesAsync(user);
+
+            string newAccessToken = _tokenService.CreateToken(user, roles);
+
+            return Ok(new
+            {
+                accessToken = newAccessToken,
+                refreshToken = newRefreshToken.Token
+            });
         }
     }
 }
