@@ -15,7 +15,7 @@ export class AuthService {
   constructor(private http: HttpClient, public globalService: GlobalService) {}
 
   login(body: FormData) {
-    return this.http
+    return this.http 
       .post<{ accessToken: string; refreshToken: string }>(`${this.apiUrl}/login`, body)
       .pipe(
         tap(res => {
@@ -31,6 +31,13 @@ export class AuthService {
 
   register(body: FormData) {
     return this.http.post(`${this.apiUrl}/register`, body);
+  }
+
+  forgotPassword(body: FormData) {
+    return this.http.post<{ message: string }>(
+      `${this.apiUrl}/forgot-password`,
+      body
+    );
   }
 
   logout() {

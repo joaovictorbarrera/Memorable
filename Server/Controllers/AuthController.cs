@@ -19,7 +19,8 @@ namespace Server.Controllers
         UserManager<ApplicationUser> _userManager,
         SignInManager<ApplicationUser> _signInManager,
         TokenService _tokenService,
-        IImageUploadService _imgBb)
+        IImageUploadService _imgBb,
+        EmailService _emailService)
         : Controller
     {
 
@@ -156,7 +157,7 @@ namespace Server.Controllers
         }
 
         [HttpPost("forgot-password")]
-        public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordRequestDto dto)
+        public async Task<IActionResult> ForgotPassword([FromForm] ForgotPasswordRequestDto dto)
         {
             var user = await _userManager.FindByEmailAsync(dto.Email);
 
@@ -169,10 +170,36 @@ namespace Server.Controllers
             var encodedToken = Uri.EscapeDataString(token);
 
             var resetLink =
-                $"http://localhost:4200/reset-password?email={dto.Email}&resetToken={encodedToken}";
+                $"https://memorable-two.vercel.app/?email={dto.Email}&resetToken={encodedToken}";
 
-            // TODO: Send Email
-            Console.WriteLine(resetLink);
+            var html = $"""
+                <!DOCTYPE html>
+                <html>
+                <body style="font-family: Arial, sans-serif; line-height: 1.5;">
+
+                <p>Hello,</p>
+
+                <p>You requested to reset your password.</p>
+
+                <p>
+                    Click the link below to reset your password:
+                </p>
+
+                <p>
+                    <a href="{resetLink}" style="font-size:12px; color:#1a73e8;">
+                        Reset your password
+                    </a>
+                </p>
+
+                <p style="font-size:12px; color:#666;">
+                    If you did not request this, you can safely ignore this email.
+                </p>
+
+                </body>
+                </html>
+                """;
+
+            await _emailService.SendEmailAsync(dto.Email, "Password Reset Link", html);
 
             return Ok(new { message = "Password reset link generated." });
         }

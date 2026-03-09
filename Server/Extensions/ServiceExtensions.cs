@@ -14,7 +14,8 @@ public static class ServiceExtensions
                 .AddScoped<IUserService, UserService>()
                 .AddScoped<IInteractionService, InteractionService>()
                 .AddScoped<TokenService>()
-                .AddHostedService<RefreshTokenCleanupService>();
+                .AddHostedService<RefreshTokenCleanupService>()
+                .AddScoped<EmailService>();
 
         return services;
     }
