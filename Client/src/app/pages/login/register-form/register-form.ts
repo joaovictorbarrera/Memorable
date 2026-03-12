@@ -2,10 +2,11 @@ import { SlicePipe } from '@angular/common';
 import { Component, EventEmitter, Output, signal } from '@angular/core';
 import { AuthService } from '../../../shared/services/auth.service';
 import { registerValidation } from '../../../shared/utilities/validation';
+import { SubmitButton } from "../../../shared/components/submit-button/submit-button";
 
 @Component({
   selector: 'app-register-form',
-  imports: [SlicePipe],
+  imports: [SlicePipe, SubmitButton],
   templateUrl: './register-form.html',
   styleUrl: './register-form.scss',
 })
@@ -17,6 +18,7 @@ export class RegisterForm {
   profileFileName = signal<string | null>(null);
   profilePreviewUrl = signal<string | null>(null);
   success = signal(false)
+  loading = signal(false)
 
   constructor(private authService: AuthService) {}
 
@@ -34,13 +36,16 @@ export class RegisterForm {
     const form = formEvent.target as HTMLFormElement;
     const fd = new FormData(form);
 
+    this.loading.set(true)
     this.authService.register(fd).subscribe({
       next: () => {
         this.errorList.set([]);
         this.success.set(true);
+        this.loading.set(false)
       },
       error: (err) => {
         this.errorList.set(err.error.errors)
+        this.loading.set(false)
       }
     });
   }

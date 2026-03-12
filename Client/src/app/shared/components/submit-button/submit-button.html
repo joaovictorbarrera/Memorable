@@ -1,0 +1,8 @@
+<button [disabled]="loading || disabled" type="submit" 
+class="w-full bg-accent-primary text-white py-2 rounded-lg hover:bg-accent-primary/90 transition
+disabled:bg-accent-primary/50 disabled:pointer-events-none flex items-center justify-center gap-2">
+    @if (loading) {
+        <app-spinning-wheel></app-spinning-wheel>
+    }
+    <span>{{text}}</span>
+</button>

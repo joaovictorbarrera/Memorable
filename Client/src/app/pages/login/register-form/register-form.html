@@ -20,22 +20,27 @@
 <form (submit)="register($event)">
     <div class="flex flex-col gap-4 mt-5">
         <input name="email" type="email" placeholder="Email"
+        required
         class="px-3 border-2 border-bg-tertiary py-2 rounded-lg outline-none
         focus:border-none focus:ring-2 focus:ring-accent-primary/80" >
 
         <input name="username" type="text" placeholder="Username"
+        required
         class="px-3 border-2 border-bg-tertiary py-2 rounded-lg outline-none
         focus:border-none focus:ring-2 focus:ring-accent-primary/80" >
 
         <input name="password" type="password" placeholder="Password"
+        required
         class="px-3 border-2 border-bg-tertiary py-2 rounded-lg outline-none
         focus:border-none focus:ring-2 focus:ring-accent-primary/80" >
 
         <input name="firstName" type="text" placeholder="First Name"
+        required
         class="px-3 border-2 border-bg-tertiary py-2 rounded-lg outline-none
         focus:border-none focus:ring-2 focus:ring-accent-primary/80" >
 
         <input name="lastName" type="text" placeholder="Last Name"
+        required
         class="px-3 border-2 border-bg-tertiary py-2 rounded-lg
         outline-none focus:border-none focus:ring-2 focus:ring-accent-primary/80" >
 
@@ -43,7 +48,7 @@
         <div class="flex flex-col gap-2">
             <label for="profileImageInput" class="block text-sm mb-1">Upload Profile Picture:</label>
             <div class="flex items-center gap-3">
-                <input id="profileImageInput" name="profileImage" type="file" accept="image/*" class="hidden" (change)="onProfileImageChange($event)">
+                <input id="profileImageInput" name="profileImage" type="file" accept="image/*" class="hidden" (change)="onProfileImageChange($event)" required>
                 <label for="profileImageInput" class="px-3 border-2 border-bg-tertiary py-2 rounded-lg outline-none focus:border-none focus:ring-2 focus:ring-accent-primary/80 flex items-center gap-2 bg-bg-secondary cursor-pointer text-text-primary">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-600" viewBox="0 0 20 20" fill="currentColor"><path d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V7.414A2 2 0 0017.414 6L13 1.586A2 2 0 0011.586 1H4z"/></svg>
                     <span class="text-sm text-nowrap">Choose image</span>
@@ -60,7 +65,7 @@
             </div>
         </div>
 
-        <button type="submit" [disabled]="this.success()" class="bg-accent-primary text-white py-2 rounded-lg hover:bg-accent-primary/90 transition disabled:bg-accent-primary/20 disabled:hover:bg-inherit disabled:pointer-events-none">Register</button>
+        <app-submit-button [disabled]="success()" [text]="'Register'" [loading]="loading()"></app-submit-button>
     </div>
 </form>
 

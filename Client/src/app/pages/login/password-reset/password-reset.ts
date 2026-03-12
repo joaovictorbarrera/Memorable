@@ -3,10 +3,11 @@ import { FormSubmittedEvent } from '@angular/forms';
 import { Router } from '@angular/router';
 import { passwordValidation } from '../../../shared/utilities/validation';
 import { AuthService } from '../../../shared/services/auth.service';
+import { SubmitButton } from "../../../shared/components/submit-button/submit-button";
 
 @Component({
   selector: 'app-password-reset',
-  imports: [],
+  imports: [SubmitButton],
   templateUrl: './password-reset.html',
   styleUrl: './password-reset.scss',
 })
@@ -14,6 +15,7 @@ export class PasswordReset implements OnInit {
   @Output() doneResetting = new EventEmitter<boolean>(true);
 
   error = signal<null | string>(null);
+  loading = signal(false)
 
   constructor(private router: Router, private authService: AuthService) {}
 
@@ -65,6 +67,7 @@ export class PasswordReset implements OnInit {
     fd.append("password", passwordInput.value)
     fd.append("token", resetToken)
 
+    this.loading.set(true)
     this.authService.resetPassword(fd).subscribe({
       next: () => {
         this.returnToLogin()
@@ -72,6 +75,7 @@ export class PasswordReset implements OnInit {
       error: (err: any) => {
         console.log(err)
         this.error.set(err?.error[0]?.description)
+        this.loading.set(false)
       }
     });
   }
