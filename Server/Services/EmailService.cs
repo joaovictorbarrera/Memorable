@@ -1,13 +1,10 @@
-﻿using MailKit.Net.Smtp;
-using MailKit.Security;
-using MimeKit;
+﻿using SendGrid;
+using SendGrid.Helpers.Mail;
+using Microsoft.Extensions.Options;
+using Server.Models;
 
 namespace Server.Services
 {
-    using Microsoft.Extensions.Options;
-    using Server.Models;
-    using System.Net.Mail;
-
     public class EmailService
     {
         private readonly EmailSettings _config;
@@ -19,25 +16,20 @@ namespace Server.Services
 
         public async Task SendEmailAsync(string toEmail, string subject, string body)
         {
-            var email = new MimeMessage();
+            var client = new SendGridClient(_config.ApiKey);
 
-            email.From.Add(new MailboxAddress(_config.SenderName, _config.SenderEmail));
-            email.To.Add(MailboxAddress.Parse(toEmail));
-            email.Subject = subject;
+            var from = new EmailAddress(_config.SenderEmail, _config.SenderName);
+            var to = new EmailAddress(toEmail);
 
-            email.Body = new TextPart("html")
-            {
-                Text = body
-            };
+            var msg = MailHelper.CreateSingleEmail(
+                from,
+                to,
+                subject,
+                "",
+                body
+            );
 
-            using var smtp = new MailKit.Net.Smtp.SmtpClient();
-
-            await smtp.ConnectAsync(_config.SmtpServer, _config.Port, SecureSocketOptions.StartTls);
-
-            await smtp.AuthenticateAsync(_config.Username, _config.Password);
-
-            await smtp.SendAsync(email);
-            await smtp.DisconnectAsync(true);
+            await client.SendEmailAsync(msg);
         }
     }
 }
