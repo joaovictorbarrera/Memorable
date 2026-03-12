@@ -1,10 +1,10 @@
 import { Component, EventEmitter, Output, signal } from '@angular/core';
 import { AuthService } from '../../../shared/services/auth.service';
-import { ForgotPassword } from './forgot-password/forgot-password';
+import { ForgotPassword } from '../forgot-password/forgot-password';
 
 @Component({
   selector: 'app-login-form',
-  imports: [ForgotPassword],
+  imports: [],
   templateUrl: './login-form.html',
   styleUrl: './login-form.scss',
 })
@@ -12,7 +12,6 @@ export class LoginForm {
   @Output() needRegistering = new EventEmitter<boolean>();
 
   invalidLogin = signal(false);
-  forgotPasswordMode = signal(false)
 
   constructor(private authService: AuthService) {}
 
@@ -34,9 +33,5 @@ export class LoginForm {
       next: () => this.authService.checkLogin(),
       error: () => this.invalidLogin.set(true)
     });
-  }
-
-  toggleForgotPassword() {
-    this.forgotPasswordMode.set(!this.forgotPasswordMode())
   }
 }

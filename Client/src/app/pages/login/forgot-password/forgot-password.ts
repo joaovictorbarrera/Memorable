@@ -1,9 +1,10 @@
 import { Component, EventEmitter, Output, signal } from '@angular/core';
-import { AuthService } from '../../../../shared/services/auth.service';
+import { AuthService } from '../../../shared/services/auth.service';
+import { MatIcon } from "@angular/material/icon";
 
 @Component({
   selector: 'app-forgot-password',
-  imports: [],
+  imports: [MatIcon],
   templateUrl: './forgot-password.html',
   styleUrl: './forgot-password.scss',
 })

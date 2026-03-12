@@ -1,17 +1,21 @@
 <main class="h-full w-full flex justify-center">
     <div class="w-full flex justify-center items-center h-full xs:py-10">
-        <app-card class="p-6 py-8 max-w-lg xs:h-auto h-full flex flex-col justify-center">
+        <app-card class="p-6 py-8 max-w-lg xs:h-auto h-full flex flex-col justify-center relative">
+            @if (forgotPasswordMode()) {
+                <app-forgot-password (doneResetting)="toggleForgotPassword()"></app-forgot-password>
+            }
             <!-- Reset Password Form -->
-            @if (this.passwordResetMode()) {
+            @else if (this.passwordResetMode()) {
                 <app-password-reset (doneResetting)="disableResetMode()"></app-password-reset>
             }
             <!-- Login Form -->
-            @else if (this.haveAccount()) {
-                <app-login-form (needRegistering)="toggleHaveAccount()"></app-login-form>
+            @else if (this.hasAccount()) {
+                <app-login-form (needRegistering)="toggleHasAccount()"></app-login-form>
+                <p class="text-center text-gray-500 mt-4">Forgot your password? <button (click)="this.toggleForgotPassword()" class="text-accent-primary hover:underline">Reset</button>.</p>
             }
             <!-- Register Form -->
             @else {
-                <app-register-form (doneRegistering)="toggleHaveAccount()"></app-register-form>
+                <app-register-form (doneRegistering)="toggleHasAccount()"></app-register-form>
             }
         </app-card>
     </div>
