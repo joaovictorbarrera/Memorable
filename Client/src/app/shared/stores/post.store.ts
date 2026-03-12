@@ -66,24 +66,41 @@ export class PostStore {
     }
 
     addComment(postId: string, comment: CommentDto) {
-        const map = new Map(this.comments());
-        const comments = map.get(postId);
+        const mapComments = new Map(this.comments());
+        const mapPosts = new Map(this.posts())
+
+        const comments = mapComments.get(postId);
+        const post = mapPosts.get(postId)
+
+        if (!post) return
+
+        post.commentCount = post.commentCount + 1
+
         if (!comments) {
-            map.set(postId, [comment]);
+            mapComments.set(postId, [comment]);
         } else {
             comments.push(comment);
         }
-        this.comments.set(map);
+
+        this.comments.set(mapComments);
+        this.posts.set(mapPosts)
     }
 
     removeComment(postId: string, commentId: string) {
-        const map = new Map(this.comments());
-        const comments = map.get(postId);
-        if (!comments) return;
+        const mapComments = new Map(this.comments());
+        const mapPosts = new Map(this.posts())
+
+        const comments = mapComments.get(postId);
+        const post = mapPosts.get(postId)
+
+        if (!comments || !post) return;
+
+        post.commentCount = post.commentCount - 1
 
         const filteredComments = comments.filter(c => c.commentId !== commentId);
-        map.set(postId, filteredComments);
-        this.comments.set(map);
+        mapComments.set(postId, filteredComments);
+        this.comments.set(mapComments);
+        this.posts.set(mapPosts)
     }
 
     addManyComments(postId: string, comments: CommentDto[]) {

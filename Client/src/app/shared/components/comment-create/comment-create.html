@@ -12,6 +12,6 @@
         }
     </div>
 
-    <app-post-button (click)="this.createComment()" [disabled]="this.commentContent().trim() === ''"></app-post-button>
+    <app-post-button (click)="this.createComment()" [disabled]="this.commentContent().trim() === '' || loading()"></app-post-button>
 </div>
 
