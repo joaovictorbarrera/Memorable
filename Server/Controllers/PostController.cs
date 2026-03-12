@@ -5,7 +5,6 @@ using Microsoft.Extensions.Hosting;
 using Server.Dtos;
 using Server.Extensions;
 using Server.Models;
-using Server.Services.Data.Mockup;
 using Server.Services.ImageUpload;
 using Server.Services.Interfaces;
 

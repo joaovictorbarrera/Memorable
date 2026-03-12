@@ -3,9 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Server.Dtos;
 using Server.Extensions;
 using Server.Models;
-using Server.Services.Data.Mockup;
 using Server.Services.Interfaces;
-using System.Security.Cryptography;
 
 namespace Server.Controllers
 {

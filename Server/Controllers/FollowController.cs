@@ -1,9 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Server.Dtos;
 using Server.Extensions;
 using Server.Models;
-using Server.Services.Data.Mockup;
 using Server.Services.Interfaces;
 
 namespace Server.Controllers

@@ -75,7 +75,10 @@ export class Post implements OnInit {
     const post = this.post();
     if (!post) return
 
-    this.commentService.getCommentsByPostId(post, this.commentPageCount(), post.initialComments?.length ?? 0).subscribe({
+    const commentPage = this.commentPageCount()
+    const skip = this.comments()?.length ?? 0
+
+    this.commentService.getCommentsByPostId(post, commentPage, skip).subscribe({
       next: (comments) => {
         this.postStore.addManyComments(post.postId, comments)
         this.commentPageCount.set(this.commentPageCount() + 1)
