@@ -16,6 +16,8 @@ export class LoginForm {
   constructor(private authService: AuthService) {}
 
   login(formEvent: Event): void {
+    this.invalidLogin.set(false)
+
     formEvent.preventDefault();
 
     const form = formEvent.target as HTMLFormElement;

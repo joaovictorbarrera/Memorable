@@ -21,6 +21,8 @@ export class RegisterForm {
   constructor(private authService: AuthService) {}
 
   register(formEvent: Event) {
+    this.errorList.set([])
+
     formEvent.preventDefault();
 
     const validationErrors: string[] = registerValidation(formEvent);
