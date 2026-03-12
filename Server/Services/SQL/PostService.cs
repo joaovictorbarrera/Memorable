@@ -47,7 +47,7 @@ namespace Server.Services
             int commentCount = await _context.Comments
                 .CountAsync(c => c.PostId == postId);
 
-            List<CommentDto> initialComments = await GetPostComments(postId, 0, 5, 1);
+            List<CommentDto> initialComments = await GetPostComments(postId, 0, 5);
 
             return new PostDto
             {
@@ -102,7 +102,7 @@ namespace Server.Services
                 var user = users.FirstOrDefault(u => u.Id == post.UserId);
                 var postLikes = likes.Where(l => l.PostId == post.PostId).ToList();
 
-                var initialComments = await GetPostComments(post.PostId, 0, 5, 1);
+                var initialComments = await GetPostComments(post.PostId, 0, 5);
 
                 var dto = new PostDto
                 {
@@ -132,14 +132,12 @@ namespace Server.Services
         public async Task<List<CommentDto>> GetPostComments(
             Guid postId,
             int skipFirst,
-            int pageSize,
-            int pageNumber)
+            int pageSize)
         {
             List<Guid> commentIds = await _context.Comments
                 .Where(c => c.PostId == postId)
                 .OrderByDescending(c => c.CreatedAt)
                 .Skip(skipFirst)
-                .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize)
                 .Select(c => c.CommentId)
                 .ToListAsync();

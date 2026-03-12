@@ -1,10 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Server.Dtos;
 using Server.Extensions;
 using Server.Models;
-using Server.Services.Data.Mockup;
 using Server.Services.Interfaces;
 
 namespace Server.Controllers
@@ -77,19 +75,18 @@ namespace Server.Controllers
         public async Task<IActionResult> GetByPostId(
         [FromQuery] Guid postId,
         [FromQuery] int skip,
-        [FromQuery] int pageNumber,
         [FromQuery] int pageSize)
         {
             if (postId == Guid.Empty)
                 return BadRequest("Invalid PostId");
 
-            if (pageNumber <= 0 || pageSize <= 0)
+            if (pageSize <= 0)
                 return BadRequest("Invalid pagination parameters");
 
             if (!await _postService.PostExists(postId))
                 return NotFound("Post not found");
 
-            List<CommentDto> commentDtos = await _postService.GetPostComments(postId, skip, pageSize, pageNumber);
+            List<CommentDto> commentDtos = await _postService.GetPostComments(postId, skip, pageSize);
 
             return Ok(commentDtos);
         }

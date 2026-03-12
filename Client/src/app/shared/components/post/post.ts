@@ -39,7 +39,7 @@ export class Post implements OnInit {
 
   post!: Signal<PostDto | undefined>
   comments!: Signal<CommentDto[] | undefined>;
-  commentPageCount = signal<number>(1)
+  commentPageCount = signal<number>(2)
 
   isCurrentUserPost: Signal<boolean> = computed(() => this.post()?.userId === this.globalService.user()?.userId);
   timeAgo = signal("");

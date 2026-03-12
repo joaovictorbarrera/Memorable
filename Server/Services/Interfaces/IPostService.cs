@@ -9,7 +9,7 @@ namespace Server.Services.Interfaces
 
         Task<List<PostDto>> GetPostDtosByIds(List<Guid> postIds, Guid currentUserId);
 
-        Task<List<CommentDto>> GetPostComments(Guid postId, int skipFirst, int pageSize, int pageNumber);
+        Task<List<CommentDto>> GetPostComments(Guid postId, int skipFirst, int pageSize);
 
         Task<Post?> CreatePost(PostCreateDto body, Guid userId, string? imageUrl);
 

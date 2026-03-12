@@ -46,7 +46,6 @@ export class CommentService {
     const params = new HttpParams()
       .set('postId', post.postId)
       .set('pageSize', pageSize.toString())
-      .set('pageNumber', pageNumber.toString())
       .set('skip', skip.toString())
     return this.http.get<CommentDto[]>(`${this.apiUrl}/CommentGetByPostId`, { params });
   }
