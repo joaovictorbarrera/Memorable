@@ -9,9 +9,7 @@
     }
     @else {
         <div class="flex md:flex-row flex-col md:gap-8 gap-2 items-center pt-5 pb-10">
-            <picture>
-                <img class="w-24 h-24 rounded-full object-cover" [src]="this.user()?.profileImageUrl" alt="Profile Picture">
-            </picture>
+            <app-profile-image [editable]="this.isCurrentUserProfile()" [imageUrl]="this.user()?.profileImageUrl"></app-profile-image>
 
             <div class="flex flex-col gap-2">
                 <p class="text-xl md:text-start text-center text-nowrap">{{ this.user()?.displayName ?? '' }}</p>

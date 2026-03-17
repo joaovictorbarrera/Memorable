@@ -9,12 +9,13 @@ import { CommonModule } from '@angular/common';
 import { GlobalService } from '../../core/state/global';
 import { FollowButton } from "./components/follow-button/follow-button";
 import { postPageSize } from '../../core/state/constants';
+import { ProfileImage } from "./components/profile-image/profile-image";
 
 @Component({
   selector: 'app-user',
   templateUrl: './user.html',
   styleUrl: './user.scss',
-  imports: [Post, CommonModule, FollowButton, PostCreate],
+  imports: [Post, CommonModule, FollowButton, PostCreate, ProfileImage],
 })
 export class User implements OnInit, AfterViewInit {
   @ViewChild('scrollAnchor') scrollAnchor!: ElementRef;

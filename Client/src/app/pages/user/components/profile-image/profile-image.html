@@ -1,0 +1,27 @@
+@if (editable) {
+    <input 
+    type="file"
+    #fileInput
+    accept="image/*"
+    class="hidden"
+
+    (change)="onFileSelected($event)"
+    />
+}
+
+<picture class="relative">
+  <img
+    class="w-24 h-24 rounded-full object-cover"
+    [class.cursor-pointer]="editable"
+    [src]="imageUrl"
+    alt="Profile Picture"
+  >
+
+  @if (editable) {
+    <div
+      class="absolute inset-0 flex items-center justify-center rounded-full bg-black/40 opacity-0 hover:opacity-100 transition cursor-pointer"
+    >
+      <mat-icon fontIcon="edit" class="text-white text-2xl"></mat-icon>
+    </div>
+  }
+</picture>
