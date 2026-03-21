@@ -1,9 +1,9 @@
 @if (editable) {
-    <input 
+    <input
     type="file"
-    #fileInput
     accept="image/*"
     class="hidden"
+    id="profileImageSelector"
 
     (change)="onFileSelected($event)"
     />
@@ -12,16 +12,16 @@
 <picture class="relative">
   <img
     class="w-24 h-24 rounded-full object-cover"
-    [class.cursor-pointer]="editable"
-    [src]="imageUrl"
+    [src]="this.profilePreviewUrl() ? profilePreviewUrl() : imageUrl"
     alt="Profile Picture"
   >
 
   @if (editable) {
-    <div
-      class="absolute inset-0 flex items-center justify-center rounded-full bg-black/40 opacity-0 hover:opacity-100 transition cursor-pointer"
+    <label
+      class="absolute flex items-center justify-center rounded-full bg-bg-secondary border-2 border-bg-primary round-full transition cursor-pointer right-0 bottom-0"
+      for="profileImageSelector"
     >
-      <mat-icon fontIcon="edit" class="text-white text-2xl"></mat-icon>
-    </div>
+      <mat-icon fontIcon="edit" style="font-size: 1rem; display: flex; justify-content: center; align-items: center; "></mat-icon>
+  </label>
   }
 </picture>

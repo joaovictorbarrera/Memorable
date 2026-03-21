@@ -146,5 +146,21 @@ namespace Server.Services
 
             return await GetUserDto(randomUserId, userId);
         }
+
+        public async Task<bool> UpdateProfileImage(Guid userId, string imageUrl)
+        {
+            ApplicationUser? user = await _context.Users
+                .FirstOrDefaultAsync(u => u.Id == userId);
+
+            if (user == null) return false;
+
+            if (user.ProfileImageUrl == imageUrl) return true;
+
+            user.ProfileImageUrl = imageUrl;
+
+            await _context.SaveChangesAsync();
+
+            return true;
+        }
     }
 }
