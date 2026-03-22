@@ -9,7 +9,7 @@
     />
 }
 
-<picture class="relative">
+<div class="relative">
   <img
     class="w-24 h-24 rounded-full object-cover"
     [src]="this.profilePreviewUrl() ? profilePreviewUrl() : imageUrl"
@@ -18,10 +18,10 @@
 
   @if (editable) {
     <label
-      class="absolute flex items-center justify-center rounded-full bg-bg-secondary border-2 border-bg-primary round-full transition cursor-pointer right-0 bottom-0"
+      class="absolute flex items-center justify-center rounded-full bg-bg-secondary border-2 border-bg-primary transition cursor-pointer right-0 bottom-0"
       for="profileImageSelector"
     >
       <mat-icon fontIcon="edit" style="font-size: 1rem; display: flex; justify-content: center; align-items: center; "></mat-icon>
   </label>
   }
-</picture>
+</div>
