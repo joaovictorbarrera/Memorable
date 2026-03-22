@@ -8,10 +8,8 @@
         <p class="text-center text-gray-500 py-4">User not found.</p>
     }
     @else {
-        <div class="flex md:flex-row flex-col md:gap-8 gap-2 items-center pt-5 pb-10">
-            <picture>
-                <img class="w-24 h-24 rounded-full object-cover" [src]="this.user()?.profileImageUrl" alt="Profile Picture">
-            </picture>
+        <div class="flex md:flex-row flex-col md:gap-8 gap-2 items-center pt-5 pb-8">
+            <app-profile-image (userUpdated)="loadUserAndPosts(username()!)" [editable]="this.isCurrentUserProfile()" [imageUrl]="this.user()?.profileImageUrl"></app-profile-image>
 
             <div class="flex flex-col gap-2">
                 <p class="text-xl md:text-start text-center text-nowrap">{{ this.user()?.displayName ?? '' }}</p>
@@ -42,28 +40,33 @@
             </div>
         </div>
         <hr class="text-bg-secondary text-lg">
-     }
 
         <!-- User Posts -->
-        @if (this.postStore.allPostsForProfile(this.user()?.userId ?? '')().length !== 0) {
+        <div class="mt-5 flex flex-col gap-8 w-full max-w-2xl">
+
             @if (this.loadingPosts()) {
                 <p class="text-center text-gray-500 py-4">Loading more posts…</p>
             }
             @else {
-                <div class="mt-5 flex flex-col gap-8 w-full max-w-2xl">
-                    @if (this.isCurrentUserProfile()) {
-                        <app-post-create (postCreated)="increasePostCount()"></app-post-create>
-                    }
+
+                @if (this.isCurrentUserProfile()) {
+                    <app-post-create (postCreated)="increasePostCount()"></app-post-create>
+                }
+
+                @if (this.postStore.allPostsForProfile(this.user()?.userId ?? '')().length !== 0) {
                     @for (postId of this.postStore.allPostsForProfile(this.user()?.userId ?? '')(); track postId) {
-                        <app-post  [postId]="postId" (postDeleted)="decreasePostCount()"></app-post>
+                        <app-post [postId]="postId" (postDeleted)="decreasePostCount()"></app-post>
                     }
-                </div>
+                }
+                @else {
+                    <p class="text-center text-gray-500 py-4">No posts yet.</p>
+                }
+
             }
-        }
-        @else {
-            <p class="text-center text-gray-500 py-4">No posts yet.</p>
-        }
+
+        </div>
 
         <div #scrollAnchor class="h-1"></div>
+    }
     </div>
 </main>

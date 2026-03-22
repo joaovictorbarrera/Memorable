@@ -17,5 +17,6 @@ namespace Server.Services.Interfaces
         Task<ApplicationUser?> GetUserByUsername(string username);
         Task<List<UserDto>> GetByUsernameQuery(string query);
         Task<UserDto?> GetStranger(Guid userId);
+        Task<bool> UpdateProfileImage(Guid userId, string imageUrl);
     }
 }

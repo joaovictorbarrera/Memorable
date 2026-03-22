@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Server.Dtos;
 using Server.Extensions;
 using Server.Models;
+using Server.Services.ImageUpload;
 using Server.Services.Interfaces;
 
 namespace Server.Controllers
@@ -10,7 +11,7 @@ namespace Server.Controllers
     [Authorize]
     [ApiController]
     [Route("[controller]")]
-    public class UserController(ILogger<UserController> _logger, IUserService _userService) : Controller
+    public class UserController(ILogger<UserController> _logger, IUserService _userService, IImageUploadService _imgBb) : Controller
     {
         private readonly ILogger<UserController> _logger = _logger;
         private readonly IUserService _userService = _userService;
@@ -67,6 +68,28 @@ namespace Server.Controllers
             if (strangerDto == null) return NotFound("None available");
 
             return Ok(strangerDto);
+        }
+
+        [HttpPost("UploadProfileImage")]
+        [Consumes("multipart/form-data")]
+        public async Task<IActionResult> UploadProfileImage([FromForm] IFormFile file)
+        {
+            if (file == null || file.Length == 0)
+                return BadRequest("Image is required");
+
+            if (!file.ContentType.StartsWith("image/"))
+                return BadRequest("Only image files are allowed");
+
+            string imageUrl = await _imgBb.UploadAsync(file);
+
+            Guid authUserId = HttpContext.GetUserId();
+
+            bool success = await _userService.UpdateProfileImage(authUserId, imageUrl);
+
+            if (!success)
+                return BadRequest("Failed to update profile image");
+
+            return Ok(new { imageUrl });
         }
     }
 }

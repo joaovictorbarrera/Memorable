@@ -32,4 +32,10 @@ export class UserService {
         .get<UserDto>(`${this.apiUrl}/UserGetStranger`)
     }
 
+    uploadProfileImage(formData: FormData): Observable<{ imageUrl: string }> {
+      return this.http.post<{ imageUrl: string }>(
+        `${this.apiUrl}/UploadProfileImage`,
+        formData
+      );
+    }
 }
