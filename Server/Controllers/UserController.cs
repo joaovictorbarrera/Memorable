@@ -72,15 +72,15 @@ namespace Server.Controllers
 
         [HttpPost("UploadProfileImage")]
         [Consumes("multipart/form-data")]
-        public async Task<IActionResult> UploadProfileImage([FromForm] IFormFile file)
+        public async Task<IActionResult> UploadProfileImage([FromForm] UploadProfileImageRequestDto req)
         {
-            if (file == null || file.Length == 0)
+            if (req.File == null || req.File.Length == 0)
                 return BadRequest("Image is required");
 
-            if (!file.ContentType.StartsWith("image/"))
+            if (!req.File.ContentType.StartsWith("image/"))
                 return BadRequest("Only image files are allowed");
 
-            string imageUrl = await _imgBb.UploadAsync(file);
+            string imageUrl = await _imgBb.UploadAsync(req.File);
 
             Guid authUserId = HttpContext.GetUserId();
 
