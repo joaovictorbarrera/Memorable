@@ -25,6 +25,13 @@ function registerValidation(formEvent: Event) {
       errors = errors.concat(passwordValidation(passwordInput.value))
     }
 
+    const confirmPasswordInput = form.querySelector("[name=confirmPassword]") as HTMLInputElement | null;
+    if (!confirmPasswordInput || !confirmPasswordInput.value) {
+      errors.push('Confirm password is required.');
+    } else if (passwordInput && passwordInput.value !== confirmPasswordInput.value) {
+      errors.push('Passwords do not match.');
+    }
+
     const firstNameInput = form.querySelector("[name=firstName]") as HTMLInputElement | null;
     if (!firstNameInput || !firstNameInput.value) {
       errors.push('First name is required.');
