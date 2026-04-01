@@ -114,8 +114,13 @@ namespace Server.Services
 
         public async Task<List<UserDto>> GetByUsernameQuery(string query)
         {
+            string lowerQuery = query.ToLower();
             List<ApplicationUser> users = await _context.Users
-                .Where(u => u.UserName != null && EF.Functions.Like(u.UserName.ToLower(), $"%{query.ToLower()}%"))
+                .Where(u => 
+                    (u.UserName != null && EF.Functions.Like(u.UserName.ToLower(), $"%{lowerQuery}%")) ||
+                    (u.FirstName != null && EF.Functions.Like(u.FirstName.ToLower(), $"%{lowerQuery}%")) ||
+                    (u.LastName != null && EF.Functions.Like(u.LastName.ToLower(), $"%{lowerQuery}%"))
+                )
                 .OrderBy(u => u.UserName != null ? u.UserName.Length : 0)
                 .Take(5)
                 .ToListAsync();
