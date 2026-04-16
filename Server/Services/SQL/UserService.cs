@@ -54,7 +54,7 @@ namespace Server.Services
 
             string displayName = $"{user.FirstName} {user.LastName}";
 
-            UserDto userDto = new UserDto
+            UserDto userDto = new()
             {
                 UserId = user.Id,
                 DisplayName = displayName,
@@ -68,7 +68,7 @@ namespace Server.Services
                 FollowerCount = await GetFollowerCount(user.Id),
                 FollowingCount = await GetFollowingCount(user.Id),
                 IsFollowedByCurrentUser = authUserId.HasValue
-                    ? await IsFollowing(user.Id, authUserId.Value)
+                    ? await IsFollowing(authUserId.Value, user.Id)
                     : false
             };
 
