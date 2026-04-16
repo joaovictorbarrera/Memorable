@@ -19,7 +19,7 @@ export class Home implements OnInit, AfterViewInit {
 
   private page = 1;
   public loading = false;
-  private hasMore = true;
+  public hasMore = true;
   private observer!: IntersectionObserver;
 
   constructor(
