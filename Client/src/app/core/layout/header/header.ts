@@ -82,7 +82,7 @@ export class Header implements OnInit {
         window.location.href = `/user/${user.username}`;
       },
       error: (err) => {
-        window.alert("Error fetching random user: " + err.message);
+        console.log("Error fetching random user: " + err.message);
       }
     })
   }
