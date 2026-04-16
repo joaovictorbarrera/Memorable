@@ -1,0 +1,23 @@
+<div
+  class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm"
+  (click)="closeModal()"
+>
+  <div
+    class="w-full max-w-lg mx-4"
+    (click)="onContentClick($event)"
+  >
+    <app-card class="relative bg-bg-popup!">
+      <!-- Close Button -->
+      <button
+        (click)="closeModal()"
+        class="absolute top-3 right-3 rounded-full hover:brightness-75 transition"
+      >
+        <mat-icon class="text-gray-600 dark:text-gray-300 text-xl">close</mat-icon>
+      </button>
+
+      <!-- Content -->
+      <ng-content></ng-content>
+
+    </app-card>
+  </div>
+</div>

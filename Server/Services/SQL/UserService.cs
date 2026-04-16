@@ -33,10 +33,10 @@ namespace Server.Services
         {
             return await _context.Posts.CountAsync(p => p.UserId == userId);
         }
-
-        public async Task<bool> IsFollowing(Guid profileUserId, Guid authUserId)
+        public async Task<bool> IsFollowing(Guid followerId, Guid followingId)
         {
-            return await _context.Follows.AnyAsync(f => f.FollowerId == authUserId && f.FollowingId == profileUserId);
+            return await _context.Follows
+                .AnyAsync(f => f.FollowerId == followerId && f.FollowingId == followingId);
         }
 
         public async Task<List<Guid>> GetFollowingList(Guid userId)
@@ -116,7 +116,7 @@ namespace Server.Services
         {
             string lowerQuery = query.ToLower();
             List<ApplicationUser> users = await _context.Users
-                .Where(u => 
+                .Where(u =>
                     (u.UserName != null && EF.Functions.Like(u.UserName.ToLower(), $"%{lowerQuery}%")) ||
                     (u.FirstName != null && EF.Functions.Like(u.FirstName.ToLower(), $"%{lowerQuery}%")) ||
                     (u.LastName != null && EF.Functions.Like(u.LastName.ToLower(), $"%{lowerQuery}%"))
@@ -166,6 +166,42 @@ namespace Server.Services
             await _context.SaveChangesAsync();
 
             return true;
+        }
+
+        public async Task<List<UserDto>> GetFollowersByUserId(Guid userId, Guid? authUserId)
+        {
+            List<Guid> followerIds = await _context.Follows
+                .Where(f => f.FollowingId == userId)
+                .Select(f => f.FollowerId)
+                .ToListAsync();
+
+            List<UserDto> result = [];
+
+            foreach (Guid id in followerIds)
+            {
+                UserDto? dto = await GetUserDto(id, authUserId);
+                if (dto != null) result.Add(dto);
+            }
+
+            return result;
+        }
+
+        public async Task<List<UserDto>> GetFollowingByUserId(Guid userId, Guid? authUserId)
+        {
+            List<Guid> followingIds = await _context.Follows
+                .Where(f => f.FollowerId == userId)
+                .Select(f => f.FollowingId)
+                .ToListAsync();
+
+            List<UserDto> result = [];
+
+            foreach (Guid id in followingIds)
+            {
+                UserDto? dto = await GetUserDto(id, authUserId);
+                if (dto != null) result.Add(dto);
+            }
+
+            return result;
         }
     }
 }

@@ -1,0 +1,19 @@
+<div class="flex gap-2 items-center text-xl mb-4">
+    <mat-icon fontIcon="people" class="text-2xl"></mat-icon>
+    <h1>{{ this.type === 'following' ? 'Following' : 'Followers' }}</h1>
+</div>
+<div class="flex flex-col gap-2">
+    @if (this.loading()) {
+        <p class="text-center text-gray-500 py-4">Loading...</p>
+    }
+
+    @for (user of this.users(); track user.userId) {
+        <a (click)="closeModal()" [routerLink]="['/user', user.username]" class="flex items-center gap-3 p-2 rounded-lg hover:brightness-75">
+            <app-profile-icon [imageUrl]="user.profileImageUrl" [username]="user.username"></app-profile-icon>
+            <div class="flex flex-col leading-4 h-full">
+                <span>{{ user.displayName }}</span>
+                <span class="text-sm text-text-secondary">@{{ user.username }}</span>
+            </div>
+        </a>
+    }
+</div>

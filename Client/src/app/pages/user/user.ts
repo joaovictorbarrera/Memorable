@@ -10,17 +10,22 @@ import { GlobalService } from '../../core/state/global';
 import { FollowButton } from "./components/follow-button/follow-button";
 import { postPageSize } from '../../core/state/constants';
 import { ProfileImage } from "./components/profile-image/profile-image";
+import { Modal } from "../../shared/components/modal/modal";
+import { MatIcon } from "@angular/material/icon";
+import { FollowModal } from "./components/follow-modal/follow-modal";
 
 @Component({
   selector: 'app-user',
   templateUrl: './user.html',
   styleUrl: './user.scss',
-  imports: [Post, CommonModule, FollowButton, PostCreate, ProfileImage],
+  imports: [Post, CommonModule, FollowButton, PostCreate, ProfileImage, Modal, FollowModal],
 })
 export class User implements OnInit, AfterViewInit {
   @ViewChild('scrollAnchor') scrollAnchor!: ElementRef;
   username = signal<string | undefined>(undefined);
   user = signal<UserDto | undefined>(undefined);
+  followingModalOpen = signal(false);
+  followerModalOpen = signal(false);
 
   private page = 1;
   public loadingPosts = signal(false);

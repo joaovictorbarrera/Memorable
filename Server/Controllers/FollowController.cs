@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Server.Dtos;
 using Server.Extensions;
 using Server.Models;
 using Server.Services.Interfaces;
@@ -45,6 +46,36 @@ namespace Server.Controllers
                 return NotFound("User could not be unfollowed");
 
             return Ok(follow);
+        }
+
+        [HttpGet("FollowersGetByUserId")]
+        public async Task<IActionResult> FollowersGetByUserId([FromQuery] Guid userId)
+        {
+            if (userId == Guid.Empty) return BadRequest("Invalid UserId");
+
+            if (!await _userService.UserExists(userId))
+                return NotFound("User not found");
+
+            Guid authUserId = HttpContext.GetUserId();
+
+            List<UserDto> followers = await _userService.GetFollowersByUserId(userId, authUserId);
+
+            return Ok(followers);
+        }
+
+        [HttpGet("FollowingGetByUserId")]
+        public async Task<IActionResult> FollowingGetByUserId([FromQuery] Guid userId)
+        {
+            if (userId == Guid.Empty) return BadRequest("Invalid UserId");
+
+            if (!await _userService.UserExists(userId))
+                return NotFound("User not found");
+
+            Guid authUserId = HttpContext.GetUserId();
+
+            List<UserDto> following = await _userService.GetFollowingByUserId(userId, authUserId);
+
+            return Ok(following);
         }
     }
 }

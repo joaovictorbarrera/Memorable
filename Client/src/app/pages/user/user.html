@@ -1,3 +1,23 @@
+@if (followingModalOpen()) {
+    <app-modal (close)="followingModalOpen.set(false)">
+        <app-follow-modal
+            [type]="'following'"
+            [userId]="this.user()?.userId ?? ''"
+            (close)="followingModalOpen.set(false)">
+        </app-follow-modal>
+    </app-modal>
+}
+
+@if (followerModalOpen()) {
+    <app-modal (close)="followerModalOpen.set(false)">
+        <app-follow-modal
+            [type]="'followers'"
+            [userId]="this.user()?.userId ?? ''"
+            (close)="followerModalOpen.set(false)">
+        </app-follow-modal>
+    </app-modal>
+}
+
 <main class="text-sm text-text-primary flex items-center w-full justify-center">
     <div class="flex flex-col w-xl py-5 px-3 gap-6">
     <!-- Profile Header -->
@@ -16,9 +36,9 @@
                 <div class="flex gap-5">
                     <span>{{this.user()?.postCount ?? 0}} posts</span>
 
-                    <span>{{ this.user()?.followingCount ?? 0 }} following</span>
+                    <button (click)="followingModalOpen.set(this.user()?.followingCount !== 0 ? true : false)" class="hover:brightness-75">{{ this.user()?.followingCount ?? 0 }} following</button>
 
-                    <span>{{ this.user()?.followerCount ?? 0 }} followers</span>
+                    <button (click)="followerModalOpen.set(this.user()?.followerCount !== 0 ? true : false)" class="hover:brightness-75">{{ this.user()?.followerCount ?? 0 }} followers</button>
                 </div>
 
                 <div class="flex items-center gap-5 ">

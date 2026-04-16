@@ -18,5 +18,7 @@ namespace Server.Services.Interfaces
         Task<List<UserDto>> GetByUsernameQuery(string query);
         Task<UserDto?> GetStranger(Guid userId);
         Task<bool> UpdateProfileImage(Guid userId, string imageUrl);
+        Task<List<UserDto>> GetFollowersByUserId(Guid userId, Guid? authUserId);
+        Task<List<UserDto>> GetFollowingByUserId(Guid userId, Guid? authUserId);
     }
 }

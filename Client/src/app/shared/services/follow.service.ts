@@ -36,4 +36,28 @@ export class FollowService {
       { params }
     );
   }
+
+  /**
+   * GET FOLLOWERS
+   */
+  getFollowers(userId: string): Observable<UserDto[]> {
+    const params = new HttpParams().set('userId', userId);
+
+    return this.http.get<UserDto[]>(
+      `${this.apiUrl}/FollowersGetByUserId`,
+      { params }
+    );
+  }
+
+  /**
+   * GET FOLLOWING
+   */
+  getFollowing(userId: string): Observable<UserDto[]> {
+    const params = new HttpParams().set('userId', userId);
+
+    return this.http.get<UserDto[]>(
+      `${this.apiUrl}/FollowingGetByUserId`,
+      { params }
+    );
+  }
 }
