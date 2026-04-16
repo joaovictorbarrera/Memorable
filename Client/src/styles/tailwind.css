@@ -12,8 +12,8 @@
 
   /* Background Colors */
   --color-bg-primary: var(--color-zinc-950);
-  --color-bg-secondary: oklch(21.6% .006 56.043);
-  --color-bg-tertiary: color-mix(in oklab, var(--color-stone-800) 50%, transparent);
+  --color-bg-secondary: oklch(25% .006 56.043);
+  --color-bg-tertiary: color-mix(in oklab, var(--color-stone-800) 60%, transparent);
   --color-bg-quaternary: color-mix(in oklab, var(--color-zinc-950) 50%, transparent);
   --color-bg-popup: #191617;
 
