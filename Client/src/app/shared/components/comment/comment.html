@@ -1,17 +1,13 @@
-<div class="flex gap-2 items-center text-sm">
-    <app-profile-icon class="mb-auto" [imageUrl]="comment.userProfileImageUrl" [username]="comment.username"></app-profile-icon>
+<div class="flex gap-3 items-center text-sm">
+    <app-profile-icon class="mb-auto mt-1" [imageUrl]="comment.userProfileImageUrl" [username]="comment.username"></app-profile-icon>
     <div class="flex-col flex gap-1 min-w-0">
-        <div class="flex gap-2 items-center">
+        <div class="flex items-center gap-2">
             <a [routerLink]="['/user', comment.username]" routerLinkActive="active">
                 <span class="text-text-primary pb-1">{{ comment.displayName }}</span>
             </a>
             <p class="text-stone-400 text-sm">{{ timeAgo() }}</p>
 
-            @if (this.globalService.user()?.userId === this.comment.userId) {
-                <button (click)="deleteComment()" class="cursor-pointer hover:brightness-70 flex justify-center items-center">
-                    <mat-icon fontIcon="delete" style="color: rgb(75, 0, 0); font-size: 1.2rem" ></mat-icon>
-                </button>
-            }
+
         </div>
         @if (seeMore()) {
             <p class="text-text-offwhite wrap-break-word">{{ comment.textContent | slice:0:100 }}...
@@ -23,4 +19,9 @@
         }
     </div>
 
+    @if (this.globalService.user()?.userId === this.comment.userId) {
+        <button (click)="deleteComment()" class="cursor-pointer hover:brightness-70 flex justify-center items-center ml-auto">
+            <mat-icon fontIcon="delete" style="color: rgb(100, 0, 0); font-size: 1.2rem" ></mat-icon>
+        </button>
+    }
 </div>
