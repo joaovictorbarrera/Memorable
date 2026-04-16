@@ -3,10 +3,11 @@ import { MatIcon } from "@angular/material/icon";
 import { FollowService } from '../../../../shared/services/follow.service';
 import { ProfileIcon } from "../../../../shared/components/profile-icon/profile-icon";
 import { Router, RouterLink } from '@angular/router';
+import { FollowButton } from "../follow-button/follow-button";
 
 @Component({
   selector: 'app-follow-modal',
-  imports: [MatIcon, ProfileIcon, RouterLink],
+  imports: [MatIcon, ProfileIcon, RouterLink, FollowButton],
   templateUrl: './follow-modal.html',
   styleUrl: './follow-modal.scss',
 })
