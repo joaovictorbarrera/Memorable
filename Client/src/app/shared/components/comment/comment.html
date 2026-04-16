@@ -5,7 +5,7 @@
             <a [routerLink]="['/user', comment.username]" routerLinkActive="active">
                 <span class="text-text-primary pb-1">{{ comment.displayName }}</span>
             </a>
-            <p class="text-stone-500 text-sm pb-1">{{ timeAgo() }}</p>
+            <p class="text-stone-400 text-sm">{{ timeAgo() }}</p>
 
             @if (this.globalService.user()?.userId === this.comment.userId) {
                 <button (click)="deleteComment()" class="cursor-pointer hover:brightness-70 flex justify-center items-center">
