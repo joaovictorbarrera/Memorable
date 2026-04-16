@@ -41,7 +41,7 @@ namespace Server.Services
         public async Task<List<CommentDto>> GetCommentDtosByIds(List<Guid> commentIds)
         {
             if (commentIds == null || commentIds.Count == 0)
-                return new List<CommentDto>();
+                return [];
 
             List<CommentDto> comments = await _context.Comments
                 .Where(c => commentIds.Contains(c.CommentId))
@@ -60,6 +60,7 @@ namespace Server.Services
                         DisplayName = u.DisplayName,
                         UserProfileImageUrl = u.ProfileImageUrl
                     })
+                .OrderByDescending(c => c.CreatedAt)
                 .ToListAsync();
 
             return comments;
