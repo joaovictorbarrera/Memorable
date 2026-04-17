@@ -24,6 +24,10 @@ namespace Server.Controllers
 
             if (await _userService.IsFollowing(authUserId, userId)) return BadRequest("User is already followed by logged-in user");
 
+            if (!await _userService.UserExists(userId)) return NotFound("User not found");
+
+            if (authUserId == userId) return BadRequest("You cannot follow yourself");
+
             Follow? follow = await _userService.FollowUser(authUserId, userId);
 
             if (follow == null) return BadRequest("User could not be followed");

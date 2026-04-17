@@ -17,12 +17,14 @@
                 </div>
             </a>
 
-            <app-follow-button
-            class="ml-auto"
-                [userId]="user.userId"
-                [isFollowedByCurrentUser]="user.isFollowedByCurrentUser"
-            >
-            </app-follow-button>
+            @if (!this.isCurrentUser(user.userId)) {
+                <app-follow-button
+                class="ml-auto"
+                    [userId]="user.userId"
+                    [isFollowedByCurrentUser]="user.isFollowedByCurrentUser"
+                >
+                </app-follow-button>
+            }
         </div>
 
     }

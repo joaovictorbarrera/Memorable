@@ -4,6 +4,7 @@ import { FollowService } from '../../../../shared/services/follow.service';
 import { ProfileIcon } from "../../../../shared/components/profile-icon/profile-icon";
 import { Router, RouterLink } from '@angular/router';
 import { FollowButton } from "../follow-button/follow-button";
+import { GlobalService } from '../../../../core/state/global';
 
 @Component({
   selector: 'app-follow-modal',
@@ -19,7 +20,11 @@ export class FollowModal implements OnInit {
   public loading = signal(true);
   public users = signal<UserDto[]>([]);
 
-  constructor(private followService: FollowService) {}
+  constructor(private followService: FollowService, private globalService: GlobalService) {}
+
+  isCurrentUser(userId: string): boolean {
+    return this.globalService.user()?.userId === userId;
+  }
 
   ngOnInit(): void {
     if (this.type === 'followers') {
