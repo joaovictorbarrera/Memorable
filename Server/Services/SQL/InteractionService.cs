@@ -83,6 +83,19 @@ namespace Server.Services
             return comment;
         }
 
+        public async Task<Comment?> UpdateComment(CommentDto updatedComment)
+        {
+            Comment? comment = await _context.Comments
+                .FirstOrDefaultAsync(p => p.CommentId == updatedComment.CommentId);
+
+            if (comment == null) return null;
+
+            comment.TextContent = updatedComment.TextContent;
+
+            await _context.SaveChangesAsync();
+            return comment;
+        }
+
         public async Task<Comment?> DeleteComment(Guid commentId)
         {
             Comment? comment = await _context.Comments

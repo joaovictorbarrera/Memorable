@@ -28,6 +28,15 @@ export class CommentService {
   }
 
   /**
+   * UPDATE comment
+   */
+  updateComment(updatedComment: CommentDto): Observable<any> {
+    return this.http.put(
+      `${this.apiUrl}/CommentUpdate`, updatedComment
+    );
+  }
+
+  /**
    * DELETE comment
    */
   deleteComment(commentId: string): Observable<any> {

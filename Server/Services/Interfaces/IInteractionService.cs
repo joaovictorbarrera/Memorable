@@ -11,6 +11,7 @@ namespace Server.Services.Interfaces
         Task<Comment?> DeleteComment(Guid commentId);
         Task<bool> IsLiking(Guid userId, Guid postId);
         Task<Like?> AddNewLike(Guid userId, Guid postId);
+        Task<Comment?> UpdateComment(CommentDto updatedComment);
         Task<Like?> RemoveLike(Guid userId, Guid postId);
         Task<bool> CommentExists(Guid commentId);
         Task<bool> CommentBelongsToUser(Guid commentId, Guid userId);
