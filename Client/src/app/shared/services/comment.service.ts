@@ -30,7 +30,7 @@ export class CommentService {
   /**
    * DELETE comment
    */
-  deletePost(commentId: string): Observable<any> {
+  deleteComment(commentId: string): Observable<any> {
     const params = new HttpParams()
     .set('commentId', commentId);
 

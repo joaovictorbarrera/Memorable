@@ -38,7 +38,7 @@ export class Comment implements OnInit {
 
   deleteComment(): void {
     if (window.confirm("Are you sure you want to delete this comment?")) {
-      this.commentService.deletePost(this.comment.commentId)
+      this.commentService.deleteComment(this.comment.commentId)
       .subscribe({
           next: () => {
             this.postStore.removeComment(this.comment.postId, this.comment.commentId)
