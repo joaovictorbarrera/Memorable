@@ -70,7 +70,6 @@ namespace Server.Controllers
             return Ok(comment);
         }
 
-
         [HttpGet("CommentGetByPostId")]
         public async Task<IActionResult> GetByPostId(
         [FromQuery] Guid postId,

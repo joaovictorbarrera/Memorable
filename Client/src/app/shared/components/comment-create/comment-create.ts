@@ -37,8 +37,8 @@ export class CommentCreate implements OnInit {
   createComment() {
     if (this.commentContent().trim() === '') return
 
-    if (this.commentContent().length > 300) {
-      this.error.set("Comment content cannot exceed 200 characters.");
+    if (this.commentContent().length > 500) {
+      this.error.set("Comment content cannot exceed 500 characters.");
       return;
     }
 
