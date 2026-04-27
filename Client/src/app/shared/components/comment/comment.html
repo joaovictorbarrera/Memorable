@@ -1,6 +1,6 @@
 <div class="flex gap-3 items-center text-sm">
     <app-profile-icon class="mb-auto mt-1" [imageUrl]="comment.userProfileImageUrl" [username]="comment.username"></app-profile-icon>
-    <div class="flex-col flex gap-1 min-w-0">
+    <div class="flex-col flex gap-1 min-w-0 w-full">
         <div class="flex items-center gap-2">
             <a [routerLink]="['/user', comment.username]" routerLinkActive="active">
                 <span class="text-text-primary pb-1">{{ comment.displayName }}</span>
@@ -9,19 +9,46 @@
 
 
         </div>
-        @if (seeMore()) {
-            <p class="text-text-offwhite wrap-break-word">{{ comment.textContent | slice:0:100 }}...
-                <button (click)="openSeeMore()" class="text-text-secondary hover:underline">See more</button>
-            </p>
+        @if (editMode()) {
+            <textarea [(ngModel)]="this.mutableTextContent"
+            class="w-full bg-bg-quaternary rounded-lg border-bg-tertiary resize-none placeholder:text-stone-500
+            focus-visible:outline-0 focus-visible:ring-3 focus-visible:ring-accent-primary/80 p-2">
+            </textarea>
         }
         @else {
-            <p class="text-text-offwhite wrap-break-word">{{ comment.textContent }}</p>
+            @if (seeMore()) {
+                <p class="text-text-offwhite wrap-break-word">{{ comment.textContent | slice:0:100 }}...
+                    <button (click)="openSeeMore()" class="text-text-secondary hover:underline">See more</button>
+                </p>
+            }
+            @else {
+                <p class="text-text-offwhite wrap-break-word">{{ comment.textContent }}</p>
+            }
         }
     </div>
 
     @if (this.globalService.user()?.userId === this.comment.userId) {
-        <button (click)="deleteComment()" class="cursor-pointer hover:brightness-70 flex justify-center items-center ml-auto">
-            <mat-icon fontIcon="delete" style="color: rgb(100, 0, 0); font-size: 1.2rem" ></mat-icon>
-        </button>
+        @if (!editMode()) {
+            <div class="ml-auto flex gap-1">
+                <button (click)="editComment()" class="cursor-pointer hover:brightness-70 flex justify-center items-center">
+                    <mat-icon fontIcon="edit" style="color: gray; font-size: 1.2rem" ></mat-icon>
+                </button>
+
+                <button (click)="deleteComment()" class="cursor-pointer hover:brightness-70 flex justify-center items-center">
+                    <mat-icon fontIcon="delete" style="color: rgb(100, 0, 0); font-size: 1.2rem" ></mat-icon>
+                </button>
+            </div>
+        }
+        @else {
+            <div class="ml-auto flex gap-2">
+                <button (click)="saveEdits()" class="cursor-pointer hover:brightness-70">
+                    <mat-icon fontIcon="check" style="color: green; font-size: 1.2rem" ></mat-icon>
+                </button>
+
+                <button (click)="cancelEdit()" class="cursor-pointer hover:brightness-70">
+                    <mat-icon fontIcon="close" style="color: red; font-size: 1.2rem" ></mat-icon>
+                </button>
+            </div>
+        }
     }
 </div>

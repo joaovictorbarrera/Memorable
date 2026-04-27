@@ -8,9 +8,10 @@ import { CommentService } from '../../services/comment.service';
 import { PostStore } from '../../stores/post.store';
 import { RouterModule } from '@angular/router';
 import { SlicePipe } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 @Component({
   selector: 'app-comment',
-  imports: [ProfileIcon, MatIcon, RouterModule, SlicePipe],
+  imports: [ProfileIcon, MatIcon, RouterModule, SlicePipe, FormsModule],
   templateUrl: './comment.html',
   styleUrl: './comment.scss',
 })
@@ -18,6 +19,9 @@ export class Comment implements OnInit {
   @Input() comment!: CommentDto;
   timeAgo = signal('');
   seeMore = signal(false)
+
+  editMode = signal(false)
+  mutableTextContent = signal("")
 
   constructor(
     public globalService: GlobalService,
@@ -30,10 +34,44 @@ export class Comment implements OnInit {
     if (this.comment.textContent && this.comment.textContent.length > 100) {
       this.seeMore.set(true)
     }
+    this.mutableTextContent.set(this.comment.textContent)
   }
 
   openSeeMore(): void {
     this.seeMore.set(false)
+  }
+
+  editComment() {
+    this.editMode.set(true)
+  }
+
+  cancelEdit() {
+    this.editMode.set(false);
+    this.mutableTextContent.set(this.comment.textContent)
+  }
+
+  saveEdits() {
+    if (this.mutableTextContent().trim() == "") {
+      window.alert("Comment cannot be empty")
+      return
+    }
+
+    let updatedComment = {...this.comment}
+
+    updatedComment.textContent = this.mutableTextContent().trim()
+
+    this.commentService.updateComment(updatedComment)
+    .subscribe({
+      next: (updatedCommentDto) => {
+        this.postStore.setComment(updatedCommentDto)
+        this.editMode.set(false)
+      },
+      error: (err) => {
+          window.alert("Error updating comment: "+ err.message)
+        }
+    })
+
+    return
   }
 
   deleteComment(): void {

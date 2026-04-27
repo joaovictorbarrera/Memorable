@@ -46,6 +46,44 @@ namespace Server.Controllers
             return Ok(commentDto);
         }
 
+        [HttpPut("CommentUpdate")]
+        public async Task<IActionResult> UpdateComment([FromBody] CommentDto updatedComment)
+        {
+            if (updatedComment.CommentId == Guid.Empty) return BadRequest("Invalid CommentId");
+
+            Guid authUserId = HttpContext.GetUserId();
+
+            if (!await _interactionService.CommentExists(updatedComment.CommentId))
+            {
+                return NotFound("Comment Not Found");
+            }
+
+            if (!await _interactionService.CommentBelongsToUser(updatedComment.CommentId, authUserId))
+            {
+                return Forbid();
+            }
+
+            if (String.IsNullOrEmpty(updatedComment.TextContent))
+            {
+                return BadRequest("Comment cannot be null or empty");            
+            }
+
+            if (updatedComment.TextContent.Length > 500)
+            {
+                return BadRequest("Comment cannot exceed 500 characters");
+            }
+
+            Comment? comment = await _interactionService.UpdateComment(updatedComment);
+
+            if (comment == null) return BadRequest("Comment could not be updated");
+
+            CommentDto? commentDto = await _interactionService.GetCommentDtoById(comment.CommentId);
+
+            if (commentDto == null) return BadRequest("Could not get new comment details");
+
+            return Ok(commentDto);
+        }
+
         [HttpDelete("CommentDelete")]
         public async Task<IActionResult> DeleteComment([FromQuery] Guid commentId)
         {
@@ -60,7 +98,7 @@ namespace Server.Controllers
 
             if (!await _interactionService.CommentBelongsToUser(commentId, authUserId))
             {
-                return Forbid("You can only delete your own comments");
+                return Forbid();
             }
 
             Comment? comment = await _interactionService.DeleteComment(commentId);
