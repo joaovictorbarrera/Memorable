@@ -40,7 +40,7 @@ export class CommentService {
     );
   }
 
-  getCommentsByPostId(post: PostDto, pageNumber: number, skip: number): Observable<CommentDto[]> {
+  getCommentsByPostId(post: PostDto, skip: number): Observable<CommentDto[]> {
     const pageSize = commentPageSize;
 
     const params = new HttpParams()
