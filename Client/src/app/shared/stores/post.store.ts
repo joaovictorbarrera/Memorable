@@ -86,6 +86,22 @@ export class PostStore {
         this.posts.set(mapPosts)
     }
 
+    setComment(updatedComment: CommentDto) {
+        const map = new Map(this.comments());
+        const commentsForPost = map.get(updatedComment.postId) ?? [];
+
+        for (let i = 0; i < commentsForPost.length; i++) {
+            if (commentsForPost[i].commentId === updatedComment.commentId) {
+                commentsForPost[i] = updatedComment
+                break;
+            }
+        }
+
+        map.set(updatedComment.postId, [...commentsForPost])
+
+        this.comments.set(map);
+    }
+
     removeComment(postId: string, commentId: string) {
         const mapComments = new Map(this.comments());
         const mapPosts = new Map(this.posts())
